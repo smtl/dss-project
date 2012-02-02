@@ -3,12 +3,16 @@
 
 = Introduction =
 
-The website uses the Python (2.7), Django Framework 1.3, Apache2 server with mod_wsgi extension, qlite3 all running on top of the Ubuntu operating system.
+The website uses the Python (2.7), Django Framework 1.3, Apache2 server with mod_wsgi extension, sqlite3 all running on top of the Ubuntu operating system.
 
 This page lets you know the configurations and necessary programs to run this website.
 
 
 = Details =
+
+== Where to install ==
+
+svn checkout into /var/www/ so that the files you download will have the correct locations in them.
 
 == Python ==
 
@@ -68,3 +72,7 @@ We are using subversion as a version control system.
 sudo apt-get install subversion
 
 A guide to using subversion can be found at http://svnbook.red-bean.com/
+
+== Finally ==
+
+Go to localhost to view the website
