@@ -60,3 +60,11 @@ Edit /etc/apache2/httpd.conf to include this line:
 
 For a more detailed guide to using mod_wsgi of for troubleshooting help, see:
 [http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide]
+
+== SVN ==
+
+We are using subversion as a version control system. 
+
+sudo apt-get install subversion
+
+A guide to using subversion can be found at http://svnbook.red-bean.com/
