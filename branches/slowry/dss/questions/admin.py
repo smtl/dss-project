@@ -10,7 +10,7 @@ class QuestionAdmin(admin.ModelAdmin):
        ('Question', {'fields': ['question']}),
     ]
     inlines = [AnswerInline]
-    list_display = ('question')
+    #list_display = ('question')
     search_fields = ['question']
 
 admin.site.register(Question, QuestionAdmin)
