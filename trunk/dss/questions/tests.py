@@ -4,8 +4,9 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-
+from django.utils import unittest
 from django.test import TestCase
+from django.test.client import Client
 
 
 class SimpleTest(TestCase):
@@ -14,3 +15,9 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+class HelloTestCase(TestCase):
+    def testHello(self):
+        #client = Client()
+        response = self.client.get('/hello/?name=stephen')
+        self.assertEqual(response.status_code, 200)
