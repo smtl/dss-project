@@ -16,8 +16,8 @@ class SimpleTest(TestCase):
         """
         self.assertEqual(1 + 1, 2)
 
-class HelloTestCase(TestCase):
+class HelloTestCase(unittest.TestCase):
     def testHello(self):
-        #client = Client()
-        response = self.client.get('/hello/?name=stephen')
+        client = Client()
+        response = client.get('/hello/?name=stephen')
         self.assertEqual(response.status_code, 200)
