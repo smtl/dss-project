@@ -5,6 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('dss.questions.views',
+    url(r'^$', 'hello'),
     url(r'^hello/', 'hello'),
 )
 
