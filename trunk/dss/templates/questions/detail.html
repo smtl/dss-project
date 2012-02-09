@@ -1,0 +1,12 @@
+{{ question }}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/questions/{{question.id}}/answer/" method="post">
+{% csrf_token %}
+{% for answer in question.answer_set.all %}
+    <input type="radio" name="answer" id="answer{{forloop.counter}}" value="{{answer.id}}" />
+    <label for="answer{{forloop.counter}}">{{answer.answer}}</label><br />
+{% endfor %}
+<input type="submit" value="answer" />
+</form>

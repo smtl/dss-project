@@ -1,0 +1,7 @@
+<h1>{{ question.question }}</h1>
+
+<ul>
+{% for answer in question.answer_set.all %}
+    <li>{{ answer.answer }} -- {{ answer.answers }} answer{{ answer.answers|pluralize }}</li>
+{% endfor %}
+</ul>
