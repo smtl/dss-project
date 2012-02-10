@@ -1,0 +1,15 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This class is separate (for now), and is used to convert a PML or DOT document into a flowchart using Graphviz.
+
+Note: Graphviz will need to be installed (located in the Ubuntu libraries under graphviz and python-pygraphviz.
+
+
+= Details =
+
+Steps
+  * cd into the graphviz/graph in the DSS folder
+  * type "python graphvizConv.py" followed by the path of any DOT or PML    file
+  * the image will open automatically with gnome-open. This is just to emphasize that it works; it will be changed in the future to integrate into the main site.
