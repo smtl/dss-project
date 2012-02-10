@@ -4,7 +4,7 @@
 
 This class is separate (for now), and is used to convert a PML or DOT document into a flowchart using Graphviz.
 
-Note: Graphviz will need to be installed (located in the Ubuntu repositories under graphviz and python-pygraphviz.
+Note: Graphviz will need to be installed (located in the Ubuntu repositories under graphviz and python-pygraphviz).
 
 
 = Details =
