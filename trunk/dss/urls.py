@@ -1,8 +1,12 @@
+
 from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+# Cron enabled.                                                                                                              
+#import django_cron
+#django_cron.autodiscover()
 
 urlpatterns = patterns('dss.questions.views',
     url(r'^$', 'hello'),

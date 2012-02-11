@@ -1,0 +1,184 @@
+==============
+Signed cookies
+==============
+
+While cookies are a convenient way to store basic persistent data in client
+browsers, users are free to edit them at will, making them inherently insecure.
+By attaching signatures to cookies, you can confidently trust that their values
+are safe from editing.
+
+How it works
+============
+
+Cookies are signed by attaching a digest to the cookie value that can be
+verified when the cookie is sent back to the server. This digest is created from
+the cookie's name and value, along with the site's secret_.
+
+Essentially, this creates a set of four values that must all remain intact in
+order for the cookie to validate properly. If any one of these is altered, the
+cookie will be invalid.
+
+* ``settings.SECRET_KEY``
+* Name
+* Value
+* Signature
+
+This set of values ensures that users are unable to rename the cookie or edit
+its value without generating a new signature. Since the secret is known
+only to site administrators, users will be unable to generate signatures that
+will validate with altered values.
+
+.. _secret: http://www.djangoproject.com/documentation/settings/#secret-key
+
+Automatic signing
+=================
+
+The easiest and most reliable way to sign your cookies is to use the provided
+middleware, which will automatically handle everything behind the scenes. In
+fact, aside from a single line in your settings, using the middleware requires
+no changes in your code.
+
+Activating the middleware
+-------------------------
+
+Simply add a ``'SignedCookiesMiddleware'`` reference to your
+``MIDDLEWARE_CLASSES`` setting to enjoy signature protection for all your views.
+One thing to keep in mind is that, while all views are automatically handled,
+middleware will only be protected if they are positioned *after* signed cookies.
+
+Invalid cookies
+---------------
+
+Signing and validation are both handled transparently to views, with invalid
+cookies being silently removed from ``request.COOKIES`` prior to executing the
+view. This means that views will see no difference between an unsigned cookie
+and no cookie at all.
+
+As with a missing cookie, a proper cookie can simply be set within the view,
+which will then be signed properly and will validate on the next request.
+
+A note about sessions
+---------------------
+
+Though the `sessions framework`_ uses cookies, it only stores the ID, which is
+considered safe. This means that it can safely be placed before signed cookies
+in your ``MIDDLEWARE_CLASSES``.
+
+.. _sessions framework: http://www.djangoproject.com/documentation/sessions/
+
+Example
+-------
+
+This is an example of how ``MIDDLEWARE_CLASSES`` might look.
+
+MIDDLEWARE_CLASSES = (
+'django.middleware.common.CommonMiddleware',
+'django.contrib.sessions.middleware.SessionMiddleware',
+'signedcookies.middleware.SignedCookiesMiddleware',
+'django.contrib.auth.middleware.AuthenticationMiddleware',
+'django.middleware.doc.XViewMiddleware',
+)
+
+And your project might utilize shopping cart data that can be stored in a
+cookie, and will be used to populate some ``ShoppingCart`` object. This is an
+example of how such a view could work, without having to worry about signatures.
+
+from django.http import HttpResponse
+from signedcookies import utils
+from myapp.utils import ShoppingCart
+
+def view_cart(request):
+response = HttpResponse()
+try:
+cart = ShoppingCart(request.COOKIES['cart']))
+except:
+# The cookie was not found, or was malformed, so create a new cart
+cart = ShoppingCart()
+response.set_cookie('cart', cart.cookie_data)
+
+# Continue processing the shopping cart
+
+return response
+
+Manual signing
+==============
+
+If only a portion of the project needs signed cookies, or if you need additional
+control of what happens with your cookies, there is a manual option that doesn't
+rely on middleware. There are two functions provided, which can be used to
+manually sign and validate cookie values within views.
+
+These utilities live in ``signedcookies.utils``.
+
+sign(key, unsigned_value)
+-------------------------
+
+When setting cookies, a signature can be attached manually by using this simple
+function. It takes the cookie's name and value and returns a signed value that
+is suitable for being set to a cookie.
+
+This function will not set the cookie to the response; this still has to be done
+according to HttpResponse_.
+
+.. _HttpResponse: http://www.djangoproject.com/documentation/request_response/
+
+unsign(key, signed_value)
+-------------------------
+
+When receiving a signed cookie from an incoming request, the signature will
+still be attached, and must be manually validated and removed. This function
+handles both tasks, raising ``django.core.exceptions.SuspiciousOperation``
+for invalid or unsigned cookies, and returning the unsigned value otherwise.
+
+Invalid cookies
+---------------
+
+If the cookie is not signed or invalid, ``unsign`` will raise an exception,
+which must be handled by the view to prevent server error responses. Catching
+the exception allows a view to know whether a cookie wasn't set, or if it was
+actually modified, and can then act accordingly, providing greater control.
+
+Example
+-------
+
+Rewriting our previous example is fairly simple
+
+from django.http import HttpResponse
+from django.core.exceptions import SuspiciousOperation
+from signedcookies import utils
+from myapp.utils import ShoppingCart
+
+def view_cart(request):
+response = HttpResponse()
+try:
+data = utils.unsign('cart', request.COOKIES['cart'])
+except SuspiciousOperation:
+# Log the request's IP or whatever else and display an message
+# chastising the user because they tampered with your cookie.
+# But set a new one anyway, so they can continue properly
+cart = ShoppingCart()
+response.set_cookie('cart', utils.sign('cart', cart.cookie_data))
+except:
+# The cookie wasn't set, so a new one should be set
+cart = ShoppingCart()
+response.set_cookie('cart', utils.sign('cart', cart.cookie_data))
+else:
+# Everything went well, so populate the cart
+cart = ShoppingCart(data)
+
+# Continue processing the shopping cart
+
+return response
+
+A note about stolen cookies
+===========================
+
+While cookie signing is a reasonable way to ensure that a cookie has not been
+edited, there is no guarantee that it is being requested by the same computer
+where it was first set. If a computer is compromised and its cookies stolen,
+the thief would be able to use the signed cookie with no interference.
+
+Therefore, any applications that implement mission-critical functionality with
+signed cookies should take extra precautions to anticipate cookie theft.
+
+

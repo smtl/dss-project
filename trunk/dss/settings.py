@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/var/www/dss.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/var/www/dss/dss.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+  
 )
 
 ROOT_URLCONF = 'dss.urls'
@@ -119,9 +120,21 @@ INSTALLED_APPS = (
     'dss.questions',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'django.contrib.sessions',
+    # Add the guest and django_cron applications.
+    #'guest',
+    #'django_cron',
+
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    #'django.contrib.admindocs',
 )
+
+# Override the default settings for cleaning up guests.
+import datetime
+# How long a guest user must have been inactive to get deleted.
+GUEST_DELETE_TIME = datetime.timedelta(hours=72)
+# How often we check guest users and delete old ones (in seconds).
+GUEST_DELETE_FREQUENCY = 8640
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
