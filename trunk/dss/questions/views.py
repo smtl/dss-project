@@ -5,7 +5,7 @@ from dss.questions.models import Question, Answer
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from signedcookies import utils
+"""from signedcookies import utils"""
 import time
 
 #from guest.decorators import guest_allowed, login_required
