@@ -17,7 +17,7 @@ body {
 
 
 a { 
-color: #0099FF;
+color: #545454;
 text-decoration: none; 
 }
  
@@ -58,53 +58,39 @@ margin: 0;
 padding: 5px 20px; 
 }
 
-/*  positioning-layers statisch und absolut */
-
-#left {
-position: absolute;
-left: -2px;
-width: 8%;
-}
-
-#left ul {
-list-style-type: none;
-padding-left: 2px;
-border: 2px solid #564b47;
-}
-
-#table {
-	position:relative;
-	left:14%;
-	border-top:none;
-	height:auto;
-	width:80%;
-	border:none;
-}
-
-#table tr {
-	width:100%;
-}
-
-#table tr td {
-	width:50%;
-	border:0;
-}
-
-#left li {
-margin-bottom: 0px;
-background-color: white;
-}
-
-
 #content {
-padding: 2px;
-padding-top:10px;
-padding-left: 4px;
-position:absolute;
+	padding:10px;
+}
+
+#right-box {
+	float:right;
+	margin-top:5%;
+	width:52%;
+	border: 2px solid #454545;
+	background-color: #ffffff;
+	padding-bottom:40px;
+}
+
+#title {
+	padding:5px;
+	color:white;
+	position:static;
+	top:0%;
+	margin-top:0px;
+	padding-bottom:5px;
+	background-color:#454545;
+}
+
+#left-box {
+float:left;
+padding: 0px;
+margin-top:0px;
+padding-bottom:40px;
+margin-left: 4px;
+position:relative;
 width:45%;
-border: 2px solid #564b47;
+border: 2px solid #454545;
 border-top: 0px;
-top:0%;
 background-color: #ffffff;    
 }
 
@@ -127,24 +113,21 @@ float: right;
         {% endif %}
         </div>
     </div>
-    <div id="left">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/admin/">Admin</a></li>
-            <li><a href="/questions/">All Questions</a></li>
-        </ul>
-    </div>
-
-<table id="table">
-    <tr>
-      <td><div id="content">
+<div id="left-box">
+	<div id="title">Questions</div>
+	<div id="content">
         {% block content %}{% endblock %}
-    </div></td>
-      <td><div id="content">
+	</div>
+    </div><div id="right-box">
+	<div id="title">
 	Recommendations
-    </div></td>
-    </tr>
-</table>
+	</div><div id="content">
+	Recommend1<br />
+	Recommend2<br />
+	Recommend3<br />
+	Recommend4<br />
+	</div>
+    </div>
     
 </body>
 </html>
