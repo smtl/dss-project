@@ -38,6 +38,8 @@ def detail(request, question_id):
 
 def answer(request, question_id):
     q = get_object_or_404(Question, pk=question_id)
+    num = int(question_id)+1
+    next = get_object_or_404(Question, pk=num)
     try:
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
     except (KeyError, Answer.DoesNotExist):
@@ -52,7 +54,10 @@ def answer(request, question_id):
         qa.question = q
         qa.save()
         #selected_answer.save()
-        return HttpResponseRedirect(reverse('dss.questions.views.results', args=(q.id,)))
+        if num > Question.objects.count:
+            return HttpResponseRedirect(reverse('dss.questions.views.results', args=(q.id,)))
+        else:
+            return render_to_response('questions/detail.html', {'question': next})
 
 def results(request, question_id):
     q = get_object_or_404(Question, pk=question_id)
