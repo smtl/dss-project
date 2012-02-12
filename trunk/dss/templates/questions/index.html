@@ -1,6 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
 {% if latest_question_list %}
     {% for q in latest_question_list %}
-        <b>{{ q.question }}</b><br/>
+        <a href="/questions/{{q.id}}/">{{ q.question }}</a><br/>
 	{% for a in q.answers %}
             <p>{{ a.answer }}</p>
         {% endfor %}
@@ -9,3 +12,4 @@
 {% else %}
     <p>No questions are available.</p>
 {% endif %}
+{% endblock %}

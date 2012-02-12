@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>{% block title %}DSS{% endblock %}</title>
+<style type="text/css"><!--
+/*  body und schrift deffinitionen */
+body {
+  background-color: #e1ddd9;
+  font-size: 13px;
+  font-family: Arial, SunSans-Regular, Sans-Serif;
+  color:#564b47;  
+  padding:0;
+  margin:0;
+}
+
+
+
+a { 
+color: #0099FF;
+text-decoration: none; 
+}
+ 
+
+#header {
+font-size: 16px;
+text-transform:uppercase;
+color: #564b47;
+background-color: #90897a;
+padding:5px 15px;
+margin:0px
+}
+
+#header a{
+color: #564b47;
+}
+
+#header a:hover{
+color: white;
+}
+
+#header li{
+display: inline;
+}
+
+h2 {
+font-size:16px;
+padding-top:10px;
+text-transform:uppercase;
+color: #564b47;
+background-color: transparent;
+}
+
+.logo { margin: 20px 0; }
+
+p, h2, pre {
+margin: 0; 
+padding: 5px 20px; 
+}
+
+/*  positioning-layers statisch und absolut */
+
+#left {
+position: absolute;
+left: 0;
+width: 120px;
+}
+
+#left ul {
+list-style-type: none;
+padding-left: 10px;
+}
+
+#left li {
+margin-bottom: 2px;
+background-color: white;
+}
+
+#content {
+padding: 2px;
+padding-left: 4px;
+margin: 0 220px;
+border: 2px solid #564b47;
+border-top: none;
+background-color: #ffffff;    
+}
+
+#right {
+position: absolute;
+right: 0;        
+width: 220px;
+background-color: #f9c;
+}
+
+#user-info {
+float: right;
+}
+--></style>
+</head>
+
+<body>
+    <div id=header>
+        <li><a href="/">Home</a></li> |
+        <li><a href="/admin/">Admin</a></li> |
+        <li><a href="/questions/">All Questions</a></li>
+	<div id="user-info">
+	{% if user.is_authenticated %}
+        Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
+        {% else %}
+            <a href="/accounts/login">Log in</a> or <a href="/accounts/register">Register</a>
+        {% endif %}
+        </div>
+    </div>
+    <div id="left">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin/">Admin</a></li>
+            <li><a href="/questions/">All Questions</a></li>
+        </ul>
+    </div>
+
+    <div id="right">
+       <h2>MENU</h2> 
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

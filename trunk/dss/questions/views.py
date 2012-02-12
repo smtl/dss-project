@@ -1,7 +1,8 @@
 # Create your views here.
 
 from django.http import HttpResponseRedirect, HttpResponse
-from dss.questions.models import Question, Answer
+from dss.questions.models import Question, Answer, AnsweredQuestion
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -21,15 +22,15 @@ import time
  #  ...
 
 def hello(request, name="world"):
-    if 'name' in request.GET and request.GET['name'] is not None:
-    	hello = "Hello "+request.GET['name']+"!"
+    if request.user.is_authenticated():
+        hello = "Hello "+request.user.username
     else:
-        hello = "Hello World!"
+        hello = "Hello stranger"
     return HttpResponse(hello)
 
 def questions(request):
     latest_question_list = Question.objects.all()
-    return render_to_response('questions/index.html', {'latest_question_list': latest_question_list})
+    return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
 
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
@@ -45,8 +46,12 @@ def answer(request, question_id):
             'error_message': "You didn't choose an answer",
             }, context_instance=RequestContext(request))
     else:
-        selected_answer.save()
-        #return HttpResponseRedirect(reverse('questions.views.results', kwargs={'object_id': q.id}))
+        qa = AnsweredQuestion()
+        qa.user = request.user
+        qa.answer = selected_answer
+        qa.question = q
+        qa.save()
+        #selected_answer.save()
         return HttpResponseRedirect(reverse('dss.questions.views.results', args=(q.id,)))
 
 def results(request, question_id):

@@ -96,6 +96,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
   
@@ -118,6 +119,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dss.questions',
+    'dss.auth',
+    'dss.recommendations',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.sessions',
@@ -129,12 +132,7 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
 )
 
-# Override the default settings for cleaning up guests.
-import datetime
-# How long a guest user must have been inactive to get deleted.
-GUEST_DELETE_TIME = datetime.timedelta(hours=72)
-# How often we check guest users and delete old ones (in seconds).
-GUEST_DELETE_FREQUENCY = 8640
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
