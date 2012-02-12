@@ -62,34 +62,57 @@ padding: 5px 20px;
 
 #left {
 position: absolute;
-left: 0;
-width: 120px;
+left: -2px;
+width: 8%;
 }
 
 #left ul {
 list-style-type: none;
-padding-left: 10px;
+padding-left: 2px;
+border: 2px solid #564b47;
+}
+
+#table {
+	position:relative;
+	left:9%;
+	border-top:none;
+	height:auto;
+	width:80%;
+	border:none;
+}
+
+#table tr {
+	width:100%;
+}
+
+#table tr td {
+	width:50%;
+	border:0;
 }
 
 #left li {
-margin-bottom: 2px;
+margin-bottom: 0px;
 background-color: white;
 }
 
+
 #content {
 padding: 2px;
+padding-top:10px;
 padding-left: 4px;
-margin: 0 220px;
+position:absolute;
+width:45%;
 border: 2px solid #564b47;
-border-top: none;
+border-top: 0px;
+top:0%;
 background-color: #ffffff;    
 }
 
 #right {
-position: absolute;
+position:fixed;
 right: 0;        
-width: 220px;
-background-color: #f9c;
+width: 12%;
+background-color: #7575ff
 }
 
 #user-info {
@@ -122,9 +145,16 @@ float: right;
     <div id="right">
        <h2>MENU</h2> 
     </div>
-
-    <div id="content">
+<table id="table">
+    <tr>
+      <td><div id="content">
         {% block content %}{% endblock %}
-    </div>
+    </div></td>
+      <td><div id="content">
+	Recommendations
+    </div></td>
+    </tr>
+</table>
+    
 </body>
 </html>
