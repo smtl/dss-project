@@ -20,7 +20,9 @@ urlpatterns = patterns('dss.questions.views',
 
 urlpatterns += patterns('dss.auth.views',
     url(r'^accounts/login/$', login),
-    url(r'^accounts/logout/$', logout),
+    #url(r'^accounts/logout/$', logout),
+    url(r'^accounts/logout/$', logout,
+                          {'next_page': '/'}),
     url(r'^accounts/register/$', 'register'),
 )
 
