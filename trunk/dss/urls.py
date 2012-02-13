@@ -26,6 +26,10 @@ urlpatterns += patterns('dss.auth.views',
     url(r'^accounts/register/$', 'register'),
 )
 
+urlpatterns += patterns('dss.recommendations.views',
+    url(r'^recommendations/$', 'show'),
+)
+
 urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
