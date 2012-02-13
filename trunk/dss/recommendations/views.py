@@ -17,3 +17,5 @@ def show(request):
         for a in answers:
             recs = RecAnswerLink.objects.filter(answer=a)
         return render_to_response('recommendations/show.html', {'recs': recs})
+    else:
+        return render_to_response('questions/index.html', {})
