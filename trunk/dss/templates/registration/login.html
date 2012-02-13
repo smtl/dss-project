@@ -1,6 +1,122 @@
-{% extends "base.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>{% block title %}DSS{% endblock %}</title>
+<style type="text/css">
 
-{% block content %}
+body {
+  background-color: #e1ddd9;
+  font-size: 13px;
+  font-family: Arial, SunSans-Regular, Sans-Serif;
+  color:#564b47;  
+  padding:0;
+  margin:0;
+}
+
+
+
+a { 
+color: #545454;
+text-decoration: none; 
+}
+ 
+
+#header {
+font-size: 16px;
+text-transform:uppercase;
+color: #564b47;
+background-color: #90897a;
+padding:5px 15px;
+margin:0px
+}
+
+#header a{
+color: #564b47;
+}
+
+#header a:hover{
+color: white;
+}
+
+#header li{
+display: inline;
+}
+
+h2 {
+font-size:16px;
+padding-top:10px;
+text-transform:uppercase;
+color: #564b47;
+background-color: transparent;
+}
+
+.logo { margin: 20px 0; }
+
+p, h2, pre {
+margin: 0; 
+padding: 5px 20px; 
+}
+
+#content {
+	padding:10px;
+}
+
+#right-box {
+	float:right;
+	margin-top:5%;
+	width:52%;
+	border: 2px solid #454545;
+	background-color: #ffffff;
+	padding-bottom:40px;
+}
+
+#title {
+	padding:5px;
+	color:white;
+	position:static;
+	top:0%;
+	margin-top:0px;
+	padding-bottom:5px;
+	background-color:#454545;
+}
+
+#left-box {
+float:left;
+padding: 0px;
+margin-top:0px;
+padding-bottom:40px;
+margin-left: 4px;
+position:relative;
+width:45%;
+border: 2px solid #454545;
+border-top: 0px;
+background-color: #ffffff;    
+}
+
+#user-info {
+float: right;
+}
+</style>
+</head>
+
+<body>
+    <div id=header>
+        <li><a href="/">Home</a></li> |
+        <li><a href="/admin/">Admin</a></li> |
+        <li><a href="/questions/">All Questions</a></li>
+	<div id="user-info">
+	{% if user.is_authenticated %}
+        Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
+        {% else %}
+            <a href="/accounts/login">Log in</a> or <a href="/accounts/register">Register</a>
+        {% endif %}
+        </div>
+    </div>
+<div id="left-box">
+	<div id="title">Questions</div>
+	<div id="content">
+        {% block content %}
 
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
@@ -17,3 +133,10 @@
   <form action='.' method='post'>
 
 {% endblock %}
+	</div>
+
+    
+</body>
+</html>
+
+
