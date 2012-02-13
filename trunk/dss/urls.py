@@ -11,10 +11,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('dss.questions.views',
     url(r'^$', 'questions'),
-    url(r'^hello/', 'hello'),
+    url(r'^hello/$', 'hello'),
     url(r'^questions/$', 'questions'),
     url(r'^questions/(?P<question_id>\d+)/$', 'detail'),
-    url(r'^(?P<question_id>\d+)/results/$', 'results'),
+    url(r'^questions/results/$', 'results'),
     url(r'^questions/(?P<question_id>\d+)/answer/$', 'answer'),
 )
 

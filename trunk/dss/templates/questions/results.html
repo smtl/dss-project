@@ -1,7 +1,7 @@
-<h1>{{ question.question }}</h1>
+{% extends "base.html" %}
 
-<ul>
-{% for answer in question.answer_set.all %}
-    <li>{{ answer.answer }} -- {{ answer.answers }} answer{{ answer.answers|pluralize }}</li>
-{% endfor %}
-</ul>
+{% block content %}
+
+No more questions to answer.
+
+{% endblock %}

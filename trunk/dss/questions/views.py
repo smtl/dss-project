@@ -36,10 +36,16 @@ def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
     return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
+def get_or_none(model, **kwargs):
+    try:
+        return model.objects.get(**kwargs)
+    except model.DoesNotExist:
+        return None
+
 def answer(request, question_id):
-    q = get_object_or_404(Question, pk=question_id)
+    q = get_or_none(Question, pk=question_id)
     num = int(question_id)+1
-    next = get_object_or_404(Question, pk=num)
+    next = get_or_none(Question, pk=num)
     try:
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
     except (KeyError, Answer.DoesNotExist):
@@ -54,11 +60,11 @@ def answer(request, question_id):
         qa.question = q
         qa.save()
         #selected_answer.save()
-        if num > Question.objects.count:
-            return HttpResponseRedirect(reverse('dss.questions.views.results', args=(q.id,)))
+        if next == None:
+            return render_to_response('questions/results.html')
         else:
             return render_to_response('questions/detail.html', {'question': next})
 
-def results(request, question_id):
-    q = get_object_or_404(Question, pk=question_id)
-    return render_to_response('questions/results.html', {'question': q})
+def results(request):
+    #q = get_object_or_404(Question, pk=question_id)
+    return render_to_response('questions/results.html', {}) #{'question': q})
