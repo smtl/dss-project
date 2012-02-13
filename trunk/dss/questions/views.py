@@ -54,11 +54,12 @@ def answer(request, question_id):
             'error_message': "You didn't choose an answer",
             }, context_instance=RequestContext(request))
     else:
-        qa = AnsweredQuestion()
-        qa.user = request.user
-        qa.answer = selected_answer
-        qa.question = q
-        qa.save()
+        if request.user.is_authenticated():
+            qa = AnsweredQuestion()
+            qa.user = request.user
+            qa.answer = selected_answer
+            qa.question = q
+            qa.save()
         #selected_answer.save()
         if next == None:
             return render_to_response('questions/results.html')
