@@ -6,27 +6,16 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-"""from signedcookies import utils"""
 import time
 
-#from guest.decorators import guest_allowed, login_required
-
-# A guest user account will be automatically created for unauthenticated users who access this view.
-#@guest_allowed
-#def some_view(request):
-#    ....
-
-# A guest user, like an unauthenticated user, will be redirected to the login page.
-#@login_required
-#def some_other_view(request):
- #  ...
-
-def hello(request, name="world"):
+# Stephen Lowry, Stephen Murphy
+def hello(request):
     if request.user.is_authenticated():
         hello = "Hello "+request.user.username
     else:
-        hello = "Hello stranger"
-    return HttpResponse(hello)
+        if "question" not in request.session:
+            request.session["question"] = "why is thie broke?"
+    return render_to_response('questions/hello.html', {'color': request.session["question"]}, context_instance=RequestContext(request))
 
 def questions(request):
     latest_question_list = Question.objects.all()
@@ -34,7 +23,13 @@ def questions(request):
 
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
-    return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+
+    if request.user.is_authenticated():
+        pass
+    elif q not in request.session:
+        return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
 
 def get_or_none(model, **kwargs):
     try:
@@ -60,11 +55,15 @@ def answer(request, question_id):
             qa.answer = selected_answer
             qa.question = q
             qa.save()
+        elif q not in request.session:
+            request.session[q] = selected_answer
         #selected_answer.save()
         if next == None:
-            return render_to_response('questions/results.html')
+            return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
+        elif next not in request.session:
+            return render_to_response('questions/detail.html', {'question': next}, context_instance=RequestContext(request))
         else:
-            return render_to_response('questions/detail.html', {'question': next})
+            return render_to_response('questions/detail.html', {'question': next, 'answered': request.session[next]}, context_instance=RequestContext(request))
 
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)

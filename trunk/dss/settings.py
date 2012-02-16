@@ -107,7 +107,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-  
 )
 
 ROOT_URLCONF = 'dss.urls'
@@ -132,13 +131,19 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.sessions',
-    # Add the guest and django_cron applications.
-    #'guest',
-    #'django_cron',
-
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+      "django.contrib.auth.context_processors.auth",
+      "django.core.context_processors.request",
+      "django.core.context_processors.debug",
+      "django.core.context_processors.i18n",
+      "django.core.context_processors.media",
+      "django.contrib.messages.context_processors.messages",
+)
+
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 

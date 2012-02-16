@@ -2,11 +2,14 @@
 
 {% block content %}
 
-{{ question }}
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="/questions/{{question.id}}/answer/" method="post">
+{% if answered == None %}
+
+{{ question }}
+
+    <form action="/questions/{{question.id}}/answer/" method="post">
 {% csrf_token %}
 {% for answer in question.answer_set.all %}
     <input type="radio" name="answer" id="answer{{forloop.counter}}" value="{{answer.id}}" />
@@ -15,5 +18,11 @@
 <input type="hidden" name="user_id" value="{{ user.id }}" />
 <input type="submit" value="answer" />
 </form>
+
+{% else %}
+
+{{ answered }}
+
+{% endif %}
 
 {% endblock %}
