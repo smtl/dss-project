@@ -6,16 +6,30 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-import time
+"""from signedcookies import utils"""
+import datetime
 
-# Stephen Lowry, Stephen Murphy
-def hello(request):
+#from dss.questions.models import QuestionView
+
+
+#from guest.decorators import guest_allowed, login_required
+
+# A guest user account will be automatically created for unauthenticated users who access this view.
+#@guest_allowed
+#def some_view(request):
+#    ....
+
+# A guest user, like an unauthenticated user, will be redirected to the login page.
+#@login_required
+#def some_other_view(request):
+ #  ...
+
+def hello(request, name="world"):
     if request.user.is_authenticated():
         hello = "Hello "+request.user.username
     else:
-        if "question" not in request.session:
-            request.session["question"] = "why is thie broke?"
-    return render_to_response('questions/hello.html', {'color': request.session["question"]}, context_instance=RequestContext(request))
+        hello = "Hello stranger"
+    return HttpResponse(hello)
 
 def questions(request):
     latest_question_list = Question.objects.all()
@@ -23,13 +37,7 @@ def questions(request):
 
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
-
-    if request.user.is_authenticated():
-        pass
-    elif q not in request.session:
-        return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
-    else:
-        return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
+    return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
 def get_or_none(model, **kwargs):
     try:
@@ -55,16 +63,62 @@ def answer(request, question_id):
             qa.answer = selected_answer
             qa.question = q
             qa.save()
-        elif q not in request.session:
-            request.session[q] = selected_answer
         #selected_answer.save()
         if next == None:
-            return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
-        elif next not in request.session:
-            return render_to_response('questions/detail.html', {'question': next}, context_instance=RequestContext(request))
+            return render_to_response('questions/results.html')
         else:
-            return render_to_response('questions/detail.html', {'question': next, 'answered': request.session[next]}, context_instance=RequestContext(request))
+            return render_to_response('questions/detail.html', {'question': next})
 
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}) #{'question': q})
+
+# Adrian Kwizera
+def index(req):
+
+   # A secret non-empty string to sign the cookie
+   secret = 'my_secret'
+
+   # Pass the cookie class and the secret to get_cookies()
+  # signed_cookies = Cookie.get_cookies(req, Cookie.SignedCookie, secret=secret)
+
+   # Get the returned signed cookie
+   #returned_signed = signed_cookies.get('signed', None)
+   
+   # If the signed cookie exists
+   if returned_signed:
+      # Check if the cookie was not altered
+      if type(returned_signed) is not Cookie.SignedCookie:
+         message = 'The cookie was altered'
+      else:
+         message = 'The cookie was not altered'
+   else:
+      message = 'This is your first visit'
+     
+   # Create a signed cookie
+   send_signed = Cookie.SignedCookie('signed', 'this string is signed', secret)
+
+   # The cookie will expire in 30 days.
+   send_signed.expires = time.time() + 30 * 24 * 60 * 60
+   
+   # Add the cookie to the HTTP header.
+   Cookie.add_cookie(req, send_signed)
+
+   return """\
+<html><body>
+<p>%s</p>
+<p><pre>%s</pre></p>
+<p>%s</p>
+</body></html>
+""" % ('You have just received this cookie:', send_signed, message)
+
+#Adrian Kwizera
+def record_view(request):
+
+  """
+  creating a counter for displaying the number of users
+  """
+    count = User.objects.count()
+    return render_to_response('questions/record_view.html', {'count': count})
+    #return HttpResponse(u"%s" % User.objects.count())
+
