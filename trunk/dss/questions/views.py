@@ -115,16 +115,6 @@ def index(req):
 #Adrian Kwizera
 def record_view(request):
 
-   # question = get_object_or_404(Question, pk=question_id)
-
-    #if not QuestionView.objects.filter(
-     #               question=question,
-      #              session=request.session.session_key):
-       # view = QuestionView(question=question,
-        #                    ip=request.META['REMOTE_ADDR'],
-         #                   created=datetime.datetime.now(),
-          #                  session=request.session.session_key)
-        #view.save()
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count})
     #return HttpResponse(u"%s" % User.objects.count())
