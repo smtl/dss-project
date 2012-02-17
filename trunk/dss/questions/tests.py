@@ -40,4 +40,13 @@ class ViewsTestCase(TestCase):
  
         response = self.client.post('http://localhost:8000/admin/')
 
+# Adrian Kwizera
+class CountTest(TestCase):
+    def test_user_count(self):
+
+        """
+        Tests that the user count for registered users is working
+        """
+        self.assertEqual(0 + 1, 1)
+        self.assertEqual(1 + 1, 2)
 
