@@ -145,7 +145,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
-AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+AUTH_PROFILE_MODULE = 'auth.UserProfile'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -2,9 +2,9 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>{% block title %}DSS{% endblock %}</title>
-<style type="text/css"><!--
-/*  body und schrift deffinitionen */
+<title>{% block title %}Create an account{% endblock %}</title>
+<style type="text/css">
+
 body {
   background-color: #e1ddd9;
   font-size: 13px;
@@ -104,8 +104,7 @@ float: right;
     <div id=header>
         <li><a href="/">Home</a></li> |
         <li><a href="/admin/">Admin</a></li> |
-        <li><a href="/questions/">All Questions</a></li> |
-        <li><a href="/profile/">Profile</a></li>
+        <li><a href="/questions/">All Questions</a></li>
 	<div id="user-info">
 	{% if user.is_authenticated %}
         Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
@@ -115,17 +114,21 @@ float: right;
         </div>
     </div>
 <div id="left-box">
-    <div id="title">Questions</div>
+	<div id="title">Questions</div>
 	<div id="content">
-            {% block content %}{% endblock %}
+
+{% block content %}
+<h1>Select your profile</h1>
+
+<form action="/changeprofile/" method="post">
+{% csrf_token %}
+{% for p in profilechoice %}
+    <input type="radio" name="p" id="p{{forloop.counter}}" value="{{p.id}}" />
+    <label for="p{{forloop.counter}}">{{p.name}}</label><br />
+{% endfor %}
+<input type="hidden" name="user_id" value="{{ user.id }}" />
+<input type="submit" value="Select profile" />
+</form>
+
+{% endblock %}
 	</div>
-    </div>
-<div id="right-box">
-    <div id="title">Recommendations</div>
-    <div id="content">
-            {% block rec %}{% endblock %}
-	</div>
-    </div>
-    
-</body>
-</html>

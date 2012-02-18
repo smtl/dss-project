@@ -26,6 +26,8 @@ urlpatterns += patterns('dss.auth.views',
     url(r'^accounts/logout/$', logout,
                           {'next_page': '/'}),
     url(r'^accounts/register/$', 'register'),
+    url(r'^profile/$', 'profile'),
+    url(r'changeprofile/$', 'change_profile'),
 )
 
 urlpatterns += patterns('dss.recommendations.views',

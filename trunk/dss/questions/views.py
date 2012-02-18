@@ -1,7 +1,7 @@
 # Create your views here.
 
 from django.http import HttpResponseRedirect, HttpResponse
-from dss.questions.models import Question, Answer, AnsweredQuestion
+from dss.questions.models import Question, Answer, AnsweredQuestion, QuestionPath
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -39,6 +39,17 @@ def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
     return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
+    if request.user.is_authenticated():
+        answered = get_or_none(AnsweredQuestion, user=request.user, question=q)
+        if answered == None:
+            return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+        else:
+            return render_to_response('questions/detail.html', {'question': q, 'answered': answered.answer}, context_instance=RequestContext(request))
+    elif q not in request.session:
+        return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
+
 def get_or_none(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
@@ -48,7 +59,11 @@ def get_or_none(model, **kwargs):
 def answer(request, question_id):
     q = get_or_none(Question, pk=question_id)
     num = int(question_id)+1
-    next = get_or_none(Question, pk=num)
+    next1 = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile())
+    if next1 != None:
+        next = next1.follow_question
+    else:
+        return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
     try:
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
     except (KeyError, Answer.DoesNotExist):

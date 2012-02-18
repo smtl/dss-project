@@ -1,4 +1,5 @@
-from dss.questions.models import Question, Answer
+from dss.questions.models import Question, Answer, QuestionPath
+from dss.auth.models import Profile
 from dss.recommendations.models import RecAnswerLink
 from django.contrib import admin
 from django import forms
@@ -30,4 +31,18 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline, RecAnswerLinkInline]
     search_fields = ['question']
 
+class QuestionPathAdmin(admin.TabularInline):
+    model = QuestionPath
+    fieldsets = [
+        ('Question Path', {'fields': ('profile', 'current_question', 'follow_question')
+    }),
+    ]
+
+class ProfileAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Profile', {'fields': ['name']}),
+    ]
+    inlines = [QuestionPathAdmin]
+
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Question, QuestionAdmin)

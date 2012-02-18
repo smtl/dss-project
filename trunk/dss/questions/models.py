@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from dss.auth.models import Profile
 
 # Create your models here.
 
@@ -10,12 +11,13 @@ class Question(models.Model):
         return self.question
 
 class Answer(models.Model):
-    ANSWER_CHOICES = (
-        ('Yes', 'Yes'),
-        ('No', 'No'),
-    )
+    # The following is if you want to limit the answer choices to Yes and No
+    #ANSWER_CHOICES = (
+    #    ('Yes', 'Yes'),
+    #    ('No', 'No'),
+    #)
     question = models.ForeignKey(Question)
-    answer = models.CharField(max_length=200, choices=ANSWER_CHOICES)
+    answer = models.CharField(max_length=200)#, choices=ANSWER_CHOICES)
     def __unicode__(self):
         return self.question.question+" "+self.answer
 
@@ -29,24 +31,9 @@ class Recommendation(models.Model):
     def __unicode__(self):
         return self.recommendation
 
-class Guest(models.Model):
-    
-    """
-    A temporary user.
+class QuestionPath(models.Model):
+    profile = models.ForeignKey(Profile)
+    current_question = models.ForeignKey(Question, related_name='current_question')
+    follow_question = models.ForeignKey(Question, related_name='follow_question')
 
-    Fields:
-    ``user`` - The temporary user.
-    ``last_used`` - The last time we noted this user doing something.
-    
-    All users with a record in this model are temporary and should be
-    deleted after GUEST_DELETE_TIME.
-    
-    """
 
-    user = models.ForeignKey(User)
-    last_used = models.DateTimeField(User)
-
-    @classmethod
-    def create_guest(self, user):
-        guest = Guest(user=user, last_used=datetime.datetime.now())
-        return guest
