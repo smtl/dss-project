@@ -90,7 +90,8 @@ class RecAnswerLinkTest(unittest.TestCase):
         self.assertEqual(self.ralink.question.question, "What?")
         self.assertEqual(self.ralink.recommendation.recommendation, "This is a recommendation")
         self.assertEqual(self.ralink.answer.answer, "Yes")
-=======
+
+
 #Adrian Kwizera
 #Testing the user profile
 class UserProfileTesting(unittest.TestCase):
