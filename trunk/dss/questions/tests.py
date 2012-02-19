@@ -152,18 +152,30 @@ class RecAnswerLinkTest(unittest.TestCase):
         self.a.delete()
         self.r.delete()
 
-
 #Adrian Kwizera
-#Testing the user profile
-class UserProfileTesting(unittest.TestCase):
+#Testing the user creation
+class UserCreationTesting(unittest.TestCase):
     def setUp(self):
-        self.profile1 = User.objects.create(username='Manager')
-        self.profile2 = User.objects.create(username='Engineer')
+        self.profile1 = User.objects.create(username='Adrian')
+        self.profile2 = User.objects.create(username='Poland')
+        self.profile3 = User.objects.create(username='James')
+        self.profile4 = User.objects.create(username='Cathy')
+        self.profile5 = User.objects.create(username='Stephen')
+        self.profile6 = User.objects.create(username='Murphy')
 
     def testA(self):
-        self.assertEquals(self.profile1.username, 'Manager')
-        self.assertEquals(self.profile2.username, 'Engineer')
-       
+        self.assertEquals(self.profile1.username, 'Adrian')
+        self.assertEquals(self.profile2.username, 'Poland')
+        self.assertEquals(self.profile3.username, 'James')
+        self.assertEquals(self.profile4.username, 'Cathy')
+        self.assertEquals(self.profile5.username, 'Stephen')
+        self.assertEquals(self.profile6.username, 'Murphy')
+
         def tearDown(self):
           self.profile1.delete()
           self.profile2.delete()
+          self.profile3.delete()
+          self.profile4.delete()
+          self.profile5.delete()
+          self.profile6.delete()
+
