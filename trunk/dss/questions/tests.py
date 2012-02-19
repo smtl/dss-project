@@ -21,6 +21,10 @@ from django.contrib.auth.models import User
 from dss.auth.models import Profile
 import copy
 
+from dss.auth.models import Profile, UserProfile
+from dss.recommendations.models import Recommendation, RecAnswerLink
+from dss.questions.models import Question, Answer, QuestionPath, AnsweredQuestion
+
 class SimpleTest(TestCase):
     def test_basic_addition(self):
         """
@@ -51,6 +55,42 @@ class CountTest(TestCase):
         self.assertEqual(0 + 1, 1)
         self.assertEqual(1 + 1, 2)
 
+# Stephen Lowry
+class ProfileTest(unittest.TestCase):
+    def setUp(self):
+        self.p = Profile.objects.create(name="TestProfile")
+    def testProfileName(self):
+        self.assertEqual(self.p.name, "TestProfile")
+
+# Stephen Lowry
+class UserProfileTest(unittest.TestCase):
+    def setUp(self):
+       self.u = User.objects.create(username="Test", password="test")
+       self.p = Profile.objects.create(name="TestProfile")
+       self.userprofile = UserProfile.objects.create(user=self.u, profile=self.p)
+    def testUserProfile(self):
+       self.assertEqual(self.userprofile.user.username, "Test")
+       self.assertEqual(self.userprofile.profile.name, "TestProfile")
+
+# Stephen Lowry
+class RecommendationTest(unittest.TestCase):
+    def setUp(self):
+        self.r = Recommendation.objects.create(recommendation="This is a recommendation")
+    def testRecommendation(self):
+        self.assertEqual(self.r.recommendation, "This is a recommendation")
+
+# Stephen Lowry
+class RecAnswerLinkTest(unittest.TestCase):
+    def setUp(self):
+        self.r = Recommendation.objects.create(recommendation="This is a recommendation")
+        self.q = Question.objects.create(question="What?")
+        self.a = Answer.objects.create(question=self.q, answer="Yes")
+        self.ralink = RecAnswerLink.objects.create(question=self.q, answer=self.a, recommendation=self.r)
+    def testRecAnswerLink(self):
+        self.assertEqual(self.ralink.question.question, "What?")
+        self.assertEqual(self.ralink.recommendation.recommendation, "This is a recommendation")
+        self.assertEqual(self.ralink.answer.answer, "Yes")
+=======
 #Adrian Kwizera
 #Testing the user profile
 class UserProfileTesting(unittest.TestCase):
@@ -65,5 +105,3 @@ class UserProfileTesting(unittest.TestCase):
         def tearDown(self):
           self.profile1.delete()
           self.profile2.delete()
-
-
