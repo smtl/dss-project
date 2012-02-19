@@ -45,7 +45,7 @@ def index(request):
         # If the user 
         q = get_next_question_or_none(request.user)
         if q == None:
-            return render_to_response('questions/results.html')
+            return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
     else:
@@ -110,7 +110,7 @@ def answer(request, question_id):
  	    request.session[q] = selected_answer
         #selected_answer.save()
         if qpath == None:
-            return render_to_response('questions/results.html')
+            return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
             return render_to_response('questions/detail.html', {'question': next})
 
@@ -119,7 +119,7 @@ def answer(request, question_id):
 
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
-    return render_to_response('questions/results.html', {}) #{'question': q})
+    return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
 
 
 
