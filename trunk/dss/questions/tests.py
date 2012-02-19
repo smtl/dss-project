@@ -56,10 +56,17 @@ class CountTest(TestCase):
         self.assertEqual(1 + 1, 2)
 
 # Stephen Lowry
+class UserTest(unittest.TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="Test", password="test")
+    def testUser(self)
+        self.assertEqual(self.u.username, "Test")
+
+# Stephen Lowry
 class ProfileTest(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="TestProfile")
-    def testProfileName(self):
+    def testProfile(self):
         self.assertEqual(self.p.name, "TestProfile")
 
 # Stephen Lowry
