@@ -23,7 +23,8 @@ import copy
 
 from dss.auth.models import Profile, UserProfile
 from dss.recommendations.models import Recommendation, RecAnswerLink
-from dss.questions.models import Question, Answer, QuestionPath, AnsweredQuestion
+from dss.questions.models import Question, Answer, QuestionPath
+from dss.questions.models import AnsweredQuestion
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):
@@ -83,7 +84,25 @@ class AnswerTest(unittest.TestCase):
         self.assertEqual(self.a.answer, "Yes")
     def tearDown(self):
         self.q.delete()
-        self.a.delete()  
+        self.a.delete()
+
+# Stephen Lowry
+class AnsweredQuestionTest(unittest.TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="useracc", password="useracc")
+        self.q = Question.objects.create(question = "What is your name?")
+        self.a = Answer.objects.create(question = self.q, answer = "Matt Belamy")
+        self.aq = AnsweredQuestion.objects.create(user=self.u, question=self.q, answer=self.a)
+    def testAnsweredQuestions(self):
+        self.assertEqual(self.aq.user.username, "useracc")
+        self.assertEqual(self.aq.question.question, "What is your name?")
+        self.assertEqual(self.aq.answer.answer, "Matt Belamy")
+    def tearDown(self):
+        self.u.delete()
+        self.q.delete()
+        self.a.delete()
+        self.aq.delete()
+    
 
 # Stephen Lowry
 class ProfileTest(unittest.TestCase):
@@ -91,6 +110,8 @@ class ProfileTest(unittest.TestCase):
         self.p = Profile.objects.create(name="TestProfile")
     def testProfile(self):
         self.assertEqual(self.p.name, "TestProfile")
+    def tearDown(self):
+        self.p.delete()
 
 # Stephen Lowry
 class UserProfileTest(unittest.TestCase):
@@ -112,6 +133,8 @@ class RecommendationTest(unittest.TestCase):
         self.r = Recommendation.objects.create(recommendation="This is a recommendation")
     def testRecommendation(self):
         self.assertEqual(self.r.recommendation, "This is a recommendation")
+    def tearDown(self):
+        self.r.delete()
 
 # Stephen Lowry
 class RecAnswerLinkTest(unittest.TestCase):
@@ -124,6 +147,10 @@ class RecAnswerLinkTest(unittest.TestCase):
         self.assertEqual(self.ralink.question.question, "What?")
         self.assertEqual(self.ralink.recommendation.recommendation, "This is a recommendation")
         self.assertEqual(self.ralink.answer.answer, "Yes")
+    def tearDown(self):
+        self.q.delete()
+        self.a.delete()
+        self.r.delete()
 
 
 #Adrian Kwizera
