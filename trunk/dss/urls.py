@@ -10,7 +10,7 @@ admin.autodiscover()
 #django_cron.autodiscover()
 
 urlpatterns = patterns('dss.questions.views',
-    url(r'^$', 'questions'),
+    url(r'^$', 'index'),
     url(r'^hello/$', 'hello'),
     url(r'^questions/$', 'questions'),
     url(r'^questions/(?P<question_id>\d+)/$', 'detail'),

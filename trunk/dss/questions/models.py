@@ -25,6 +25,9 @@ class AnsweredQuestion(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(Question)
     answer = models.ForeignKey(Answer)
+
+    def __unicode__(self):
+        return self.question.question
     
     class Meta:
         unique_together = ('user', 'question',)

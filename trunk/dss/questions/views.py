@@ -16,6 +16,19 @@ def get_or_none(model, **kwargs):
     except model.DoesNotExist:
         return None
 
+def get_next_question_or_none(current_user):
+    for i in xrange(Question.objects.count()-2):
+        q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question
+        a = get_or_none(AnsweredQuestion, user=current_user,question=q)
+        if a == None:
+            return q
+
+    if i == Question.objects.count() or i > Question.objects.count():
+        return None
+
+
+
+
 def hello(request, name="world"):
     if request.user.is_authenticated():
         hello = "Hello "+request.user.username
@@ -23,15 +36,31 @@ def hello(request, name="world"):
         hello = "Hello stranger"
     return HttpResponse(hello)
 
+
+
+
 # Show a list of questions
+def index(request):
+    if request.user.is_authenticated():
+        # If the user 
+        q = get_next_question_or_none(request.user)
+        if q == None:
+            return render_to_response('questions/results.html')
+        else:
+            return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+    else:
+        latest_question_list = Question.objects.all()
+        return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
+
 def questions(request):
     latest_question_list = Question.objects.all()
     return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
 
+
+
 # Present the question to the user
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
-    #return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
     
     # Check if user is logged in
     if request.user.is_authenticated():
@@ -47,10 +76,11 @@ def detail(request, question_id):
     else:
         return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
 
+
+
 # Handles the answer selected by the user/guest
 def answer(request, question_id):
     q = get_or_none(Question, pk=question_id)
-    #num = int(question_id)+1
     # Get the next question for the user based on the profile path set for their profile type
     if request.user.is_authenticated():
         up = UserProfile.objects.get(user=request.user)
@@ -60,8 +90,6 @@ def answer(request, question_id):
         qpath = get_or_none(QuestionPath, current_question=q, profile=1)
     if qpath != None:
         next = qpath.follow_question
-    else:
-        return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
     try:
         # Make sure they have selected an answer
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
@@ -81,14 +109,20 @@ def answer(request, question_id):
         elif q not in request.session:
  	    request.session[q] = selected_answer
         #selected_answer.save()
-        if next == None:
+        if qpath == None:
             return render_to_response('questions/results.html')
         else:
             return render_to_response('questions/detail.html', {'question': next})
 
+
+
+
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}) #{'question': q})
+
+
+
 
 #Adrian Kwizera
 def record_view(request):
