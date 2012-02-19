@@ -26,6 +26,10 @@ class AnsweredQuestion(models.Model):
     question = models.ForeignKey(Question)
     answer = models.ForeignKey(Answer)
     
+    class Meta:
+        unique_together = ('user', 'question',)
+
+    
 class Recommendation(models.Model):
     recommendation = models.TextField()
     def __unicode__(self):

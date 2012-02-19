@@ -13,6 +13,10 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
+            up = UserProfile()
+            up.user_id = new_user.id
+            up.profile_id = 1
+            up.save()
             return HttpResponseRedirect("/")
     else:
         form = UserCreationForm()

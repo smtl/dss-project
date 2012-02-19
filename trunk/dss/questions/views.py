@@ -6,23 +6,13 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-"""from signedcookies import utils"""
 import datetime
 
-#from dss.questions.models import QuestionView
-
-
-#from guest.decorators import guest_allowed, login_required
-
-# A guest user account will be automatically created for unauthenticated users who access this view.
-#@guest_allowed
-#def some_view(request):
-#    ....
-
-# A guest user, like an unauthenticated user, will be redirected to the login page.
-#@login_required
-#def some_other_view(request):
- #  ...
+def get_or_none(model, **kwargs):
+    try:
+        return model.objects.get(**kwargs)
+    except model.DoesNotExist:
+        return None
 
 def hello(request, name="world"):
     if request.user.is_authenticated():
@@ -31,40 +21,46 @@ def hello(request, name="world"):
         hello = "Hello stranger"
     return HttpResponse(hello)
 
+# Show a list of questions
 def questions(request):
     latest_question_list = Question.objects.all()
     return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
 
+# Present the question to the user
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
-    return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
-
+    #return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+    
+    # Check if user is logged in
     if request.user.is_authenticated():
-        answered = get_or_none(AnsweredQuestion, user=request.user, question=q)
-        if answered == None:
+        answered_already = get_or_none(AnsweredQuestion, user=request.user, question=q)
+        # Check if they have already answered this question
+        if answered_already != None:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
         else:
-            return render_to_response('questions/detail.html', {'question': q, 'answered': answered.answer}, context_instance=RequestContext(request))
+            return render_to_response('questions/detail.html', {'question': q, 'answered': answered_already}, context_instance=RequestContext(request))
+    # or check if they are a guest that has already answered this question
     elif q not in request.session:
         return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
     else:
         return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
 
-def get_or_none(model, **kwargs):
-    try:
-        return model.objects.get(**kwargs)
-    except model.DoesNotExist:
-        return None
-
+# Handles the answer selected by the user/guest
 def answer(request, question_id):
     q = get_or_none(Question, pk=question_id)
-    num = int(question_id)+1
-    next1 = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile())
-    if next1 != None:
-        next = next1.follow_question
+    #num = int(question_id)+1
+    # Get the next question for the user based on the profile path set for their profile type
+    if request.user.is_authenticated():
+        qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().id)
+        #qpath = QuestionPath.objects.get(current_question=q,profile=request.user.get_profile().id) 
+    else:
+        qpath = get_or_none(QuestionPath, current_question=q, profile=1)
+    if qpath != None:
+        next = qpath.follow_question
     else:
         return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
     try:
+        # Make sure they have selected an answer
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
     except (KeyError, Answer.DoesNotExist):
         return render_to_response('questions/detail.html', {
@@ -72,12 +68,15 @@ def answer(request, question_id):
             'error_message': "You didn't choose an answer",
             }, context_instance=RequestContext(request))
     else:
+        # Save their answer if they are logged in
         if request.user.is_authenticated():
             qa = AnsweredQuestion()
             qa.user = request.user
             qa.answer = selected_answer
             qa.question = q
             qa.save()
+        elif q not in request.session:
+ 	    request.session[q] = selected_answer
         #selected_answer.save()
         if next == None:
             return render_to_response('questions/results.html')
@@ -89,48 +88,7 @@ def results(request):
     return render_to_response('questions/results.html', {}) #{'question': q})
 
 #Adrian Kwizera
-def index(req):
-
-   # A secret non-empty string to sign the cookie
-   secret = 'my_secret'
-
-   # Pass the cookie class and the secret to get_cookies()
-  # signed_cookies = Cookie.get_cookies(req, Cookie.SignedCookie, secret=secret)
-
-   # Get the returned signed cookie
-   #returned_signed = signed_cookies.get('signed', None)
-   
-   # If the signed cookie exists
-   if returned_signed:
-      # Check if the cookie was not altered
-      if type(returned_signed) is not Cookie.SignedCookie:
-         message = 'The cookie was altered'
-      else:
-         message = 'The cookie was not altered'
-   else:
-      message = 'This is your first visit'
-     
-   # Create a signed cookie
-   send_signed = Cookie.SignedCookie('signed', 'this string is signed', secret)
-
-   # The cookie will expire in 30 days.
-   send_signed.expires = time.time() + 30 * 24 * 60 * 60
-   
-   # Add the cookie to the HTTP header.
-   Cookie.add_cookie(req, send_signed)
-
-   return """\
-<html><body>
-<p>%s</p>
-<p><pre>%s</pre></p>
-<p>%s</p>
-</body></html>
-""" % ('You have just received this cookie:', send_signed, message)
-
-#Adrian Kwizera
 def record_view(request):
-
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count})
-    #return HttpResponse(u"%s" % User.objects.count())
 
