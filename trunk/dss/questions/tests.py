@@ -127,6 +127,23 @@ class UserProfileTest(unittest.TestCase):
         self.p.delete()
         self.userprofile.delete()
 
+# Stephen lowry
+class QuestionPathTest(unittest.TestCase):
+    def setUp(self):
+        self.p = Profile.objects.create(name="Engineer")
+        self.q1 = Question.objects.create(question = "What is your favourite country?")
+        self.q2 = Question.objects.create(question = "What is your favourite city?")
+        self.qp = QuestionPath.objects.create(profile=self.p, current_question=self.q1, follow_question=self.q2)
+    def testQuestionPath(self):
+        self.assertEqual(self.qp.profile.name, "Engineer")       
+        self.assertEqual(self.qp.current_question.question, "What is your favourite country?") 
+        self.assertEqual(self.qp.follow_question.question, "What is your favourite city?")  
+    def tearDown(self):
+        self.p.delete()
+        self.q1.delete()
+        self.q2.delete()
+        self.qp.delete()
+
 # Stephen Lowry
 class RecommendationTest(unittest.TestCase):
     def setUp(self):
