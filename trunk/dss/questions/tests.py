@@ -58,9 +58,11 @@ class CountTest(TestCase):
 # Stephen Lowry
 class UserTest(unittest.TestCase):
     def setUp(self):
-        self.u = User.objects.create(username="Bob", password="test")
+        self.u = User.objects.create(username="Test", password="test")
     def testUser(self):
-        self.assertEqual(self.u.username, "Bob")
+        self.assertEqual(self.u.username, "Test")
+    def tearDown(self):
+          self.u.delete()
 
 # Stephen Lowry
 class ProfileTest(unittest.TestCase):
@@ -78,6 +80,10 @@ class UserProfileTest(unittest.TestCase):
     def testUserProfile(self):
        self.assertEqual(self.userprofile.user.username, "Test")
        self.assertEqual(self.userprofile.profile.name, "TestProfile")
+    def tearDown(self):
+        self.u.delete()
+        self.p.delete()
+        self.userprofile.delete()
 
 # Stephen Lowry
 class RecommendationTest(unittest.TestCase):
