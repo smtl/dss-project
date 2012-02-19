@@ -58,9 +58,9 @@ class CountTest(TestCase):
 # Stephen Lowry
 class UserTest(unittest.TestCase):
     def setUp(self):
-        self.u = User.objects.create(username="Test", password="test")
-    def testUser(self)
-        self.assertEqual(self.u.username, "Test")
+        self.u = User.objects.create(username="Bob", password="test")
+    def testUser(self):
+        self.assertEqual(self.u.username, "Bob")
 
 # Stephen Lowry
 class ProfileTest(unittest.TestCase):
