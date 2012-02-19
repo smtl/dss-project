@@ -46,6 +46,13 @@ sudo apt-get install python-dev
 We are using Django 1.3.1. The download and instructions to install can be found here:
 https://www.djangoproject.com/download/
 
+After installing the database, make sure to set the dbb path in settings.py as an 
+absolute path in order to support global installations and database permissions
+
+python manage.py syncdb //syncs the database
+python manage.py test //runs unit tests
+python manage.py runserver //runs the django development server
+
 == Apache Details ==
 
 sudo apt-get install apache2
