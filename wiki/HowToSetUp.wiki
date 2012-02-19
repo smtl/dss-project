@@ -16,7 +16,7 @@ svn checkout into /var/www/ so that the files you download will have the correct
 
 == Python ==
 
-Ubuntu comes with python but you still might need to install the devloper packages:
+Ubuntu comes with python but you still might need to install the developer packages:
 
 `sudo apt-get install python-dev`
 
