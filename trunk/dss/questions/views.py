@@ -3,6 +3,7 @@
 
 from django.http import HttpResponseRedirect, HttpResponse
 from dss.questions.models import Question, Answer, AnsweredQuestion, QuestionPath
+from dss.auth.models import UserProfile
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -36,10 +37,10 @@ def detail(request, question_id):
     if request.user.is_authenticated():
         answered_already = get_or_none(AnsweredQuestion, user=request.user, question=q)
         # Check if they have already answered this question
-        if answered_already != None:
+        if answered_already == None:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
         else:
-            return render_to_response('questions/detail.html', {'question': q, 'answered': answered_already}, context_instance=RequestContext(request))
+            return render_to_response('questions/detail.html', {'question': q, 'answered': answered_already.answer}, context_instance=RequestContext(request))
     # or check if they are a guest that has already answered this question
     elif q not in request.session:
         return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
@@ -52,8 +53,9 @@ def answer(request, question_id):
     #num = int(question_id)+1
     # Get the next question for the user based on the profile path set for their profile type
     if request.user.is_authenticated():
-        qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().id)
-        #qpath = QuestionPath.objects.get(current_question=q,profile=request.user.get_profile().id) 
+        up = UserProfile.objects.get(user=request.user)
+        qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().profile)
+        #qpath = QuestionPath.objects.get(current_question=q,profile=up.id) 
     else:
         qpath = get_or_none(QuestionPath, current_question=q, profile=1)
     if qpath != None:
