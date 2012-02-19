@@ -65,6 +65,27 @@ class UserTest(unittest.TestCase):
           self.u.delete()
 
 # Stephen Lowry
+class Questiontest(unittest.TestCase):
+    def setUp(self):
+        self.q = Question.objects.create(question = "Why?")
+    def testQuestions(self):
+        self.assertEqual(self.q.question, "Why?")
+    def tearDown(self):
+        self.q.delete()
+
+# Stephen Lowry
+class AnswerTest(unittest.TestCase):
+    def setUp(self):
+        self.q = Question.objects.create(question = "Is this a question?")
+        self.a = Answer.objects.create(question = self.q, answer= "Yes")
+    def testAnswers(self):
+        self.assertEqual(self.a.question.question, "Is this a question?")
+        self.assertEqual(self.a.answer, "Yes")
+    def tearDown(self):
+        self.q.delete()
+        self.a.delete()  
+
+# Stephen Lowry
 class ProfileTest(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="TestProfile")
