@@ -41,6 +41,13 @@ class ViewsTestCase(TestCase):
  
         response = self.client.post('http://localhost:8000/admin/')
 
+class test_guest_logging(unittest.TestCase):
+    def testGuest(self):
+        client = Client()
+        session = client.session 
+        session['a'] = 1
+        self.assertEqual(session['a'],1)
+
 # Adrian Kwizera
 class CountTest(TestCase):
     def test_user_count(self):
