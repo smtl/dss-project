@@ -46,6 +46,8 @@ sudo apt-get install python-dev
 We are using Django 1.3.1. The download and instructions to install can be found here:
 https://www.djangoproject.com/download/
 
+During development, we encourage you to use the django development server.
+
 After installing the database, make sure to set the dbb path in settings.py as an 
 absolute path in order to support global installations and database permissions
 
@@ -60,6 +62,8 @@ sudo apt-get install apache2-prefork-dev
 (If you want a graphical interface to control the server, you can use https://launchpad.net/localhost-indicator)
 Commands to control the apache2 server are:
 sudo service apache2 start sudo service apache2 stop
+
+Apache is a production server, and should only be used when we are ready to deploy our website
 
 == mod_wsgi Details ==
 
