@@ -28,13 +28,6 @@ from dss.recommendations.models import Recommendation, RecAnswerLink
 from dss.questions.models import Question, Answer, QuestionPath
 from dss.questions.models import AnsweredQuestion
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
-
 #Adrian Kwizera
 class ViewsTestCase(TestCase):
     def setUp(self):
@@ -67,7 +60,7 @@ class CountTest(TestCase):
        
 
 # Stephen Lowry
-class AnonPageTest(unittest.TestCase):
+class test_page_responses(unittest.TestCase):
     def testAnonPages(self):
         client = Client()
         self.q = Question.objects.create(question = "Why?")
@@ -99,7 +92,7 @@ class UserTest(unittest.TestCase):
           self.u.delete()
 
 # Stephen Lowry
-class Questiontest(unittest.TestCase):
+class test_question_creation(unittest.TestCase):
     def setUp(self):
         self.q = Question.objects.create(question = "Why?")
     def testQuestions(self):
@@ -108,7 +101,7 @@ class Questiontest(unittest.TestCase):
         self.q.delete()
 
 # Stephen Lowry
-class AnswerTest(unittest.TestCase):
+class test_answer_creation(unittest.TestCase):
     def setUp(self):
         self.q = Question.objects.create(question = "Is this a question?")
         self.a = Answer.objects.create(question = self.q, answer= "Yes")
@@ -120,7 +113,7 @@ class AnswerTest(unittest.TestCase):
         self.a.delete()
 
 # Stephen Lowry
-class AnsweredQuestionTest(unittest.TestCase):
+class test_storing_user_answers(unittest.TestCase):
     def setUp(self):
         self.u = User.objects.create(username="useracc", password="useracc")
         self.q = Question.objects.create(question = "What is your name?")
@@ -138,7 +131,7 @@ class AnsweredQuestionTest(unittest.TestCase):
     
 
 # Stephen Lowry
-class ProfileTest(unittest.TestCase):
+class test_profile_creation(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="TestProfile")
     def testProfile(self):
@@ -147,7 +140,7 @@ class ProfileTest(unittest.TestCase):
         self.p.delete()
 
 # Stephen Lowry
-class UserProfileTest(unittest.TestCase):
+class test_profile_assigned_to_user(unittest.TestCase):
     def setUp(self):
        self.u = User.objects.create(username="Test", password="test")
        self.p = Profile.objects.create(name="TestProfile")
@@ -161,7 +154,7 @@ class UserProfileTest(unittest.TestCase):
         self.userprofile.delete()
 
 # Stephen lowry
-class QuestionPathTest(unittest.TestCase):
+class test_question_path_creation(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="Engineer")
         self.q1 = Question.objects.create(question = "What is your favourite country?")
@@ -178,7 +171,7 @@ class QuestionPathTest(unittest.TestCase):
         self.qp.delete()
 
 # Stephen Lowry
-class RecommendationTest(unittest.TestCase):
+class test_recommendation_creation(unittest.TestCase):
     def setUp(self):
         self.r = Recommendation.objects.create(recommendation="This is a recommendation")
     def testRecommendation(self):
@@ -187,7 +180,7 @@ class RecommendationTest(unittest.TestCase):
         self.r.delete()
 
 # Stephen Lowry
-class RecAnswerLinkTest(unittest.TestCase):
+class test_storing_links_from_answers_to_recommendations(unittest.TestCase):
     def setUp(self):
         self.r = Recommendation.objects.create(recommendation="This is a recommendation")
         self.q = Question.objects.create(question="What?")
@@ -216,6 +209,7 @@ class recParsing(unittest.TestCase):
         self.assertEqual(rec.media(self.text.tex,0),"Hello")
     def test_youTube(self):
         self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+
 #Adrian Kwizera
 #Testing the user creation
 class UserCreationTesting(unittest.TestCase):
