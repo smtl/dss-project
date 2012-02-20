@@ -119,6 +119,7 @@ class test_answer_creation(unittest.TestCase):
         self.q.delete()
         self.a.delete()
 
+
 # Stephen Lowry
 class test_storing_user_answers(unittest.TestCase):
     def setUp(self):
@@ -207,15 +208,15 @@ class test_storing_links_from_answers_to_recommendations(unittest.TestCase):
 #Testing the recommendation parsing
 class recParsing(unittest.TestCase):
     def setUp(self):
-        self.link = Recommendation.objects.create(link="http://www.yahoo.com")
-        self.text = Recommendation.objects.create(tex="Hello")
-        self.yout = Recommendation.objects.create(you="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+        self.link = Recommendation.objects.create(recommendation="http://www.yahoo.com")
+        self.text = Recommendation.objects.create(recommendation="Hello")
+        self.yout = Recommendation.objects.create(recommendation="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
     def test_link(self):
-        self.assertEqual(rec.media(self.link.link,0),"<a href=\"http://yahoo.com\">link</a>")
+        self.assertEqual(rec.rec.media(self.link.recommendation,0),"<a href=\"http://www.yahoo.com\">link</a>")
     def test_text(self):
-        self.assertEqual(rec.media(self.text.tex,0),"Hello")
+        self.assertEqual(rec.rec.media(self.text.recommendation,0),"Hello")
     def test_youTube(self):
-        self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+        self.assertEqual(rec.rec.media(self.yout.recommendation,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 
 #Adrian Kwizera
 #Testing the user creation
