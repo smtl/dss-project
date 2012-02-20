@@ -106,6 +106,10 @@ You can download the files to any location that you have create/write permission
 
 Note: Make sure you have create/write permissions wherever you put the files.
 
+To retrieve the files from the repository run the following commands
+
+svn checkout http://dss-project.googlecode.com/svn/trunk/dss/
+
 If you wish to use a new database, you will need to delete the database that was with the files and run the following command:
 
 python manage.py syncdb
