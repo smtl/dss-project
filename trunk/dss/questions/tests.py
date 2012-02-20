@@ -19,6 +19,7 @@ from django.middleware.csrf import CsrfViewMiddleware
 from django.template import RequestContext, Template
 from django.contrib.auth.models import User
 from dss.auth.models import Profile
+from django.core import mail
 import copy
 
 from dss.auth.models import Profile, UserProfile
@@ -196,3 +197,16 @@ class UserCreationTesting(unittest.TestCase):
           self.profile5.delete()
           self.profile6.delete()
 
+#Adrian Kwizera
+class EmailTest(TestCase):
+    def test_send_email(self):
+        # Send message.
+        mail.send_mail('Using Django', 'Here is how to use django.',
+            'from_user@admin.com', ['to_another_user@admin.com'],
+            fail_silently=False)
+
+        # Test that one message has been sent.
+        self.assertEquals(len(mail.outbox), 1)
+
+        # Verify that the subject of the first message is correct.
+        self.assertEquals(mail.outbox[0].subject, 'Using Django')
