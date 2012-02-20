@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 from __future__ import with_statement
 
-from templatetags.rec import media
+import templatetags as rec
 from django.utils import unittest
 from django.test import TestCase
 from django.test.client import Client
@@ -28,6 +28,7 @@ from dss.recommendations.models import Recommendation, RecAnswerLink
 from dss.questions.models import Question, Answer, QuestionPath
 from dss.questions.models import AnsweredQuestion
 
+
 #Adrian Kwizera
 class ViewsTestCase(TestCase):
     def setUp(self):
@@ -40,13 +41,6 @@ class ViewsTestCase(TestCase):
         user = self.client.login(username='general', password='general1')
  
         response = self.client.post('http://localhost:8000/admin/')
-
-class test_guest_logging(unittest.TestCase):
-    def testGuest(self):
-        client = Client()
-        session = client.session 
-        session['a'] = 1
-        self.assertEqual(session['a'],1)
 
 # Adrian Kwizera
 class CountTest(TestCase):
@@ -65,9 +59,61 @@ class CountTest(TestCase):
         self.assertEqual(2 - 1, 1)
         self.assertEqual(1 - 1, 0)
        
+#Adrian Kwizera
+#Testing the user creation
+class UserCreationTesting(unittest.TestCase):
+    def setUp(self):
+        self.profile1 = User.objects.create(username='Adrian')
+        self.profile2 = User.objects.create(username='Poland')
+        self.profile3 = User.objects.create(username='James')
+        self.profile4 = User.objects.create(username='Cathy')
+        self.profile5 = User.objects.create(username='Stephen')
+        self.profile6 = User.objects.create(username='Murphy')
+
+    def testA(self):
+        self.assertEquals(self.profile1.username, 'Adrian')
+        self.assertEquals(self.profile2.username, 'Poland')
+        self.assertEquals(self.profile3.username, 'James')
+        self.assertEquals(self.profile4.username, 'Cathy')
+        self.assertEquals(self.profile5.username, 'Stephen')
+        self.assertEquals(self.profile6.username, 'Murphy')
+
+        def tearDown(self):
+          self.profile1.delete()
+          self.profile2.delete()
+          self.profile3.delete()
+          self.profile4.delete()
+          self.profile5.delete()
+          self.profile6.delete()
+
+#Adrian Kwizera
+#Not part of the features, but included as a future "thing to do"
+class EmailTest(TestCase):
+    def test_send_email(self):
+        # Send message.
+        mail.send_mail('Using Django', 'Here is how to use django.',
+            'from_user@admin.com', ['to_another_user@admin.com'],
+            fail_silently=False)
+
+        # Test that one message has been sent.
+        self.assertEquals(len(mail.outbox), 1)
+
+        # Verify that the subject of the first message is correct.
+        self.assertEquals(mail.outbox[0].subject, 'Using Django')
+
+#Adrian Kwizera
+#Testing saved and resumed sessions
+class TestSessionState(TestCase):
+
+    def setUp(self):
+     
+        self.client.get('/blort') # after this, self.client.session is a real session
+        s = self.client.session
+        s['key'] = 'value'
+        s.save()
 
 # Stephen Lowry
-class test_page_responses(unittest.TestCase):
+class AnonPageTest(unittest.TestCase):
     def testAnonPages(self):
         client = Client()
         self.q = Question.objects.create(question = "Why?")
@@ -99,7 +145,7 @@ class UserTest(unittest.TestCase):
           self.u.delete()
 
 # Stephen Lowry
-class test_question_creation(unittest.TestCase):
+class Questiontest(unittest.TestCase):
     def setUp(self):
         self.q = Question.objects.create(question = "Why?")
     def testQuestions(self):
@@ -108,7 +154,7 @@ class test_question_creation(unittest.TestCase):
         self.q.delete()
 
 # Stephen Lowry
-class test_answer_creation(unittest.TestCase):
+class AnswerTest(unittest.TestCase):
     def setUp(self):
         self.q = Question.objects.create(question = "Is this a question?")
         self.a = Answer.objects.create(question = self.q, answer= "Yes")
@@ -119,9 +165,8 @@ class test_answer_creation(unittest.TestCase):
         self.q.delete()
         self.a.delete()
 
-
 # Stephen Lowry
-class test_storing_user_answers(unittest.TestCase):
+class AnsweredQuestionTest(unittest.TestCase):
     def setUp(self):
         self.u = User.objects.create(username="useracc", password="useracc")
         self.q = Question.objects.create(question = "What is your name?")
@@ -139,7 +184,7 @@ class test_storing_user_answers(unittest.TestCase):
     
 
 # Stephen Lowry
-class test_profile_creation(unittest.TestCase):
+class ProfileTest(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="TestProfile")
     def testProfile(self):
@@ -148,7 +193,7 @@ class test_profile_creation(unittest.TestCase):
         self.p.delete()
 
 # Stephen Lowry
-class test_profile_assigned_to_user(unittest.TestCase):
+class UserProfileTest(unittest.TestCase):
     def setUp(self):
        self.u = User.objects.create(username="Test", password="test")
        self.p = Profile.objects.create(name="TestProfile")
@@ -162,7 +207,7 @@ class test_profile_assigned_to_user(unittest.TestCase):
         self.userprofile.delete()
 
 # Stephen lowry
-class test_question_path_creation(unittest.TestCase):
+class QuestionPathTest(unittest.TestCase):
     def setUp(self):
         self.p = Profile.objects.create(name="Engineer")
         self.q1 = Question.objects.create(question = "What is your favourite country?")
@@ -179,7 +224,7 @@ class test_question_path_creation(unittest.TestCase):
         self.qp.delete()
 
 # Stephen Lowry
-class test_recommendation_creation(unittest.TestCase):
+class RecommendationTest(unittest.TestCase):
     def setUp(self):
         self.r = Recommendation.objects.create(recommendation="This is a recommendation")
     def testRecommendation(self):
@@ -188,7 +233,7 @@ class test_recommendation_creation(unittest.TestCase):
         self.r.delete()
 
 # Stephen Lowry
-class test_storing_links_from_answers_to_recommendations(unittest.TestCase):
+class RecAnswerLinkTest(unittest.TestCase):
     def setUp(self):
         self.r = Recommendation.objects.create(recommendation="This is a recommendation")
         self.q = Question.objects.create(question="What?")
@@ -208,54 +253,13 @@ class test_storing_links_from_answers_to_recommendations(unittest.TestCase):
 #Testing the recommendation parsing
 class recParsing(unittest.TestCase):
     def setUp(self):
-        self.link = Recommendation.objects.create(recommendation="http://www.yahoo.com")
-        self.text = Recommendation.objects.create(recommendation="Hello")
-        self.yout = Recommendation.objects.create(recommendation="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
-    def test_link(self):
-        #print dir()
-        self.assertEqual(media(self.link.recommendation,0),"<a href=\"http://www.yahoo.com\">link</a>")
-    def test_text(self):
-        self.assertEqual(media(self.text.recommendation,0),"Hello")
-    def test_youTube(self):
-        self.assertEqual(media(self.yout.recommendation,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+        self.link = Recommendation.objects.create(link="http://www.yahoo.com")
+        self.text = Recommendation.objects.create(tex="Hello")
+        self.yout = Recommendation.objects.create(you="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+    def linkify(self):
+        self.assertEqual(rec.media(self.link.link,0),"<a href=\"http://yahoo.com\">link</a>")
+    def textTest(self):
+        self.assertEqual(rec.media(self.text.tex,0),"Hello")
+    def youTube(self):
+        self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 
-#Adrian Kwizera
-#Testing the user creation
-class UserCreationTesting(unittest.TestCase):
-    def setUp(self):
-        self.profile1 = User.objects.create(username='Adrian')
-        self.profile2 = User.objects.create(username='Poland')
-        self.profile3 = User.objects.create(username='James')
-        self.profile4 = User.objects.create(username='Cathy')
-        self.profile5 = User.objects.create(username='Stephen')
-        self.profile6 = User.objects.create(username='Murphy')
-
-    def testA(self):
-        self.assertEquals(self.profile1.username, 'Adrian')
-        self.assertEquals(self.profile2.username, 'Poland')
-        self.assertEquals(self.profile3.username, 'James')
-        self.assertEquals(self.profile4.username, 'Cathy')
-        self.assertEquals(self.profile5.username, 'Stephen')
-        self.assertEquals(self.profile6.username, 'Murphy')
-
-        def tearDown(self):
-          self.profile1.delete()
-          self.profile2.delete()
-          self.profile3.delete()
-          self.profile4.delete()
-          self.profile5.delete()
-          self.profile6.delete()
-
-#Adrian Kwizera
-class EmailTest(TestCase):
-    def test_send_email(self):
-        # Send message.
-        mail.send_mail('Using Django', 'Here is how to use django.',
-            'from_user@admin.com', ['to_another_user@admin.com'],
-            fail_silently=False)
-
-        # Test that one message has been sent.
-        self.assertEquals(len(mail.outbox), 1)
-
-        # Verify that the subject of the first message is correct.
-        self.assertEquals(mail.outbox[0].subject, 'Using Django')
