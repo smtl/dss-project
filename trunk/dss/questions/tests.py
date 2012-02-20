@@ -210,11 +210,11 @@ class recParsing(unittest.TestCase):
         self.link = Recommendation.objects.create(link="http://www.yahoo.com")
         self.text = Recommendation.objects.create(tex="Hello")
         self.yout = Recommendation.objects.create(you="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
-    def linkify(self):
+    def test_link(self):
         self.assertEqual(rec.media(self.link.link,0),"<a href=\"http://yahoo.com\">link</a>")
-    def textTest(self):
+    def test_text(self):
         self.assertEqual(rec.media(self.text.tex,0),"Hello")
-    def youTube(self):
+    def test_youTube(self):
         self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 #Adrian Kwizera
 #Testing the user creation
