@@ -6,6 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 from __future__ import with_statement
 
+import templatetags as rec
 from django.utils import unittest
 from django.test import TestCase
 from django.test.client import Client
@@ -40,10 +41,10 @@ class ViewsTestCase(TestCase):
         self.client = Client()
  
     def test_MyView(self):
-        User.objects.create_user('general', 'general@admin.com', 'polishgirl')
+        User.objects.create_user('general', 'general@admin.com', 'general1')
  
         #use test client to perform login
-        user = self.client.login(username='general', password='polishgirl')
+        user = self.client.login(username='general', password='general1')
  
         response = self.client.post('http://localhost:8000/admin/')
 
@@ -170,6 +171,20 @@ class RecAnswerLinkTest(unittest.TestCase):
         self.a.delete()
         self.r.delete()
 
+
+#Stephen Murphy
+#Testing the recommendation parsing
+class recParsing(unittest.TestCase):
+    def setUp(self):
+        self.link = Recommendation.objects.create(link="http://www.yahoo.com")
+        self.text = Recommendation.objects.create(tex="Hello")
+        self.yout = Recommendation.objects.create(you="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+    def linkify(self):
+        self.assertEqual(rec.media(self.link.link,0),"<a href=\"http://yahoo.com\">link</a>")
+    def textTest(self):
+        self.assertEqual(rec.media(self.text.tex,0),"Hello")
+    def youTube(self):
+        self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 #Adrian Kwizera
 #Testing the user creation
 class UserCreationTesting(unittest.TestCase):
