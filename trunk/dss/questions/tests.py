@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 from __future__ import with_statement
 
-import templatetags as rec
+from templatetags.rec import media
 from django.utils import unittest
 from django.test import TestCase
 from django.test.client import Client
@@ -212,11 +212,12 @@ class recParsing(unittest.TestCase):
         self.text = Recommendation.objects.create(recommendation="Hello")
         self.yout = Recommendation.objects.create(recommendation="<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
     def test_link(self):
-        self.assertEqual(rec.rec.media(self.link.recommendation,0),"<a href=\"http://www.yahoo.com\">link</a>")
+        #print dir()
+        self.assertEqual(media(self.link.recommendation,0),"<a href=\"http://www.yahoo.com\">link</a>")
     def test_text(self):
-        self.assertEqual(rec.rec.media(self.text.recommendation,0),"Hello")
+        self.assertEqual(media(self.text.recommendation,0),"Hello")
     def test_youTube(self):
-        self.assertEqual(rec.rec.media(self.yout.recommendation,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
+        self.assertEqual(media(self.yout.recommendation,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 
 #Adrian Kwizera
 #Testing the user creation
