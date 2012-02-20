@@ -55,8 +55,16 @@ class CountTest(TestCase):
         """
         Tests that the user count for registered users is working
         """
+        #for users registering on the site
         self.assertEqual(0 + 1, 1)
         self.assertEqual(1 + 1, 2)
+        self.assertEqual(2 + 1, 3)
+
+        #for users that unregister from the site 
+        self.assertEqual(3 - 1, 2)
+        self.assertEqual(2 - 1, 1)
+        self.assertEqual(1 - 1, 0)
+       
 
 # Stephen Lowry
 class AnonPageTest(unittest.TestCase):
