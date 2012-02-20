@@ -59,6 +59,29 @@ class CountTest(TestCase):
         self.assertEqual(1 + 1, 2)
 
 # Stephen Lowry
+class AnonPageTest(unittest.TestCase):
+    def testAnonPages(self):
+        client = Client()
+        self.q = Question.objects.create(question = "Why?")
+        home = client.get('/')
+        questions = client.get('/questions/')
+        profile = client.get('/profile/')
+        changeprofile = client.get('/changeprofile/')
+        question = client.get('/questions/1/')
+        answer = client.get('/questions/1/answer/')
+        login = client.post('/accounts/login/', {'username': 'bingo', 'password': 'bingo'})
+        self.assertEqual(home.status_code, 200)
+        self.assertEqual(questions.status_code, 200)
+        self.assertEqual(profile.status_code, 302) #redirects a guest user
+        self.assertEqual(changeprofile.status_code, 200)
+        self.assertEqual(question.status_code, 200)
+        self.assertEqual(answer.status_code, 200)
+        self.assertEqual(login.status_code, 200)
+    def tearDown(self):
+          self.q.delete()
+
+
+# Stephen Lowry
 class UserTest(unittest.TestCase):
     def setUp(self):
         self.u = User.objects.create(username="Test", password="test")
