@@ -1,11 +1,15 @@
 # Django settings for dss project.
 
+import sys
 import os
 import django
 # calculated paths for django and the site
 # used as starting points for various other paths
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+if SITE_ROOT not in sys.path:
+    sys.path.append(SITE_ROOT)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
