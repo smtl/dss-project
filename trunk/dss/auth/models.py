@@ -12,5 +12,5 @@ class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     profile = models.ForeignKey(Profile)
     def __unicode__(self):
-        return self.profile
+        return self.profile.name
 
