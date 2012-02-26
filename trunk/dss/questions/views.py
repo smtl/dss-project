@@ -1,6 +1,9 @@
-# Create your views here.
-# test comment
+from __future__ import absolute_import
 
+
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core import cache
 from django.http import HttpResponseRedirect, HttpResponse
 from dss.questions.models import Question, Answer, AnsweredQuestion, QuestionPath
 from dss.auth.models import UserProfile
@@ -9,6 +12,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 import datetime
+from django.core import cache
+import hashlib
+
 
 def get_or_none(model, **kwargs):
     try:
@@ -119,11 +125,18 @@ def answer(request, question_id):
             return render_to_response('questions/detail.html', {'question': nextq}, context_instance=RequestContext(request))
 
 
+<<<<<<< .mine
+
+=======
+>>>>>>> .r150
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
 
 
+<<<<<<< .mine
+#viewing user count
+=======
 # Lets a user change the answer they gave
 def edit(request, question_id):
     if request.method == 'POST':
@@ -138,6 +151,31 @@ def edit(request, question_id):
 
 
 #Adrian Kwizera
+>>>>>>> .r150
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count})
+<<<<<<< .mine
+
+
+#viewing user info by admin and maintainer for specification purposes
+def get_user_info(username):
+    c = cache.get_cache('default')
+    username = unicode(username).encode('ascii', 'ignore')
+    key = 'trac_user_info:%s' % hashlib.md5(username).hexdigest()
+    info = c.get(key)
+    if info is None:
+        try:
+            u = User.objects.get(username=username)
+        except User.DoesNotExist:
+            info = {"core": False, "cla": False}
+        else:
+            info = {
+                "core": u.has_perm('auth.commit'),
+                "cla": bool(find_agreements(u))
+            }
+        c.set(key, info, 60*60)
+    return info
+
+=======
+>>>>>>> .r150
