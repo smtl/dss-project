@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'dss.questions',
     'dss.auth',
     'dss.recommendations',
+    'django.contrib.markup',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.sessions',

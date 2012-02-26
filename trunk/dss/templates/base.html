@@ -23,12 +23,17 @@ text-decoration: none;
  
 
 #header {
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
 font-size: 16px;
 text-transform:uppercase;
 color: #564b47;
 background-color: #90897a;
-padding:5px 15px;
-margin:0px
+padding:5px 15px 0px;
+margin:0px;
+width:100%;
+position:fixed;
 }
 
 #header a{
@@ -63,33 +68,50 @@ padding: 5px 20px;
 }
 
 #right-box {
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
 	float:right;
-	margin-top:5%;
+	margin-top:40px;
+	margin-bottom:10px;
+	margin-right:10px;
 	width:52%;
-	border: 2px solid #454545;
+	border: 1px solid #454545;
 	background-color: #ffffff;
 	padding-bottom:40px;
 }
 
 #title {
+-moz-border-radius: 15px;
+border-radius: 11px 11px 0 0;
 	padding:5px;
 	color:white;
 	position:static;
 	top:0%;
-	margin-top:0px;
 	padding-bottom:5px;
 	background-color:#454545;
 }
 
 #left-box {
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
 float:left;
 padding: 0px;
-margin-top:0px;
+margin-bottom: 10px;
+margin-top:40px;
 padding-bottom:40px;
-margin-left: 4px;
-position:relative;
+margin-left: 10px;
+position:fixed;
 width:45%;
-border: 2px solid #454545;
+border: 1px solid #454545;
 border-top: 0px;
 background-color: #ffffff;    
 }
@@ -99,8 +121,26 @@ float: right;
 }
 --></style>
 </head>
-
+  {% load markup %}
 <body>
+
+
+
+<div id="left-box">
+    <div id="title">Questions</div>
+	<div id="content">
+            {% block content %}{% endblock %}
+	</div>
+    </div>
+<div id="right-box">
+    <div id="title">Recommendations</div>
+    <div id="content">
+      {% load rec %}{% get_rec_list %}
+      {% for i in rec %}<p/>{% autoescape on%}{{ i|markdown }}{% endautoescape %}{% endfor %}
+
+	</div>
+    </div>
+
     <div id=header>
         <li><a href="/">Home</a></li> |
         <li><a href="/admin/">Admin</a></li> |
@@ -114,20 +154,7 @@ float: right;
         {% endif %}
         </div>
     </div>
-<div id="left-box">
-    <div id="title">Questions</div>
-	<div id="content">
-            {% block content %}{% endblock %}
-	</div>
-    </div>
-<div id="right-box">
-    <div id="title">Recommendations</div>
-    <div id="content">
-      {% load rec %}{% get_rec_list %}
-      {% for i in rec %}<p/>{% autoescape off %}{{ i|media:"0" }}{% endautoescape %}{% endfor %}
 
-	</div>
-    </div>
     
 </body>
 </html>
