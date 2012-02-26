@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from dss.auth.models import Profile, UserProfile
 from django.template import RequestContext
+from dss.questions.models import AnsweredQuestion
 
 def register(request):
     if request.method == 'POST':
@@ -50,11 +51,13 @@ def change_profile(request):
         if current_profile != None:
             current_profile.profile_id = request.POST['p']
             current_profile.save()
+            old_answers = AnsweredQuestion.objects.filter(user=request.user)
+            old_answers.delete()
         else:
             p = UserProfile()
             p.profile_id = request.POST['p']
             p.user = request.user
-            p.save()
+            p.save()   
         return HttpResponseRedirect('/profile/')
     else:
         pc = Profile.objects.all()

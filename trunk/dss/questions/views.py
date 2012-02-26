@@ -91,10 +91,10 @@ def answer(request, question_id):
     if request.user.is_authenticated():
         up = UserProfile.objects.get(user=request.user)
         qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().profile)
-    else:
+    else:      
         qpath = get_or_none(QuestionPath, current_question=q, profile=1)
     if qpath != None:
-        next = qpath.follow_question
+        nextq = qpath.follow_question
     try:
         # Make sure they have selected an answer
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
@@ -112,11 +112,11 @@ def answer(request, question_id):
             qa.question = q
             qa.save()
         elif q not in request.session:
- 	    request.session[q] = selected_answer
+ 	        request.session[q] = selected_answer
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
-            return render_to_response('questions/detail.html', {'question': next}, context_instance=RequestContext(request))
+            return render_to_response('questions/detail.html', {'question': nextq}, context_instance=RequestContext(request))
 
 
 def results(request):
