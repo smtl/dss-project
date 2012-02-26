@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if answered_questions %}
+    {% for q in answered_questions %}
+        {{ q.answer }} <a href="/questions/{{ q.question.id }}/edit">(Change Answer)</a>
+
+    <br />
+    {% endfor %}
+{% else %}
+       <p>No questions have been answered.</p>
+{% endif %}
+{% endblock %}

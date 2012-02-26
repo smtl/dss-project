@@ -38,7 +38,6 @@ def hello(request, name="world"):
 
 
 
-
 # Show a list of questions
 def index(request):
     if request.user.is_authenticated():
@@ -53,8 +52,12 @@ def index(request):
         return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
 
 def questions(request):
-    latest_question_list = Question.objects.all()
-    return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
+    if request.user.is_authenticated():
+        answered = AnsweredQuestion.objects.filter(user=request.user)
+        return render_to_response('questions/answered_questions.html', {'answered_questions': answered}, context_instance=RequestContext(request))
+    #else:
+      # latest_question_list = Question.objects.all()
+       # return render_to_response('questions/answered_questions.html', {'answered_questions': latest_question_list}, context_instance=RequestContext(request))
 
 
 
@@ -85,7 +88,6 @@ def answer(request, question_id):
     if request.user.is_authenticated():
         up = UserProfile.objects.get(user=request.user)
         qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().profile)
-        #qpath = QuestionPath.objects.get(current_question=q,profile=up.id) 
     else:
         qpath = get_or_none(QuestionPath, current_question=q, profile=1)
     if qpath != None:
@@ -108,13 +110,10 @@ def answer(request, question_id):
             qa.save()
         elif q not in request.session:
  	    request.session[q] = selected_answer
-        #selected_answer.save()
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
-            return render_to_response('questions/detail.html', {'question': next})
-
-
+            return render_to_response('questions/detail.html', {'question': next}, context_instance=RequestContext(request))
 
 
 def results(request):
@@ -122,10 +121,20 @@ def results(request):
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
 
 
+# Lets a user change the answer they gave
+def edit(request, question_id):
+    if request.method == 'POST':
+        qa = get_or_none(AnsweredQuestion, user=request.user, question=question_id)
+        if qa != None:
+            qa.answer_id = request.POST['answer']
+            qa.save()
+        return HttpResponseRedirect("/questions")
+    else:    
+        q = get_or_none(Question, pk=question_id)
+        return render_to_response('questions/edit.html', {'question': q}, context_instance=RequestContext(request))
 
 
 #Adrian Kwizera
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count})
-
