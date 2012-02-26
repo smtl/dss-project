@@ -1,6 +1,10 @@
 from django.db import models
 from dss.questions.models import Answer, Question
+<<<<<<< .mine
+from dss.auth.models import Profile
+=======
 from django import forms
+>>>>>>> .r150
 
 # Create your models here.
 description = """
@@ -36,3 +40,18 @@ class RecAnswerLink(models.Model):
     answer = models.ForeignKey(Answer)
     def __unicode__(self):
         return "Recommendation <-> Answer Link"
+
+
+class RecommendationProfile(models.Model):
+    recommendation = models.ForeignKey(Recommendation)
+    profile = models.ForeignKey(Profile)
+
+    def __unicode__(self):
+        #return self.profile.recommendation
+        return "Recommendation <-> Recommendation Link"
+    
+    class Meta:
+        order_with_respect_to = 'user'
+
+    class Meta:
+        unique_together = ('profile', 'recommendation',)
