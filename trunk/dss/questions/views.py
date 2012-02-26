@@ -55,9 +55,12 @@ def questions(request):
     if request.user.is_authenticated():
         answered = AnsweredQuestion.objects.filter(user=request.user)
         return render_to_response('questions/answered_questions.html', {'answered_questions': answered}, context_instance=RequestContext(request))
-    #else:
-      # latest_question_list = Question.objects.all()
-       # return render_to_response('questions/answered_questions.html', {'answered_questions': latest_question_list}, context_instance=RequestContext(request))
+    else:
+        answered = []
+        for q in Question.objects.all():
+            if q in request.session:
+                answered.append(request.session[q])
+        return render_to_response('questions/answered_questions.html', {'answered_questions': answered}, context_instance=RequestContext(request))
 
 
 

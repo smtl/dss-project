@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if answered_questions %}
-    {% for q in answered_questions %}
-        {{ q.answer }} <a href="/questions/{{ q.question.id }}/edit">(Change Answer)</a>
+{% if request.user.is_authenticated %}
+    {% if answered_questions %}
+        {% for q in answered_questions %}
+            {{ q.answer }} <a href="/questions/{{ q.question.id }}/edit">(Change Answer)</a>
 
-    <br />
-    {% endfor %}
+        <br />
+        <br />
+        
+        {% endfor %}
+    {% else %}
+        <p>No questions have been answered.</p>
+    {% endif %}
 {% else %}
-       <p>No questions have been answered.</p>
+    guest
 {% endif %}
 {% endblock %}
