@@ -1,16 +1,15 @@
 import os
 import sys
-import django
-# calculated paths for django and the site
-# used as starting points for various other paths
-DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+# dss_home is the path to where the dss files are
+# dss_base is the path to where the dss folder is located. This is needed for
+# the apache server
+dss_home = os.path.dirname(os.path.join(os.path.pardir, os.path.dirname(__file__)))
+dss_base = os.path.dirname(os.path.join(os.path.pardir, dss_home))
+
+sys.path.insert(0, dss_home)
+sys.path.insert(0, dss_base)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'dss.settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
-
-path = "/home/slowry/"
-if path not in sys.path:
-    sys.path.append(path)
