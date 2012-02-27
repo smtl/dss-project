@@ -1,4 +1,4 @@
-
+import os
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib.auth.views import login, logout
 
@@ -8,6 +8,10 @@ admin.autodiscover()
 # Cron enabled.                                                                                                              
 #import django_cron
 #django_cron.autodiscover()
+
+# from a stackoverflow q http://stackoverflow.com/questions/5152026/django-admin-media-prefix-url-issue
+def fromRelativePath(*relativeComponents):
+    return os.path.join(os.path.dirname(__file__), *relativeComponents).replace("\\","/")
 
 urlpatterns = patterns('dss.questions.views',
     url(r'^$', 'index'),
@@ -36,4 +40,5 @@ urlpatterns += patterns('dss.recommendations.views',
 
 urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url("^admin_media/(?P<path>.*)$", "django.views.static.serve",{ "document_root": fromRelativePath("static", "admin") }),
 )
