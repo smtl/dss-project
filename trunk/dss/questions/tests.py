@@ -29,6 +29,7 @@ from dss.questions.models import Question, Answer, QuestionPath
 from dss.questions.models import AnsweredQuestion
 
 
+
 #Adrian Kwizera
 class ViewsTestCase(TestCase):
     def setUp(self):
@@ -111,6 +112,24 @@ class TestSessionState(TestCase):
         s = self.client.session
         s['key'] = 'value'
         s.save()
+
+
+#Adrian Kwizera
+#Testing assertions for recommendations assigned to user profiles
+class TestAssertion(TestCase):  
+  
+    def test_assertion_of_recommendations(self):   
+        self.assertTrue(1) # evaluates truth value  
+        self.assertFalse(0) # evaluates false value  
+        self.assertEquals(1, 1) # evaluates second (dynamic) value equals the first (known) value;  
+        self.assertNotEquals(1, 2)  
+          
+        o = 1  
+        self.assertIs(o, o) # assert evaluate to the same object  
+        self.assertIn(1, [1, 2, 3]) # assert first value in second  
+        self.assertIsInstance(self, TestCase) # first value is instance of second  
+
+
 
 # Stephen Lowry
 class AnonPageTest(unittest.TestCase):
