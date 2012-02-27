@@ -5,7 +5,7 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 from __future__ import with_statement
-
+from django.contrib.auth import login, logout
 import templatetags as rec
 from django.utils import unittest
 from django.test import TestCase
@@ -87,20 +87,6 @@ class UserCreationTesting(unittest.TestCase):
           self.profile5.delete()
           self.profile6.delete()
 
-#Adrian Kwizera
-#Not part of the features, but included as a future "thing to do"
-class EmailTest(TestCase):
-    def test_send_email(self):
-        # Send message.
-        mail.send_mail('Using Django', 'Here is how to use django.',
-            'from_user@admin.com', ['to_another_user@admin.com'],
-            fail_silently=False)
-
-        # Test that one message has been sent.
-        self.assertEquals(len(mail.outbox), 1)
-
-        # Verify that the subject of the first message is correct.
-        self.assertEquals(mail.outbox[0].subject, 'Using Django')
 
 #Adrian Kwizera
 #Testing saved and resumed sessions
@@ -132,7 +118,7 @@ class TestAssertion(TestCase):
 
 
 # Stephen Lowry
-class AnonPageTest(unittest.TestCase):
+class AnonPagesTest(unittest.TestCase):
     def testAnonPages(self):
         client = Client()
         self.q = Question.objects.create(question = "Why?")
@@ -152,6 +138,70 @@ class AnonPageTest(unittest.TestCase):
         self.assertEqual(login.status_code, 200)
     def tearDown(self):
           self.q.delete()
+
+
+class UserPagesTest(unittest.TestCase):
+    def testUserPages(self):
+        client = Client()
+        self.u = User.objects.create_user(username='test', email="test@test.com", password='test')
+        self.u.is_staff = False
+        self.p = Profile.objects.create(name="Default")
+        self.up = UserProfile.objects.create(user=self.u, profile=self.p)
+        client.login(username='test', password='test')
+        self.q = Question.objects.create(question = "Huh?")
+        home = client.get('/')
+        questions = client.get('/questions/')
+        profile = client.get('/profile/')
+        changeprofile = client.get('/changeprofile/')
+        question = client.get('/questions/1/')
+        answer = client.get('/questions/1/answer/')
+        logout = client.post('/accounts/logout/')
+        self.assertEqual(home.status_code, 200)
+        self.assertEqual(questions.status_code, 200)
+        self.assertEqual(profile.status_code, 200)
+        self.assertEqual(changeprofile.status_code, 200)
+        self.assertEqual(question.status_code, 200)
+        self.assertEqual(answer.status_code, 200)
+        self.assertEqual(logout.status_code, 302) #redirected to home
+    def tearDown(self):
+        self.q.delete()
+        self.u.delete()
+        self.p.delete()
+        self.up.delete()
+
+class maintenance_test(unittest.TestCase):
+    def maintenance_group_tests(self):
+        client = Client()
+        self.u = User.objects.create_user(username='test', email="test@test.com", password='test')
+        self.u.is_staff = True
+        # maintenance_group_edit_profiles()
+        self.p = Profile.objects.create(name="Default")
+        self.up = UserProfile.objects.create(user=self.u, profile=self.p)
+        client.login(username='test', password='test')
+        self.assertEqual(self.p, "Default")
+        # maintenance_group_edit_profiles()
+        self.p.name = "Manager"
+        self.assertEqual(self.p, "Manager")
+        # maintenance_group_add_question_path_to_profiles()
+        self.q1 = Question.objects.create(question="how?")
+        self.q2 = Question.objects.create(question="what?")
+        self.q3 = Question.objects.create(question="when?")
+        self.qp = QuestionPath(profile=self.p, current_question=self.q1, follow_question=self.q2)
+        self.assertEquals(self.qp.profile, "Manager")
+        self.assertEquals(self.qp.current_question, "how?")
+        self.assertEquals(self.qp.follow_question, "what?")
+        # maintenance_group_edit_question_path_for_profiles()
+        self.qp.follow_question = self.q3
+        self.assertEquals(self.qp.follow_question, "when?")
+    def tearDown(self):
+        self.q1.delete()
+        self.q2.delete()
+        self.q3.delete()
+        self.u.delete()
+        self.p.delete()
+        self.qp.delete()
+        self.up.delete()
+
 
 
 # Stephen Lowry

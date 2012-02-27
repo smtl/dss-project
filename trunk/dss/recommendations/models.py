@@ -51,7 +51,5 @@ class RecommendationProfile(models.Model):
         return "Recommendation <-> Recommendation Link"
     
     class Meta:
-        order_with_respect_to = 'user'
-
-    class Meta:
+        #order_with_respect_to = 'user'
         unique_together = ('profile', 'recommendation',)

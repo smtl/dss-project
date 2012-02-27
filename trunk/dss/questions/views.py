@@ -23,12 +23,13 @@ def get_or_none(model, **kwargs):
         return None
 
 def get_next_question_or_none(current_user):
+    i = 1
     for i in xrange(Question.objects.count()-2):
         q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question
         a = get_or_none(AnsweredQuestion, user=current_user,question=q)
         if a == None:
             return q
-
+    
     if i == Question.objects.count() or i > Question.objects.count():
         return None
 
