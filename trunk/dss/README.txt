@@ -1,6 +1,6 @@
 == Decision Support System | DSS ===
-DSS is an application to allow users to answer questions and get software development process recommendations to use for their own projects.
 
+DSS is an application to allow users to answer questions and get software development process recommendations to use for their own projects.
 
 This project is hosted on Google Code: http://code.google.com/p/dss-project
 
@@ -16,7 +16,6 @@ Stephen Murphy
 
 Adrian Kwizera
 
-
 This project is developed using the following technologies:
 
 Python 2.7 (http://python.org/)
@@ -29,13 +28,18 @@ Apache 2.2.20 (http://httpd.apache.org/)
 
 - mod_wsgi extension (http://code.google.com/p/modwsgi/)
 
+Python Markdown (http://pypi.python.org/pypi/Markdown)
+
 
 === Set up and Configuration ===
 
+
 The project files can be retrieved by either using SVN, a version control system
-or by downloading a packaged file.
+or by downloading a archived file.
+
 
 == SVN Details ==
+
 
 SVN or Subversion is a version control system (http://subversion.apache.org/). It can be used to retrieve the files.
 
@@ -49,18 +53,24 @@ To retrieve the files from the repository run the following commands
 
 svn checkout http://dss-project.googlecode.com/svn/trunk/dss/
 
+
 == Python Details ==
+
 
 Ubuntu comes with python but you still might need to install the developer packages:
 
 sudo apt-get install python-dev
 
+
 == Django Details ==
+
 
 We are using Django 1.3.1. The download and instructions to install can be found here:
 https://www.djangoproject.com/download/
 
+
 == Apache Details ==
+
 
 sudo apt-get install apache2
 
@@ -70,9 +80,13 @@ sudo apt-get install apache2-prefork-dev
 
 Commands to control the apache2 server are:
 
-sudo service apache2 start sudo service apache2 stop
+sudo service apache2 start
+
+sudo service apache2 stop
+
 
 == mod_wsgi Details ==
+
 
 Download mod_wsgi from:
 
@@ -96,33 +110,77 @@ sudo make install
 
 For a more detailed guide to using mod_wsgi of for troubleshooting help, see: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
 
+
+== Python Markdown ==
+
+
+Run the following command:
+
+sudo apt-get install python-markdown
+
+
 === Finally ===
+
 
 Go to localhost to view the website
 
+
 === First Run ===
+
 
 You can download the files to any location that you have create/write permissions in if you want to use the development server included with Django. If you want to run the application on a production server such as Apache, you will need to place the files in a location that works with your Apache installation.
 
 Note: Make sure you have create/write permissions wherever you put the files.
 
-To retrieve the files from the repository run the following commands
 
-svn checkout http://dss-project.googlecode.com/svn/trunk/dss/
+=== New database ===
+
 
 If you wish to use a new database, you will need to delete the database that was with the files and run the following command:
 
 python manage.py syncdb
 
+When prompted, create a superuser or “admin”. This user account will have admin privileges on the site and can log into the admin interface.
+
+Now run:
+
+sudo chmod 777 dss.db
+
+and run it on the dss folder itself
+
+sudo chmod 777 dss
+
+After creating questions, make sure you also create user profiles and assign one to the admin account because by default it has none. All users created through the site will get a default profile.
+
+
+=== Using the database supplied ===
+
+
+After getting the files you need to set permissions for the database and the folder itself:
+
+Run:
+
+sudo chmod 777 dss.db
+
+and run it on the dss folder itself
+
+sudo chmod 777 dss
+
+
 To test quickly, you can use the development server that comes with Django. Run the following command to turn on the development server:
 
 python manage.py runserver
+
+Note: Styled templates for the admin interface will not work on the development server.
 
 To run the unit tests included with the files, run the following command:
 
 python manage.py test
 
+
+
 === Functions ===
+
 
 Guests can answer questions
 
@@ -156,14 +214,14 @@ Admin/Maintenance can add, edit, delete links from answers to recommendations
 
 Registered User count can be displayed
 
-
 === Known Issues ===
+
 
 If a user is created in the admin interface, they are not assigned a profile upon creation and will run into an error screen when they try access the homepage.
 
-It is possible to attempt to answer the same question twice if you access the questions through the full list of questions. Answering the same question twice will give an error screen.
 
 === User count ===
+
 
 To view how many users are currently logged in or registered on the site, point to the below URL
 http://localhost:8000/record_view/
@@ -171,3 +229,41 @@ http://localhost:8000/record_view/
 This gives the total count of users.
 
 
+=== Frequently Encountered Problems ===
+
+
+Problems you might encounter while setting up the website:
+
+
+== “Unable to write read only database” or “Unable to open database file” ==
+
+
+First, make sure a database file exists. If it does not, run the following command:
+
+python manage.py syncdb
+
+Make sure to make a superuser when prompted. This will allow you to access the admin interface.
+
+Make sure you have permissions set right for the dss folder itself and the contents of the dss folder.
+
+Run:
+
+sudo chmod 777 dss.db
+
+and run it on the dss folder itself
+
+sudo chmod 777 dss
+
+
+== Admin CSS not working on Apache server ==
+
+
+Change your /etc/apache2/httpd.conf file to include:
+
+Alias /admin_media/ /<path_to_dss_folder>/dss/static/admin/
+
+
+== The Python markdown library isn't installed. ==
+
+
+sudo apt-get install python-markdown
