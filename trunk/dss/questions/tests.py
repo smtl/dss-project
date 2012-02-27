@@ -107,7 +107,7 @@ class TestSessionState(TestCase):
 
     def setUp(self):
      
-        self.client.get('/blort') # after this, self.client.session is a real session
+        self.client.get('/questions/') # after this, self.client.session is a real session
         s = self.client.session
         s['key'] = 'value'
         s.save()
