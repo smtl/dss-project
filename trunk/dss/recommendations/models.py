@@ -1,10 +1,10 @@
 from django.db import models
 from dss.questions.models import Answer, Question
-<<<<<<< .mine
+
 from dss.auth.models import Profile
-=======
+
 from django import forms
->>>>>>> .r150
+
 
 # Create your models here.
 description = """
