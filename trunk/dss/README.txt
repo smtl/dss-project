@@ -110,6 +110,7 @@ sudo make install
 
 For a more detailed guide to using mod_wsgi of for troubleshooting help, see: http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
 
+NOTE: An example_httpd.conf file is included with the files.
 
 == Python Markdown ==
 
