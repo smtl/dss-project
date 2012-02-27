@@ -116,6 +116,17 @@ class TestAssertion(TestCase):
         self.assertIsInstance(self, TestCase) # first value is instance of second  
 
 
+#Adrian Kwizera
+#Maintainer test
+class MaintainerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.cr = Question.objects.create(question="Do you love fish")
+        self.an = Answer.objects.create(question=self.cr, answer="perhaps")
+    
+    def tearDown(self):
+        self.cr.delete()
+        self.an.delete()
+     
 
 # Stephen Lowry
 class AnonPagesTest(unittest.TestCase):
