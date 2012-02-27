@@ -125,18 +125,14 @@ def answer(request, question_id):
             return render_to_response('questions/detail.html', {'question': nextq}, context_instance=RequestContext(request))
 
 
-<<<<<<< .mine
 
-=======
->>>>>>> .r150
+#viewing user count
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
 
 
-<<<<<<< .mine
-#viewing user count
-=======
+
 # Lets a user change the answer they gave
 def edit(request, question_id):
     if request.method == 'POST':
@@ -151,11 +147,10 @@ def edit(request, question_id):
 
 
 #Adrian Kwizera
->>>>>>> .r150
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count})
-<<<<<<< .mine
+
 
 
 #viewing user info by admin and maintainer for specification purposes
@@ -177,5 +172,4 @@ def get_user_info(username):
         c.set(key, info, 60*60)
     return info
 
-=======
->>>>>>> .r150
+
