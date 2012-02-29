@@ -144,7 +144,11 @@ margin-right:30px;
     <div id="title">Recommendations</div>
     <div id="content">
       {% load rec %}{% get_rec_list %}
-      {% for i in rec %}<p/>{% autoescape on%}{{ i|markdown }}{% endautoescape %}{% endfor %}
+      {% for i in rec %}
+          {% if i != None %}
+              {% autoescape on%}{{ i|markdown }}{% endautoescape %}
+          {% endif %}
+      {% endfor %}
 
 	</div>
     </div>

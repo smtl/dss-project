@@ -1,4 +1,3 @@
-import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from dss.auth.models import Profile
@@ -27,7 +26,7 @@ class AnsweredQuestion(models.Model):
     answer = models.ForeignKey(Answer)
 
     def __unicode__(self):
-    	return self.answer.answer
+        return self.answer.answer
 
     class Meta:
         unique_together = ('user', 'question',)
@@ -42,6 +41,6 @@ class QuestionPath(models.Model):
     profile = models.ForeignKey(Profile)
     current_question = models.ForeignKey(Question, related_name='current_question')
     follow_question = models.ForeignKey(Question, related_name='follow_question')
-	
+
     def __unicode__(self):
-	    return self.profile.name
+        return self.profile.name
