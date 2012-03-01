@@ -1,5 +1,5 @@
-from dss.recommendations.models import Recommendation,RecAnswerLink
-from django.template import Library,Node
+from dss.recommendations.models import Recommendation, RecAnswerLink
+from django.template import Library, Node
 
 register = Library()
 

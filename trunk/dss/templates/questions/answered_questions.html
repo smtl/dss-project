@@ -11,12 +11,13 @@
         
         {% endfor %}
     {% else %}
-        <p>No questions have been answered.</p>
+        <dp>No questions have been answered.</p>
     {% endif %}
 {% else %}
-    <strong>Feature not fully implemented</strong>
-    </br />
-    <br />
-    {{ answered_questions}}
+    {% for a in answered_questions %}
+       {{ a }} <a href="/questions/{{ a.id }}/edit">(Change Answer)</a>
+        <br />
+        <br />    
+    {% endfor %}
 {% endif %}
 {% endblock %}

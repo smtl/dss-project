@@ -127,7 +127,6 @@ def answer(request, question_id):
 
 
 
-#viewing user count
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
@@ -135,15 +134,42 @@ def results(request):
 
 
 # Lets a user change the answer they gave
-def edit(request, question_id):
+def edit(request, input_id):
+    # If a new answer is submitted
     if request.method == 'POST':
-        qa = get_or_none(AnsweredQuestion, user=request.user, question=question_id)
-        if qa != None:
-            qa.answer_id = request.POST['answer']
-            qa.save()
-        return HttpResponseRedirect("/questions")
-    else:    
-        q = get_or_none(Question, pk=question_id)
+        # Find the question
+        q = get_or_none(Question, pk=input_id)
+
+        try:
+            # Make sure they have selected an answer
+            selected_answer = q.answer_set.get(pk=request.POST['answer'])
+        except (KeyError, Answer.DoesNotExist):
+            return render_to_response('questions/edit.html', { 'question':q, 'error_message': "You didn't choose an answer",}, context_instance=RequestContext(request))
+        else: 
+            if request.user.is_authenticated():
+                # Find the old answer
+                qa = get_or_none(AnsweredQuestion, user=request.user, question=input_id)
+                if qa != None:
+                    # Edit the old answer
+                    qa.answer_id = request.POST['answer']
+                    qa.save()
+                return HttpResponseRedirect("/questions")
+            else:   
+                if q in request.session:
+                    # Delete the old answer before adding the new one
+                    del request.session[q]
+                    request.session[q] = selected_answer
+    
+                return HttpResponseRedirect("/questions")
+    # Get the question to show
+    else:
+        if request.user.is_authenticated():
+            q = get_or_none(Question, pk=input_id)
+        else:
+            answer = get_or_none(Answer, pk=input_id)
+            if answer != None:
+                q = get_or_none(Question, pk=answer.question_id)
+
         return render_to_response('questions/edit.html', {'question': q}, context_instance=RequestContext(request))
 
 
