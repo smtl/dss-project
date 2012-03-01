@@ -2,7 +2,6 @@ from dss.recommendations.models import Recommendation, RecommendationProfile
 from dss.recommendations.models import UploadedFile
 from django.contrib import admin
 
-
 class RecommendationProfileInline(admin.TabularInline):
     model = RecommendationProfile
     extra = 0

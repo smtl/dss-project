@@ -1,4 +1,5 @@
-from dss.recommendations.models import Recommendation, RecAnswerLink
+from dss.recommendations.models import Recommendation, RecAnswerLink, RecommendationProfile
+from dss.auth.models import Profile
 from dss.questions.models import AnsweredQuestion, Question
 from django.template import Library, Node
 from django.template.defaultfilters import stringfilter
@@ -49,6 +50,13 @@ class RecObj(Node):
             for rec in full_list_of_rec_links:
                 if rec != None:
                     recos.append(get_or_none(Recommendation, recommendation=rec.recommendation))
+            
+            recpro = RecommendationProfile.objects.filter(profile=request.user.get_profile().profile)
+            for re in recpro:
+                if re.recommendation in recos:
+                     recos.remove(re.recommendation)
+                     recos.insert(0,re.recommendation)  
+
             context['rec'] = recos
 
         # Guest stuff
@@ -75,6 +83,14 @@ class RecObj(Node):
             for rec in full_list_of_rec_links:
                 if rec != None:
                     recos.append(get_or_none(Recommendation, recommendation=rec.recommendation)) 
+            
+            p = Profile.objects.get(name="Default")
+            recpro = RecommendationProfile.objects.filter(profile=p)
+            for re in recpro:
+                if re.recommendation in recos:
+                     recos.remove(re.recommendation)
+                     recos.insert(0,re.recommendation)  
+
             context['rec'] = recos
         return ""
 

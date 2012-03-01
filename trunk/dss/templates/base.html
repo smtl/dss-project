@@ -146,17 +146,16 @@ margin-right:30px;
       {% load rec %}{% get_rec_list %}
       {% for i in rec %}
           {% if i != None %}
-              {% autoescape on%}{{ i|markdown }}{% endautoescape %}
+              {% autoescape on %}{{ i|markdown }}{% endautoescape %}
           {% endif %}
       {% endfor %}
-
+      {% if not rec  %} Start answering questions to get custom recommendations.{% endif %}
 	</div>
     </div>
 
     <div id=header>
         <li><a href="/">Home</a></li> |
-        <li><a href="/admin/">Admin</a></li> |
-        <li><a href="/questions/">Answered Questions</a></li> |
+        {% if request.user.is_staff %}<li><a href="/admin/">Admin</a></li> |{% endif %}
         <li><a href="/profile/">Profile</a></li>
 	<div id="user-info">
 	{% if user.is_authenticated %}

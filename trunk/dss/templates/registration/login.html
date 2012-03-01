@@ -114,9 +114,9 @@ float: right;
 <body>
     <div id=header>
         <li><a href="/">Home</a></li> |
-        <li><a href="/admin/">Admin</a></li> |
-        <li><a href="/questions/">Answered Questions</a></li>
-	<div id="user-info">
+        {% if request.user.is_staff %}<li><a href="/admin/">Admin</a></li> |{% endif %}
+        <li><a href="/profile/">Profile</a></li>
+    <div id="user-info">
 	{% if user.is_authenticated %}
         Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
         {% else %}

@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-
-
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core import cache
@@ -23,22 +20,35 @@ def get_or_none(model, **kwargs):
         return None
 
 def get_next_question_or_none(current_user):
-    i = 1
-    for i in xrange(Question.objects.count()-2):
-        q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question
-        a = get_or_none(AnsweredQuestion, user=current_user,question=q)
+    i = 0
+    try:
+        for i in xrange(Question.objects.count()):
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question
+            a = get_or_none(AnsweredQuestion, user=current_user,question=q)
+            if a == None:
+                return q
+    except IndexError:
+        # If the list has gone out of bounds go back and get the last question
+        # Check if already answered
+        q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].follow_question
+        a = get_or_none(AnsweredQuestion, user=current_user, question=q)
         if a == None:
             return q
-    
+
     if i == Question.objects.count() or i > Question.objects.count():
-        return None
+            return None
 
 def get_next_question_or_none_guest(request):
-    i = 1
+    i = 0
     p = get_or_none(Profile, name="Default")
-    for i in xrange(Question.objects.count()-2):
-        q = QuestionPath.objects.filter(profile=p)[i].current_question
-        # have they answered it already?
+    try:
+        for i in xrange(Question.objects.count()):
+            q = QuestionPath.objects.filter(profile=p)[i].current_question
+            # have they answered it already?
+            if q not in request.session:
+                return q
+    except IndexError:
+        q = QuestionPath.objects.filter(profile=p)[i-1].follow_question
         if q not in request.session:
             return q
 
@@ -52,7 +62,6 @@ def hello(request, name="world"):
     else:
         hello = "Hello stranger"
     return HttpResponse(hello)
-
 
 
 # Show a list of questions
@@ -71,6 +80,8 @@ def index(request):
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+
+
 
 def questions(request):
     if request.user.is_authenticated():
@@ -167,14 +178,14 @@ def edit(request, input_id):
                     # Edit the old answer
                     qa.answer_id = request.POST['answer']
                     qa.save()
-                return HttpResponseRedirect("/questions")
+                return HttpResponseRedirect("/profile")
             else:   
                 if q in request.session:
                     # Delete the old answer before adding the new one
                     del request.session[q]
                     request.session[q] = selected_answer
     
-                return HttpResponseRedirect("/questions")
+                return HttpResponseRedirect("/profile")
     # Get the question to show
     else:
         if request.user.is_authenticated():
