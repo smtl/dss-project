@@ -1,6 +1,6 @@
 from django.db import models
 from dss.questions.models import Answer, Question
-
+from django import forms
 from dss.auth.models import Profile
 
 from django import forms
@@ -33,6 +33,11 @@ class Recommendation(models.Model):
     def __unicode__(self):
         return self.recommendation
 
+class UploadedFile(models.Model):
+    files = models.FileField(upload_to="uploaded_files", max_length=500)
+    def __unicode__(self):
+        return str(self.files)
+
 
 class RecAnswerLink(models.Model):
     question = models.ForeignKey(Question)
@@ -40,6 +45,8 @@ class RecAnswerLink(models.Model):
     answer = models.ForeignKey(Answer)
     def __unicode__(self):
         return "Recommendation <-> Answer Link"
+
+
 
 
 class RecommendationProfile(models.Model):

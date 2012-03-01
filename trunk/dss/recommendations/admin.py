@@ -1,4 +1,5 @@
 from dss.recommendations.models import Recommendation, RecommendationProfile
+from dss.recommendations.models import UploadedFile
 from django.contrib import admin
 
 
@@ -19,4 +20,12 @@ class RecommendationAdmin(admin.ModelAdmin):
     search_fields = ['recommendation']
 
 
+class UploadedFileAdmin(admin.ModelAdmin):
+    fieldsets = [
+       ("UploadedFile", {"fields": ["files"]}),
+    ]
+    search_fields = ["files"]
+
+
 admin.site.register(Recommendation, RecommendationAdmin)
+admin.site.register(UploadedFile, UploadedFileAdmin)
