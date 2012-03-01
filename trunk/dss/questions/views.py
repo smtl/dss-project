@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core import cache
 from django.http import HttpResponseRedirect, HttpResponse
 from dss.questions.models import Question, Answer, AnsweredQuestion, QuestionPath
-from dss.auth.models import UserProfile
+from dss.auth.models import UserProfile, Profile
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -33,7 +33,17 @@ def get_next_question_or_none(current_user):
     if i == Question.objects.count() or i > Question.objects.count():
         return None
 
+def get_next_question_or_none_guest(request):
+    i = 1
+    p = get_or_none(Profile, name="Default")
+    for i in xrange(Question.objects.count()-2):
+        q = QuestionPath.objects.filter(profile=p)[i].current_question
+        # have they answered it already?
+        if q not in request.session:
+            return q
 
+    if i == Question.objects.count() or i > Question.objects.count():
+        return None
 
 
 def hello(request, name="world"):
@@ -54,9 +64,13 @@ def index(request):
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+    # Guest user
     else:
-        latest_question_list = Question.objects.all()
-        return render_to_response('questions/index.html', {'latest_question_list': latest_question_list}, context_instance=RequestContext(request))
+        q = get_next_question_or_none_guest(request)
+        if q == None:
+            return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
+        else:
+            return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
 def questions(request):
     if request.user.is_authenticated():

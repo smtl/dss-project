@@ -1,5 +1,5 @@
 from dss.recommendations.models import Recommendation, RecAnswerLink
-from dss.questions.models import AnsweredQuestion
+from dss.questions.models import AnsweredQuestion, Question
 from django.template import Library, Node
 from django.template.defaultfilters import stringfilter
 import os
@@ -50,8 +50,32 @@ class RecObj(Node):
                 if rec != None:
                     recos.append(get_or_none(Recommendation, recommendation=rec.recommendation))
             context['rec'] = recos
-        #else:
-            #context['rec'] = Recommendation.objects.all()
+
+        # Guest stuff
+        else:
+            # Get all the answers a guest has given
+            guest_answers = []
+            for q in Question.objects.all():
+                if q in request.session:
+                    guest_answers.append(request.session[q])
+
+            full_list_of_rec_links = []
+            rec_link_list = []
+            # Go through the guests answers and fine the related recAnswerLink
+            for a in guest_answers:
+                rec_link_list.append(RecAnswerLink.objects.filter(answer=a))
+
+            #Go through the list of querysets and get the full list of recAnswerLinks
+            for rec_link in rec_link_list:
+                for r in rec_link:
+                    full_list_of_rec_links.append(r)
+
+            recos = []
+            # Get each specific recommendation
+            for rec in full_list_of_rec_links:
+                if rec != None:
+                    recos.append(get_or_none(Recommendation, recommendation=rec.recommendation)) 
+            context['rec'] = recos
         return ""
 
 register.tag("get_rec_list",build_rec_list)
