@@ -14,15 +14,9 @@ class AnswerInline(admin.StackedInline):
     model = Answer
     extra = 0
 
-class RecAnswerLinkInline(admin.TabularInline):
-#    form = OrderForm
+class RecAnswerLinkInline(admin.StackedInline):
     model = RecAnswerLink
     extra = 0
-    fieldsets = [
-        (Answer, {
-            'fields': ('recommendation', 'answer',)
-        })
-    ]
 
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [

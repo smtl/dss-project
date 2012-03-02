@@ -137,14 +137,26 @@ def answer(request, question_id):
             }, context_instance=RequestContext(request))
     else:
         # Save their answer if they are logged in
-        if request.user.is_authenticated():
-            qa = AnsweredQuestion()
-            qa.user = request.user
-            qa.answer = selected_answer
-            qa.question = q
-            qa.save()
-        elif q not in request.session:
- 	        request.session[q] = selected_answer
+        answered = get_or_none(AnsweredQuestion, user=request.user, question=q)
+        if answered == None:
+            if request.user.is_authenticated():
+                qa = AnsweredQuestion()
+                qa.user = request.user
+                qa.answer = selected_answer
+                qa.question = q
+                qa.save()
+            elif q not in request.session:
+ 	            request.session[q] = selected_answer
+        else:
+            if request.user.is_authenticated():
+                qa = get_or_none(AnsweredQuestion, user=request.user, question=q)
+                if qa != None:
+                    qa.answer = selected_answer
+                    qa.save()
+            elif q in request.session:
+                # Delete the old answer before adding the new one
+                del request.session[q]
+                request.session[q] = selected_answer
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
