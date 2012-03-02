@@ -1,4 +1,4 @@
-from dss.recommendations.models import Recommendation, RecommendationProfile
+from dss.recommendations.models import Recommendation, RecommendationProfile, MultipleFacts
 from dss.recommendations.models import UploadedFile
 from django.contrib import admin
 
@@ -10,6 +10,7 @@ class RecommendationProfileInline(admin.TabularInline):
             'fields': ('recommendation', 'profile',)
         })
     ]
+
 
 class RecommendationAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -26,5 +27,23 @@ class UploadedFileAdmin(admin.ModelAdmin):
     search_fields = ["files"]
 
 
+class MultipleFactsInline(admin.TabularInline):
+    model = RecommendationProfile
+    extra = 0
+    fieldsets = [
+        (RecommendationProfile, {
+            'fields': ('recommendation', 'profile',)
+        })
+    ]
+
+
+class MultipleFilesAdmin(admin.ModelAdmin):
+    fieldsets = [
+       ("Multiple Fact", {"fields": ["recommendation"]}),
+    ]
+    search_fields = ["recommendation"]
+
+
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(UploadedFile, UploadedFileAdmin)
+

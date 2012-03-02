@@ -201,7 +201,7 @@ def edit(request, input_id):
 #Adrian Kwizera
 def record_view(request):
     count = User.objects.count()
-    return render_to_response('questions/record_view.html', {'count': count})
+    return render_to_response('questions/record_view.html', {'count': count}, context_instance=RequestContext(request))
 
 
 

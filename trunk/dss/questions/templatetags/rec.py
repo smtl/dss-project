@@ -3,6 +3,8 @@ from dss.auth.models import Profile
 from dss.questions.models import AnsweredQuestion, Question
 from django.template import Library, Node
 from django.template.defaultfilters import stringfilter
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 import os
 import glob
 
@@ -20,7 +22,7 @@ def build_rec_list(parser,token):
     {% get_rec_list %}
     """
     return RecObj()
-
+   
 
 class RecObj(Node):
     def render(self,context):
@@ -110,3 +112,16 @@ def media(value,arg):
     else:
         return value
 register.filter("media",media)
+
+
+def initial_letter_filter(text, autoescape=True):
+    first, other = text[0], text[1:]
+    if autoescape:
+        esc = conditional_escape
+    else:
+        esc = lambda x: x
+    result = '<strong>%s</strong>%s' % (esc(first), esc(other))
+    return mark_safe(result)
+
+
+

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from dss.auth.models import Profile
 
+
 # Create your models here.
 
 class Question(models.Model):
@@ -17,6 +18,7 @@ class Answer(models.Model):
     #)
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=200)#, choices=ANSWER_CHOICES)
+
     def __unicode__(self):
         return self.question.question+" "+self.answer
 

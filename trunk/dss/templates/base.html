@@ -156,7 +156,8 @@ margin-right:30px;
     <div id=header>
         <li><a href="/">Home</a></li> |
         {% if request.user.is_staff %}<li><a href="/admin/">Admin</a></li> |{% endif %}
-        <li><a href="/profile/">Profile</a></li>
+        <li><a href="/profile/">Profile</a></li> |
+        {% if request.user.is_staff %}<li>{% load count %} {% get_count %} User count: {{count}}</li>{% endif %}
 	<div id="user-info">
 	{% if user.is_authenticated %}
         Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
