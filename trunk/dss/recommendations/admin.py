@@ -52,5 +52,5 @@ class MultipleFilesAdmin(admin.ModelAdmin):
 
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(UploadedFile, UploadedFileAdmin)
-admin.site.register(RecAnswerLink, RecAnswerLinkAdmin)
+#admin.site.register(RecAnswerLink, RecAnswerLinkAdmin)
 

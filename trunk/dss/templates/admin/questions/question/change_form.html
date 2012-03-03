@@ -1,0 +1,11 @@
+{% extends "admin/change_form.html" %}
+
+{% block form_top %}
+  <p>An admin or maintaniner can add and edit questions here. A question consists of a question and a number of answers. Questions can be added to question paths for <a href="/admin/auth/profile/">user profiles</a>.</p>
+
+  <p>A "recomendation answer link" allows you to connect a specific answer with a specfic recommendation. One answer may connect to many recommendations.</p>
+
+  <p><strong>Note: You must save your question/answers before adding recommendation answer links.</strong></p>
+  {% endblock %}
+
+
