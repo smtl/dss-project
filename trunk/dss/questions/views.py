@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from dss.questions.models import Question, Answer, AnsweredQuestion, QuestionPath
 from dss.auth.models import UserProfile, Profile
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -161,7 +162,6 @@ def answer(request, question_id):
             return render_to_response('questions/detail.html', {'question': nextq}, context_instance=RequestContext(request))
 
 
-
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
@@ -208,10 +208,31 @@ def edit(request, input_id):
         return render_to_response('questions/edit.html', {'question': q}, context_instance=RequestContext(request))
 
 
+def save_progress(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()   
+            # Give them a profile
+            up = UserProfile()
+            up.user_id = new_user.id
+            up.profile_id = 1
+            up.save()   
+            # Transfer their answered questions from guest session to user account
+            for q in Question.objects.all():
+                if q in request.session:
+                    AnsweredQuestion.objects.create(user=new_user, question=q, answer=request.session[q])
+            return HttpResponseRedirect("/profile/")
+    else:
+        form = UserCreationForm()
+    return render_to_response("registration/register.html", {'form': form}, context_instance=RequestContext(request))
+
+
 #Adrian Kwizera
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count}, context_instance=RequestContext(request))
+
 
 
 
