@@ -146,8 +146,8 @@ def answer(request, question_id):
                 qa.question = q
                 qa.save()
             else:
-                answer.answer = selected_answer
-                answer.save()
+                answered.answer = selected_answer
+                answered.save()
         elif q not in request.session:
  	        request.session[q] = selected_answer
         else:
