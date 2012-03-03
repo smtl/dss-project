@@ -57,18 +57,3 @@ class RecommendationProfile(models.Model):
     class Meta:
         #order_with_respect_to = 'user'
         unique_together = ('profile', 'recommendation',)
-
-
-class MultipleFacts(models.Model):
-    question = models.ForeignKey(Question)
-    question = models.ForeignKey(Question)
-    recommendation = models.ForeignKey(Recommendation)
-    answer = models.ForeignKey(Answer)
-    def __unicode__(self):
-        return "Recommendation <-> Answer Link"
-
-    class Meta:
-    #order_with_respect_to = 'user'
-          unique_together = ('question', 'recommendation', 'answer',)
-      
-

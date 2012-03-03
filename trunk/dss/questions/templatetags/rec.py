@@ -26,38 +26,33 @@ def build_rec_list(parser,token):
 
 class RecObj(Node):
     def render(self,context):
+        # New way of doing this
+        # Go through all the recommendations and get the answer links. If all the answers are in the user's database, present the answer 
         # Get the page request so we know who the user is
         if 'request' in context:
             request = context['request']
+        
         # If they are signed in we query the database
         if request.user.is_authenticated():
-            
-            # Get all of the user's answers
-            user_answers = AnsweredQuestion.objects.filter(user=request.user)
-            full_list_of_rec_links = []
-            rec_link_list = []
-
-            # Go through the users answers and find the related recAnswerLink
-            # This results in querysets for each answer
-            for a in user_answers:
-                rec_link_list.append(RecAnswerLink.objects.filter(answer=a.answer))
-            
-            # Go through list of querysets and get the full list of recAnswerLinks
-            for rec_link in rec_link_list:
-                for r in rec_link:
-                    full_list_of_rec_links.append(r)
-            
+            rec_answers = []
             recos = []
-            # Get each specific recommendation
-            for rec in full_list_of_rec_links:
-                if rec != None:
-                    recos.append(get_or_none(Recommendation, recommendation=rec.recommendation))
-            
+            user_answers=[]
+            qa = AnsweredQuestion.objects.filter(user=request.user)
+            for ua in qa:
+                user_answers.append(ua.answer)
+            for r in Recommendation.objects.all():
+                rec_answer_links = RecAnswerLink.objects.filter(recommendation = r)
+                for a in rec_answer_links:
+                    rec_answers.append(a.answer)
+                if set(rec_answers).issubset(set(user_answers)):
+                    recos.append(r)
+                rec_answers = []
+
             recpro = RecommendationProfile.objects.filter(profile=request.user.get_profile().profile)
             for re in recpro:
                 if re.recommendation in recos:
-                     recos.remove(re.recommendation)
-                     recos.insert(0,re.recommendation)  
+                    recos.remove(re.recommendation)
+                    recos.insert(0,re.recommendation)  
 
             context['rec'] = recos
 
@@ -65,27 +60,19 @@ class RecObj(Node):
         else:
             # Get all the answers a guest has given
             guest_answers = []
+            recos = []
+            rec_answers = []
             for q in Question.objects.all():
                 if q in request.session:
                     guest_answers.append(request.session[q])
+            for r in Recommendation.objects.all():
+                rec_answer_links = RecAnswerLink.objects.filter(recommendation = r)
+                for a in rec_answer_links:
+                    rec_answers.append(a.answer)
+                if set(rec_answers).issubset(set(guest_answers)):
+                    recos.append(r)
+                rec_answers = []
 
-            full_list_of_rec_links = []
-            rec_link_list = []
-            # Go through the guests answers and fine the related recAnswerLink
-            for a in guest_answers:
-                rec_link_list.append(RecAnswerLink.objects.filter(answer=a))
-
-            #Go through the list of querysets and get the full list of recAnswerLinks
-            for rec_link in rec_link_list:
-                for r in rec_link:
-                    full_list_of_rec_links.append(r)
-
-            recos = []
-            # Get each specific recommendation
-            for rec in full_list_of_rec_links:
-                if rec != None:
-                    recos.append(get_or_none(Recommendation, recommendation=rec.recommendation)) 
-            
             p = Profile.objects.get(name="Default")
             recpro = RecommendationProfile.objects.filter(profile=p)
             for re in recpro:
