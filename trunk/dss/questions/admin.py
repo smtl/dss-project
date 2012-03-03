@@ -3,6 +3,7 @@ from dss.auth.models import Profile
 from dss.recommendations.models import RecAnswerLink, RecommendationProfile
 from django.contrib import admin
 from django import forms
+from django.contrib.sites.models import Site
 
 #class OrderForm(forms.ModelForm):
 #    def __init__(self, *args, **kwargs):
@@ -45,5 +46,5 @@ class ProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Question, QuestionAdmin)
-
+admin.site.unregister(Site)
 
