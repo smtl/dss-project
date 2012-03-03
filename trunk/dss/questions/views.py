@@ -95,8 +95,6 @@ def questions(request):
                 answered.append(request.session[q])
         return render_to_response('questions/answered_questions.html', {'answered_questions': answered}, context_instance=RequestContext(request))
 
-
-
 # Present the question to the user
 def detail(request, question_id):
     q = get_object_or_404(Question, pk = question_id)
@@ -255,4 +253,8 @@ def get_user_info(username):
         c.set(key, info, 60*60)
     return info
 
-
+def help(request):
+    if request.user.is_staff:
+        return render_to_response('questions/help_staff.html', {}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('questions/help_user.html', {}, context_instance=RequestContext(request))

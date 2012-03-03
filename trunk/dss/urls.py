@@ -22,6 +22,7 @@ urlpatterns = patterns('dss.questions.views',
     url(r'^questions/(?P<question_id>\d+)/answer/$', 'answer'),
     url(r'^questions/(?P<input_id>\d+)/edit/$', 'edit'),
     url(r'^save/$', 'save_progress'),
+    url(r'^help/$', 'help'),
 )
 
 urlpatterns += patterns('dss.auth.views',

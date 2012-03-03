@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from dss.auth.models import Profile
-
+#from dss.recommendations.models import Recommendation
 
 # Create your models here.
 
@@ -17,6 +17,7 @@ class Answer(models.Model):
     #    ('No', 'No'),
     #)
     question = models.ForeignKey(Question)
+    #recommendation = models.ForeignKey(Recommendation)
     answer = models.CharField(max_length=200)#, choices=ANSWER_CHOICES)
 
     def __unicode__(self):
@@ -34,10 +35,10 @@ class AnsweredQuestion(models.Model):
         unique_together = ('user', 'question',)
 
     
-class Recommendation(models.Model):
-    recommendation = models.TextField()
-    def __unicode__(self):
-        return self.recommendation
+#class Recommendation(models.Model):
+#    recommendation = models.TextField()
+#    def __unicode__(self):
+#        return self.recommendation
 
 class QuestionPath(models.Model):
     profile = models.ForeignKey(Profile)
