@@ -45,14 +45,14 @@ class RecObj(Node):
                 for a in rec_answer_links:
                     rec_answers.append(a.answer)
                 if len(rec_answers) > 0 and set(rec_answers).issubset(set(user_answers)):
-                    recos.append(r)
+                    recos.append(r.recommendation)
                 rec_answers = []
 
             recpro = RecommendationProfile.objects.filter(profile=request.user.get_profile().profile)
             for re in recpro:
                 if re.recommendation in recos:
-                    recos.remove(re.recommendation)
-                    recos.insert(0,re.recommendation)  
+                    recos.remove(re.recommendation.recommendation)
+                    recos.insert(0,re.recommendation.recommendation)  
 
             context['rec'] = recos
 
@@ -70,15 +70,15 @@ class RecObj(Node):
                 for a in rec_answer_links:
                     rec_answers.append(a.answer)
                 if len(rec_answers) > 0 and set(rec_answers).issubset(set(guest_answers)):
-                    recos.append(r)
+                    recos.append(r.recommendation)
                 rec_answers = []
 
             p = Profile.objects.get(name="Default")
             recpro = RecommendationProfile.objects.filter(profile=p)
             for re in recpro:
                 if re.recommendation in recos:
-                     recos.remove(re.recommendation)
-                     recos.insert(0,re.recommendation)  
+                     recos.remove(re.recommendation.recommendation)
+                     recos.insert(0,re.recommendation.recommendation)  
 
             context['rec'] = recos
         return ""

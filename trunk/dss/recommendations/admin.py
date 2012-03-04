@@ -13,7 +13,7 @@ class RecommendationProfileInline(admin.TabularInline):
 
 class RecommendationAdmin(admin.ModelAdmin):
     fieldsets = [
-       ('Recommendation', {'fields': ['recommendation']}),
+       ('Recommendation', {'fields': ['name','recommendation']}),
     ]
     inlines = [RecommendationProfileInline] 
     search_fields = ['recommendation']

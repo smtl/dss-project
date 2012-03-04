@@ -27,9 +27,10 @@ color:#545454;
 </div>
 """
 class Recommendation(models.Model):
+    name = models.CharField(max_length="110")
     recommendation = models.TextField(help_text=description)
     def __unicode__(self):
-        return self.recommendation
+        return self.name
 
 class UploadedFile(models.Model):
     files = models.FileField(upload_to="./", max_length=500)
