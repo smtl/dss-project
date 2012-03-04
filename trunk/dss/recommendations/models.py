@@ -16,12 +16,15 @@ color:#545454;
 <b>
 <ul>
 <li>[link](http://example.com)</li>
+<li>[local file link](/media/file.png)</li>
 <li>![picture alt](/media/photo.jpeg "Title is optional")</li>
 <li># header 1 #<br/>## header 2 ##<br/> ### header 3 ###</li>
 <li>_italics_<br/>**bold**<br/>`code()`<br/></li>
 <li>1. numbered<br/>2. list<br/>3. example<br/></li>
 <li>* bullet<br/>* list<br/>* example<br/></li>
 <li>> blockquote</li>
+<li>YouTube links: go to YouTube video page >> share >> embed >> copy and paste code
+<li>
 </ul>
 <p>for more Markdown syntax, visit <a href="http://en.wikipedia.org/wiki/Markdown">this</a> Wikipedia page.</p>
 </div>
