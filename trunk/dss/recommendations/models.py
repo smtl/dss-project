@@ -23,8 +23,7 @@ color:#545454;
 <li>1. numbered<br/>2. list<br/>3. example<br/></li>
 <li>* bullet<br/>* list<br/>* example<br/></li>
 <li>> blockquote</li>
-<li>YouTube links: go to YouTube video page >> share >> embed >> copy and paste code
-<li>
+<li>YouTube links: go to YouTube video page >> share >> embed >> copy and paste code</li>
 </ul>
 <p>for more Markdown syntax, visit <a href="http://en.wikipedia.org/wiki/Markdown">this</a> Wikipedia page.</p>
 </div>
