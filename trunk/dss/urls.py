@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib.auth.views import login, logout
 
@@ -40,6 +41,12 @@ urlpatterns += patterns('dss.recommendations.views',
 )
 
 urlpatterns += patterns('',
+    url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
     url(r'^admin/', include(admin.site.urls)),
     url("^admin_media/(?P<path>.*)$", "django.views.static.serve",{ "document_root": fromRelativePath("static", "admin") }),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))
