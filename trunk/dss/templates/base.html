@@ -134,13 +134,17 @@ margin-right:30px;
 <div id="right-box">
     <div id="title">Recommendations</div>
     <div id="content">
-      {% load rec %}{% get_rec_list %}
+      {% load rec %}{% if get_rec_list %}
+      {% get_rec_list %}
+      {% endif %}
       {% for i in rec %}
           {% if i != None %}
               {% autoescape on %}{{ i|markdown }}{% endautoescape %}
           {% endif %}
+      {% empty %}
+      Start answering questions to get custom recommendations.
       {% endfor %}
-      {% if not rec  %} Start answering questions to get custom recommendations.{% endif %}
+
 	</div>
     </div>
 
