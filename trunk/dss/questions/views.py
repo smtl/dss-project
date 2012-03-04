@@ -31,7 +31,10 @@ def get_next_question_or_none(current_user):
     except IndexError:
         # If the list has gone out of bounds go back and get the last question
         # Check if already answered
-        q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].follow_question
+        if i > 1:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].follow_question
+        else:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[0].follow_question
         a = get_or_none(AnsweredQuestion, user=current_user, question=q)
         if a == None:
             return q
