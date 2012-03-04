@@ -39,6 +39,13 @@ class UploadedFile(models.Model):
     def __unicode__(self):
         return str(self.files)
 
+    def save(self, *args, **kwargs):
+        print self.files
+        # We want to check for .pml files and convert them to .png
+        name = self.files
+        if str(self.files)[-4:] == ".pml":
+            print "im in ur code lawl"
+
 class RecAnswerLink(models.Model):
     question = models.ForeignKey(Question)
     recommendation = models.ForeignKey(Recommendation)
