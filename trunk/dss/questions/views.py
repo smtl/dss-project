@@ -12,7 +12,7 @@ from django.template import RequestContext
 import datetime
 from django.core import cache
 import hashlib
-
+from django.core.urlresolvers import reverse
 
 def get_or_none(model, **kwargs):
     try:
@@ -186,14 +186,14 @@ def edit(request, input_id):
                     # Edit the old answer
                     qa.answer_id = request.POST['answer']
                     qa.save()
-                return HttpResponseRedirect("/profile")
+                return HttpResponseRedirect(reverse("profile"))
             else:   
                 if q in request.session:
                     # Delete the old answer before adding the new one
                     del request.session[q]
                     request.session[q] = selected_answer
     
-                return HttpResponseRedirect("/profile")
+                return HttpResponseRedirect(reverse("profile"))
     # Get the question to show
     else:
         if request.user.is_authenticated():
@@ -220,7 +220,7 @@ def save_progress(request):
             for q in Question.objects.all():
                 if q in request.session:
                     AnsweredQuestion.objects.create(user=new_user, question=q, answer=request.session[q])
-            return HttpResponseRedirect("/profile/")
+            return HttpResponseRedirect(reverse("login"))
     else:
         form = UserCreationForm()
     return render_to_response("registration/register.html", {'form': form}, context_instance=RequestContext(request))

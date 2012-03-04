@@ -18,13 +18,12 @@ color:#545454;
 <b>
 <ul>
 <li>[link](http://example.com)</li>
-<li>![picture alt](/media/photo.jpeg "Title is optional")</li>
+<li>![picture alt](/images/photo.jpeg "Title is optional")</li>
 <li># header 1 #<br/>## header 2 ##<br/> ### header 3 ###</li>
 <li>_italics_<br/>**bold**<br/>`code()`<br/></li>
 <li>1. numbered<br/>2. list<br/>3. example<br/></li>
 <li>* bullet<br/>* list<br/>* example<br/></li>
 <li>> blockquote</li>
-<li> embed YouTube videos by using the embedding code on a YouTube page (go to YouTube video page > share > embed)</li>
 </ul>
 <p>for more Markdown syntax, visit <a href="http://en.wikipedia.org/wiki/Markdown">this</a> Wikipedia page.</p>
 </div>
@@ -35,11 +34,7 @@ class Recommendation(models.Model):
         return self.recommendation
 
 class UploadedFile(models.Model):
-    files = models.FileField(upload_to="./", max_length=500)
-    def createFile(self):
-        a = open("sampleFile.txt","w")
-        a.write("Hello there!")
-        a.close()
+    files = models.FileField(upload_to="uploaded_files", max_length=500)
     def __unicode__(self):
         return str(self.files)
 

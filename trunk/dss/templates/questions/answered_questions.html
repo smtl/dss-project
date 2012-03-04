@@ -4,7 +4,7 @@
 {% if request.user.is_authenticated %}
     {% if answered_questions %}
         {% for q in answered_questions %}
-            {{ q.answer }} <a href="/questions/{{ q.question.id }}/edit">(Change Answer)</a>
+            {{ q.answer }} <a href="{% url edit input_id=q.question.id%}">(Change Answer)</a>
 
         <br />
         <br />

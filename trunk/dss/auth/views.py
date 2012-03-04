@@ -8,6 +8,8 @@ from django import forms
 from dss.auth.models import Profile, UserProfile
 from django.template import RequestContext
 from dss.questions.models import AnsweredQuestion, Question
+from django.core.urlresolvers import reverse
+
 
 def register(request):
     if request.method == 'POST':
@@ -61,7 +63,7 @@ def change_profile(request):
             p.profile_id = request.POST['p']
             p.user = request.user
             p.save()   
-        return HttpResponseRedirect('/profile/')
+        return HttpResponseRedirect(reverse('profile'))
     else:
         pc = Profile.objects.all()
         return render_to_response("auth/change_profile.html", {

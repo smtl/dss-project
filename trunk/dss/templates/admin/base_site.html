@@ -78,8 +78,8 @@ margin-right:30px;
 {% endblock %}
 
 {% block nav-global %}
-<li><a href="/">Site Home</a></li> |
-<li><a href="/admin">Maintenance Home</a></li> |
-<li><a href="/help">Help</a> |
+<li><a href="{% url index %}">Site Home</a></li> |
+<li><a href="{% url admin:index %}">Maintenance Home</a></li> |
+<li><a href="{% url help %}">Help</a> |
 <li>{% load count %} {% get_count %} Registered users: {{count}}</li>
 {% endblock %}

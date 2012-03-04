@@ -8,7 +8,7 @@
 
     {{ question }}
 
-    <form action="/questions/{{question.id}}/edit/" method="post">
+    <form action="{% url edit input_id=question.id %}" method="post">
         {% csrf_token %}
         {% for answer in question.answer_set.all %}
             <input type="radio" name="answer" id="answer{{forloop.counter}}" value="{{answer.id}}" />

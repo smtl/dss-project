@@ -113,14 +113,14 @@ float: right;
 
 <body>
     <div id=header>
-        <li><a href="/">Home</a></li> |
-        {% if request.user.is_staff %}<li><a href="/admin/">Admin</a></li> |{% endif %}
-        <li><a href="/profile/">Profile</a></li>
+        <li><a href="{% url index %}">Home</a></li> |
+        {% if request.user.is_staff %}<li><a href="{% url admin %}">Admin</a></li> |{% endif %}
+        <li><a href="{% url profile %}">Profile</a></li>
     <div id="user-info">
 	{% if user.is_authenticated %}
-        Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
+        Logged in as {{ user.username }} | <a href="{% url logout %}">Log out</a>
         {% else %}
-            <a href="/accounts/login">Log in</a> or <a href="/accounts/register">Register</a>
+            <a href="{% url login %}">Log in</a> or <a href="{% url register %}">Register</a>
         {% endif %}
         </div>
     </div>
@@ -140,7 +140,7 @@ float: right;
     <input type="password" name="password" value="" id="password">
 
     <input type="submit" value="login" />
-    <input type="hidden" name="next" value="/" />
+    <input type="hidden" name="next" value="{% url index %}" />
   <form action='.' method='post'>
 
 {% endblock %}

@@ -4,12 +4,12 @@
 {% if request.user.is_authenticated %}
     <h1>{{ request.user.username }}'s profile</h1>
     {% if request.user.email %}<b>Email:</b> {{ request.user.email }}<br />{% endif %}    
-    <b>Profile Type:</b> {{ profile }} <a href="/changeprofile/">(Change profile type)</a><br />
+    <b>Profile Type:</b> {{ profile }} <a href="{% url changeprofile %}">(Change profile type)</a><br />
     <i>Warning: Changing profile type will remove all your answers and recommendations</i><br />
 
 {% else %}
     <h1>Guest Profile</h1>
-    <b>Profile Type:</b> {{ profile }} <a href="/accounts/register/">(Register to change profile)</a>
+    <b>Profile Type:</b> {{ profile }} <a href="{% url save_progress %}">(Register to change profile)</a>
 {% endif %}
 <br />
 <br />
@@ -19,7 +19,7 @@
 {% if request.user.is_authenticated %}
     {% if answered_questions %}
         {% for q in answered_questions %}
-            {{ q.answer }} <a href="/questions/{{ q.question.id }}/edit">(Change Answer)</a>
+            {{ q.answer }} <a href="{% url edit input_id=q.question.id %}">(Change Answer)</a>
 
         <br />
         <br />
@@ -31,7 +31,7 @@
 {% else %}
     {% if answered_questions %}
     {% for a in answered_questions %}
-       {{ a }} <a href="/questions/{{ a.id }}/edit">(Change Answer)</a>
+       {{ a }} <a href="{% url edit input_id=a.id %}">(Change Answer)</a>
         <br />
         <br />    
     {% endfor %}
