@@ -24,7 +24,16 @@ def get_next_question_or_none(current_user):
     i = 0
     try:
         for i in xrange(Question.objects.count()):
-            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question
+            try:
+                p = UserProfile.objects.get(user=current_user)
+            except UserProfile.DoesNotExist:
+                up = UserProfile()
+                up.user = current_user
+                up.profile_id = 1
+                up.save()
+                p = UserProfile.objects.get(user=current_user)
+
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question 
             a = get_or_none(AnsweredQuestion, user=current_user,question=q)
             if a == None:
                 return q
@@ -71,8 +80,9 @@ def hello(request, name="world"):
 # Show a list of questions
 def index(request):
     if request.user.is_authenticated():
-        # If the user 
+        # If the user
         q = get_next_question_or_none(request.user)
+        
         if q == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
