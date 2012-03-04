@@ -153,7 +153,7 @@ margin-right:30px;
 	{% if user.is_authenticated %}
         Logged in as {{ user.username }} | <a href="{% url logout %}?next={% url index %}">Log out</a>
         {% else %}
-            <a href="{% url login %}">Log in</a> or <a href="{% url register %}">Register</a>
+            <a href="{% url login %}">Log in</a> or <a href="{% url save_progress %}">Register</a>
         {% endif %}
         </div>
     </div>
