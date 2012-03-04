@@ -3,7 +3,7 @@
 {% block form_top %}
   <p>Files can be uploaded to the server using this form.</p>
 
-  <p>Uploaded files can be used in <a href="/admin/recommendations/recommendation/">recommendations</a> by copying the name/path of the uploaded file</p>
+  <p>Uploaded files can be used in <a href="{% url admin:recommendations_recommendation_changelist %}">recommendations</a> by copying the name/path of the uploaded file</p>
 
   <p>Naming your files appropriately before uploading may help you find and reference them easier</p>
 {% endblock %}
