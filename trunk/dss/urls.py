@@ -28,7 +28,7 @@ urlpatterns = patterns('dss.questions.views',
 
 urlpatterns += patterns('dss.auth.views',
     url(r'^accounts/login/$', login, name='login'),
-    #url(r'^accounts/logout/$', logout),
+    url(r'^accounts/logout/$', logout),
     url(r'^accounts/logout/$', logout, name='logout'),
     url(r'^accounts/register/$', 'register', name='register'),
     url(r'^profile/$', 'profile', name='profile'),
@@ -40,7 +40,7 @@ urlpatterns += patterns('dss.recommendations.views',
 )
 
 urlpatterns += patterns('',
-    url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
+    #url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
     url(r'^admin/', include(admin.site.urls), name="admin"),
     #url("^admin_media/(?P<path>.*)$", "django.views.static.serve",{ "document_root": fromRelativePath("static", "admin") }),
 )

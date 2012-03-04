@@ -32,7 +32,7 @@ class Recommendation(models.Model):
         return self.recommendation
 
 class UploadedFile(models.Model):
-    files = models.FileField("upload file", upload_to="./", max_length=500)
+    files = models.FileField(upload_to="./", max_length=500)
     def __unicode__(self):
         return str(self.files)
 
@@ -49,7 +49,7 @@ class RecommendationProfile(models.Model):
     profile = models.ForeignKey(Profile)
    
     def __unicode__(self):
-        return "Recommendation <-> Recommendation Link"
+        return "Recommendation Profile Tag"
     
     class Meta:
         #order_with_respect_to = 'user'

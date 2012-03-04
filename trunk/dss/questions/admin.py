@@ -42,9 +42,6 @@ class ProfileAdmin(admin.ModelAdmin):
     inlines = [QuestionPathAdmin]
 
 
-
-
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.unregister(Site)
-
