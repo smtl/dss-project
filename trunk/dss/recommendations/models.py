@@ -2,9 +2,7 @@ from django.db import models
 from dss.questions.models import Answer, Question
 from django import forms
 from dss.auth.models import Profile
-
-from django import forms
-
+from django.contrib.admin.models import User
 
 # Create your models here.
 description = """
@@ -34,10 +32,9 @@ class Recommendation(models.Model):
         return self.recommendation
 
 class UploadedFile(models.Model):
-    files = models.FileField(upload_to="uploaded_files", max_length=500)
+    files = models.FileField("upload file", upload_to="./", max_length=500)
     def __unicode__(self):
         return str(self.files)
-
 
 class RecAnswerLink(models.Model):
     question = models.ForeignKey(Question)

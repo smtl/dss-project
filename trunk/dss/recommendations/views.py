@@ -1,4 +1,4 @@
-from dss.recommendations.models import Recommendation, RecAnswerLink
+from dss.recommendations.models import Recommendation, RecAnswerLink, UploadedFile
 from dss.questions.models import Question, Answer, AnsweredQuestion
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
@@ -12,11 +12,12 @@ def get_or_none(model, **kwargs):
     except model.DoesNotExist:
         return None
 
-def handle_uploaded_file(f):
-    dest = open("{{ MEDIA_URL }}sample.txt","w")
-    for chunk in f.chunks():
-        dest.write(chunk)
+
+"""def handle_uploaded_file(request):
+    dest = open("/media/sample","w")
+    dest.write("Hello there!")
     dest.close()
+"""
 
 """def uploadFile(request):
     if request.method == "POST":
