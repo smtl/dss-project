@@ -16,7 +16,7 @@ color:#545454;
 <b>
 <ul>
 <li>[link](http://example.com)</li>
-<li>![picture alt](/images/photo.jpeg "Title is optional")</li>
+<li>![picture alt](/media/photo.jpeg "Title is optional")</li>
 <li># header 1 #<br/>## header 2 ##<br/> ### header 3 ###</li>
 <li>_italics_<br/>**bold**<br/>`code()`<br/></li>
 <li>1. numbered<br/>2. list<br/>3. example<br/></li>

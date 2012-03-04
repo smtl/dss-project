@@ -44,7 +44,7 @@ class RecObj(Node):
                 rec_answer_links = RecAnswerLink.objects.filter(recommendation = r)
                 for a in rec_answer_links:
                     rec_answers.append(a.answer)
-                if set(rec_answers).issubset(set(user_answers)):
+                if len(rec_answers) > 0 and set(rec_answers).issubset(set(user_answers)):
                     recos.append(r)
                 rec_answers = []
 
@@ -69,7 +69,7 @@ class RecObj(Node):
                 rec_answer_links = RecAnswerLink.objects.filter(recommendation = r)
                 for a in rec_answer_links:
                     rec_answers.append(a.answer)
-                if set(rec_answers).issubset(set(guest_answers)):
+                if len(rec_answers) > 0 and set(rec_answers).issubset(set(guest_answers)):
                     recos.append(r)
                 rec_answers = []
 
