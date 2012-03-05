@@ -9,7 +9,9 @@ Replace this with more appropriate tests for your application.
 from django.test.client import Client
 import re
 
-from dss.recommendations.models import Recommendation
+from dss.auth.models import *
+from dss.questions.models import *
+from dss.recommendations.models import *
 from django.test import TestCase
 
 #Stephen Murphy
@@ -41,38 +43,60 @@ class RecommendationsTest(TestCase):
 #test if markdown syntax is converting to HTML
 class MarkupTest(TestCase):
     def setUp(self):
-        self.link = Recommendation.objects.create(recommendation="[link](http://link.com)")
-        self.bold = Recommendation.objects.create(recommendation="<b>bold</b>")
-        self.ital = Recommendation.objects.create(recommendation="<i>italics</i>")
-        self.h2 = Recommendation.objects.create(recommendation="## big letters ##")
-        self.img = Recommendation.objects.create(recommendation="![](http://someurl.com/i.jpg)")
+        self.link = Recommendation.objects.create(name="r1",recommendation="[link](http://link.com)")
+        self.bold = Recommendation.objects.create(name="r2",recommendation="<b>bold</b>")
+        self.ital = Recommendation.objects.create(name="r3",recommendation="<i>italics</i>")
+        self.h2 = Recommendation.objects.create(name="r4",recommendation="## big letters ##")
+        self.img = Recommendation.objects.create(name="r5",recommendation="![](http://someurl.com/i.jpg)")
+	self.profile = Profile.objects.create(name="default")
         self.client = Client()
 
+
+	self.question1 = Question.objects.create(question = "?")
+	self.answer1 = Answer.objects.create(question=self.question1,answer = "yes")
+	self.ansQ1 = AnsweredQuestion.objects.create(question=self.question1,answer = self.answer1)
+
+	self.question2 = Question.objects.create(question = "??")
+	self.answer2 = Answer.objects.create(question=self.question2,answer = "yes")
+	self.ansQ2 = AnsweredQuestion.objects.create(question=self.question2,answer = self.answer2)
+
+	self.questionpath = QuestionPath.objects.create(profile=self.profile,current_question=self.question1,follow_question=self.question2)
+	
     def testMark(self):
         page = self.client.get("")
         self.assertEqual(page.status_code,200)
 
     def test_link(self):
+	profileRec = RecommendationProfile.objects.create(recommendation=self.link,profile=self.profile)
+	answerlink = RecAnswerLink.objects.create(question=self.question1,recommendation=self.link,answer=self.answer1)
         page = self.client.get("")
         reg = "<a href=\"http://link.com\">"
         self.assertIn(reg,getRegEx(reg,page))
 
     def test_bold(self):
+	profileRec = RecommendationProfile.objects.create(recommendation=self.bold,profile=self.profile)
+	answerlink = RecAnswerLink.objects.create(question=self.question1,recommendation=self.bold,answer=self.answer1)
         page = self.client.get("")
         reg = "<b>bold</b>"
         self.assertIn(reg,getRegEx(reg,page))
 
     def test_ital(self):
+	profileRec = RecommendationProfile.objects.create(recommendation=self.ital,profile=self.profile)
+	answerlink = RecAnswerLink.objects.create(question=self.question1,recommendation=self.ital,answer=self.answer1)
         page = self.client.get("")
         reg = "<i>italics</i>"
         self.assertIn(reg,getRegEx(reg,page))
 
     def test_h2(self):
+	profileRec = RecommendationProfile.objects.create(recommendation=self.h2,profile=self.profile)
+	answerlink = RecAnswerLink.objects.create(question=self.question1,recommendation=self.h2,answer=self.answer1)
         page = self.client.get("")
         reg = "<h2>big letters</h2>"
         self.assertIn(reg,getRegEx(reg,page))
 
     def test_img(self):
+	profileRec = RecommendationProfile.objects.create(recommendation=self.img,profile=self.profile)
+	answerlink = RecAnswerLink.objects.create(question=self.question1,recommendation=self.img,answer=self.answer1)
         page = self.client.get("")
         reg = "<img alt=\"\" src=\"http://someurl.com/i.jpg\" />"
         self.assertIn(reg,getRegEx(reg,page))
