@@ -3,6 +3,8 @@ from dss.questions.models import Answer, Question
 from django import forms
 from dss.auth.models import Profile
 from django.contrib.admin.models import User
+import os
+from dss.graphviz.graph.graphvizConv import toPNG, toDot
 
 # Create your models here.
 description = """
@@ -24,6 +26,7 @@ color:#545454;
 <li>* bullet<br/>* list<br/>* example<br/></li>
 <li>> blockquote</li>
 <li>YouTube links: go to YouTube video page >> share >> embed >> copy and paste code</li>
+<li>if you uploaded a PML or DOT file, you can also access a converted PNG of the file. Instead of file.pml, use file.png
 </ul>
 <p>for more Markdown syntax, visit <a href="http://en.wikipedia.org/wiki/Markdown">this</a> Wikipedia page.</p>
 </div>
@@ -41,10 +44,20 @@ class UploadedFile(models.Model):
 
     def save(self, *args, **kwargs):
         print self.files
-        # We want to check for .pml files and convert them to .png
         name = self.files
-        if str(self.files)[-4:] == ".pml":
-            print "im in ur code lawl"
+        super(UploadedFile,self).save(*args,**kwargs)
+        if str(self.files)[-4:].lower() == ".pml":
+            print "PML file. Converting..."
+            toDot(str(self.files.path))
+            toPNG(str(self.files.path)[0:-4]+".dot")
+            #os.system("touch thisisaPMLfile")
+        if str(self.files)[-4:].lower() == ".dot":
+            print "DOT file. Converting..."
+            toPNG(str(self.files.path))
+        #f = open("/home/stephen/dss/media/"+str(self.files),"r")
+        #print f.read()
+        #print "path: ",os.getcwd()
+
 
 class RecAnswerLink(models.Model):
     question = models.ForeignKey(Question)
