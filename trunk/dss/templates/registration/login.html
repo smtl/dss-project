@@ -120,7 +120,7 @@ float: right;
 	{% if user.is_authenticated %}
         Logged in as {{ user.username }} | <a href="{% url logout %}">Log out</a>
         {% else %}
-            <a href="{% url login %}">Log in</a> or <a href="{% url register %}">Register</a>
+            <a href="{% url login %}">Log in</a> or <a href="{% url save_progress %}">Register</a>
         {% endif %}
         </div>
     </div>
