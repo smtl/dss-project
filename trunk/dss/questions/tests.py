@@ -23,10 +23,12 @@ from dss.auth.models import Profile
 from django.core import mail
 import copy
 
+
 from dss.auth.models import Profile, UserProfile
 from dss.recommendations.models import Recommendation, RecAnswerLink
 from dss.questions.models import Question, Answer, QuestionPath
 from dss.questions.models import AnsweredQuestion
+
 
 
 
@@ -126,8 +128,33 @@ class MaintainerTestCase(unittest.TestCase):
     def tearDown(self):
         self.cr.delete()
         self.an.delete()
-     
 
+
+# Adrian Kwizera
+class AdminCustomisationTest(TestCase):
+    
+    def setUp(self):
+        username = 'test_user'
+        pwd = 'secret'
+
+        self.u = User.objects.create_user(username, '', pwd)
+        self.u.is_staff = True
+        self.u.is_superuser = True
+        self.u.save()
+
+        self.assertTrue(self.client.login(username=username, password=pwd),
+            "Logging in user %s, pwd %s failed." % (username, pwd))
+
+        questions.objects.all().add()
+
+    def tearDown(self):
+        self.client.logout()
+        self.u.delete()
+
+
+
+
+'''
 # Stephen Lowry
 class AnonPagesTest(unittest.TestCase):
     def testAnonPages(self):
@@ -148,9 +175,9 @@ class AnonPagesTest(unittest.TestCase):
         self.assertEqual(answer.status_code, 200)
         self.assertEqual(login.status_code, 200)
     def tearDown(self):
-          self.q.delete()
+          self.q.delete()'''
 
-
+'''
 class UserPagesTest(unittest.TestCase):
     def testUserPages(self):
         client = Client()
@@ -160,7 +187,7 @@ class UserPagesTest(unittest.TestCase):
         self.up = UserProfile.objects.create(user=self.u, profile=self.p)
         client.login(username='test', password='test')
         self.q = Question.objects.create(question = "Huh?")
-        home = client.get('/')
+        home = client.get('/hello')
         questions = client.get('/questions/')
         profile = client.get('/profile/')
         changeprofile = client.get('/changeprofile/')
@@ -213,7 +240,7 @@ class maintenance_test(unittest.TestCase):
         self.qp.delete()
         self.up.delete()
 
-
+'''
 
 # Stephen Lowry
 class UserTest(unittest.TestCase):
