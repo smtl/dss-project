@@ -105,14 +105,14 @@ float: right;
 
 <body>
     <div id=header>
-        <li><a href="/">Home</a></li> |
-        {% if request.user.is_staff %}<li><a href="/admin/">Admin</a></li> |{% endif %}
-        <li><a href="/profile/">Profile</a></li>
+        <li><a href="{% url index %}">Home</a></li> |
+        {% if request.user.is_staff %}<li><a href="{% url admin:index %}">Admin</a></li> |{% endif %}
+        <li><a href="{% url profile %}">Profile</a></li>
     <div id="user-info">
 	{% if user.is_authenticated %}
-        Logged in as {{ user.username }} | <a href="/accounts/logout">Log out</a>
+        Logged in as {{ user.username }} | <a href="{% url logout %}?next_page={% url index %}">Log out</a>
         {% else %}
-            <a href="/accounts/login">Log in</a> or <a href="/accounts/register">Register</a>
+            <a href="{% url login %}">Log in</a> or <a href="url save_progress">Register</a>
         {% endif %}
         </div>
     </div>
