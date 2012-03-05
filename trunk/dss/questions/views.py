@@ -20,6 +20,7 @@ def get_or_none(model, **kwargs):
     except model.DoesNotExist:
         return None
 
+# Gets next question in queue or none in case the current user saves state or exits
 def get_next_question_or_none(current_user):
     i = 0
     try:
@@ -51,6 +52,7 @@ def get_next_question_or_none(current_user):
     if i == Question.objects.count() or i > Question.objects.count():
             return None
 
+# Similar as above, but for guests this time
 def get_next_question_or_none_guest(request):
     i = 0
     p = get_or_none(Profile, name="Default")
@@ -68,7 +70,7 @@ def get_next_question_or_none_guest(request):
     if i == Question.objects.count() or i > Question.objects.count():
         return None
 
-
+# hello request
 def hello(request, name="world"):
     if request.user.is_authenticated():
         hello = "Hello "+request.user.username
@@ -96,7 +98,7 @@ def index(request):
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
 
-
+# definition for a set of questions
 def questions(request):
     if request.user.is_authenticated():
         answered = AnsweredQuestion.objects.filter(user=request.user)
@@ -172,7 +174,7 @@ def answer(request, question_id):
         else:
             return render_to_response('questions/detail.html', {'question': nextq}, context_instance=RequestContext(request))
 
-
+# Renders results to questions
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
@@ -218,7 +220,7 @@ def edit(request, input_id):
 
         return render_to_response('questions/edit.html', {'question': q}, context_instance=RequestContext(request))
 
-
+# Save current user state. Render same state on login
 def save_progress(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -239,7 +241,7 @@ def save_progress(request):
     return render_to_response("registration/register.html", {'form': form}, context_instance=RequestContext(request))
 
 
-#Adrian Kwizera
+# View registered user count
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count}, context_instance=RequestContext(request))
@@ -266,6 +268,9 @@ def get_user_info(username):
         c.set(key, info, 60*60)
     return info
 
+
+
+# links to help templates
 def help(request):
     if request.user.is_staff:
         return render_to_response('questions/help_staff.html', {}, context_instance=RequestContext(request))
