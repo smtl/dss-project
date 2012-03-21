@@ -128,6 +128,8 @@ sudo apt-get install graphviz
 Installation
 ===========
 
+By default the project is installed into the Home directory and places content into two folders: data and public_html. You can change the intall location by changing the HOME variable in the Makefile.
+
 To install,
 
 1. Download the archive file
@@ -156,3 +158,7 @@ python manage.py syncdb
 Make sure to make a superuser when prompted. This will allow you to access the admin interface.
 
 Make sure you have permissions set right for the dss folder itself and the contents of the dss folder.
+
+== Other Problems ==
+
+If you encounter other problems it is good practise to try restart your server andtry again. This may solve some issues.
