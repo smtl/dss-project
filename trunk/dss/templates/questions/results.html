@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>No more questions to answer.</p>
+    
+    
+    <br />
+    {% if not request.user.is_authenticated %}
+       <p> <a href="{% url save_progress %}">[save your progress]</a></p>
+    {% endif %}
+{% endblock %}

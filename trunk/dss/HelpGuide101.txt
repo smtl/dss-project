@@ -1,0 +1,86 @@
+﻿Help Guide 101
+
+
+DECISION SUPPORT SYSTEM (DSS)
+
+
+This help guide is for the purpose of pointing our users to various user-actions including; 
+---Answering Questions
+---Viewing Recommendations
+    ---In Picture/Image format
+    ---In Text format
+    ---In Video format
+---Changing or assigning of user profiles
+    ---Default profile
+    ---Manager profile
+    ---Engineer profile
+---Viewing profile details
+    ---Returns profile details
+    ---Returns list of Answered questions
+---Changing Answered questions
+    ---Alter Answers
+    ---View new Recommendations 
+
+
+Site Map
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 Home 
+   1.1 Answer Questions as Guest
+         1.1.1 Some Questions are in the form of “yes” or “no” Answers
+                  1.1.1.1 Other Questions have structural Answers
+                  1.1.1.2 Refer to 1.2 to Answer Questions as registered user
+         1.1.2 Each Answer has an associated recommendation to the right panel
+                  1.1.2.1 Recommendations are supported for text format
+                  1.1.2.2 Recommendations are supported for video format
+                  1.1.2.3 Other Recommendations are supported for image format
+
+
+   1.2 Log in to Answer Questions as registered user
+         1.2.2 Some Questions are in the form of “yes” or “no” Answers
+                  1.2.2.1 Other Questions have structural Answers
+                  1.2.2.2 Refer to 1.1 to Answer Questions as Guest user
+         1.2.2 Each Answer has an associated recommendation to the right panel
+                  1.2.2.1 Recommendations are supported for text format
+                  1.2.2.2 Recommendations are supported for video format
+                  1.2.2.3 Other Recommendations are supported for image format
+         
+2 Profile
+   2.1 Click “Profile”
+   2.2 Returns profile details and user’s answered questions
+   2.3 For guest profiles, Click “Register to change profile”
+   2.4 From 2.3 move to 4.1,4.2,4.3,4.4,4.5 
+
+
+3 Register
+   3.1 Insert username
+   3.2 Insert password
+   3.3 Insert same password as confirmation for verification purposes
+   3.4 Click “create account”
+   3.5 Click “remember password” 
+
+
+4 Log in 
+   4.1 Insert username
+   4.2 Insert password
+   4.3 Click “Log in”
+   4.4 If logged in as maintainer, refer to 5.1,5.2,5.3,5.4,5.5
+
+
+5 Referrals
+   5.1 Maintainer Guide 101 for info on Guest user maintenance
+   5.2 Maintainer Guide 101 for info on Registered user maintenance 
+   5.3 Maintainer Guide 101 for info on maintainer access
+   5.4 Maintainer Guide 101 for info on user count details
+   5.5 Maintainer Guide 101 for other maintainer related info
