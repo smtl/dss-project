@@ -12,12 +12,6 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 BASE_SITE = os.path.realpath(os.path.join(SITE_ROOT, os.path.pardir))
 HOME_DIR = os.path.realpath(os.path.join(BASE_SITE, os.path.pardir))
-#PUBLIC_HTML = os.path.realpath(os.path.join(HOME_DIR, 'public_html'))
-if 'PUBLIC_HTML' not in os.environ:
-    os.environ['PUBLIC_HTML'] = '/'
-    PUBLIC_HTML = os.environ['PUBLIC_HTML']
-else:
-    PUBLIC_HTML = os.environ['PUBLIC_HTML']
 # Initialise SCRIPT_NAME
 # SCRIPT_NAME is the name of the directory where the wsgi script lies
 if 'SCRIPT_NAME' not in os.environ:
@@ -84,7 +78,6 @@ USE_L10N = True
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 #data = os.path.pardir
-#MEDIA_ROOT = os.path.join(data, 'public_html')
 MEDIA_ROOT = DSS_PUBLIC+"/media/"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
@@ -96,7 +89,7 @@ MEDIA_URL = URL_PREFIX+'/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(PUBLIC_HTML, 'static')#'/~dss/public_html/static/'
+STATIC_ROOT = os.path.join(DSS_PUBLIC, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -105,14 +98,14 @@ STATIC_URL = URL_PREFIX+'/static/'#SITE_ROOT+'/static/'#'/static/'
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = URL_PREFIX+'/media/static/admin/'#'/admin_media/'  #'/static/admin/'
+ADMIN_MEDIA_PREFIX = URL_PREFIX+'/media/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PUBLIC_HTML, 'media/static'),
+    os.path.join(DSS_PUBLIC, 'media/static'),
 )
 
 # List of finder classes that know how to find static files in
