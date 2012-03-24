@@ -161,4 +161,6 @@ Make sure you have permissions set right for the dss folder itself and the conte
 
 == Other Problems ==
 
-If you encounter other problems it is good practice to try restart your server andtry again. This may solve some issues.
+If you encounter other problems it is good practice to try restart your server and try again. This may solve some issues.
+
+Clearing your browsers cache or trying a different browser may also clear up problems.
