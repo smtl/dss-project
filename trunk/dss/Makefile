@@ -28,7 +28,7 @@ MY_MODE=ug+rwX,o+rwX
 # Set PROJECT to the name of your project.
 PROJECT=dss
 # The upcoming release.
-RELEASE=1.1
+RELEASE=1.2
 # The tar archive will be identified by version.
 RELEASE_CANDIDATE=$(shell [ -f .svn ] && svn version|grep RELEASE|awk '{print $2}')
 RELEASE_NAME=${PROJECT}-${RELEASE}-rc${RELEASE_CANDIDATE}
@@ -85,7 +85,7 @@ build: ${WSGI.script}
 install: test ${WSGI.script}
 	${INSTALL} -d ${WSGI.dir}
 	${INSTALL} -d ${WSGI.dir}/static
-	${WRITE_INSTALL} -d ${WSGI.dir}/media
+	${INSTALL} -d ${WSGI.dir}/media
 	${INSTALL} -d ${WSGI.dir}/media/static
 	${INSTALL} -d ${WSGI.dir}/media/static/admin
 	${INSTALL} -d ${WSGI.dir}/media/static/admin/css
@@ -107,7 +107,7 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${TEMPLATES.dir}/templates/auth
 	${INSTALL} -d ${TEMPLATES.dir}/templates/recommendations
 	${INSTALL} -d ${TEMPLATES.dir}/templates/registration
-	${WRITE_INSTALL} -d ${DATA.dir}
+	${INSTALL} -d ${DATA.dir}
 	${INSTALL} -d ${DATA.dir}/auth
 	${INSTALL} -d ${DATA.dir}/recommendations
 	${INSTALL} -d ${DATA.dir}/questions
@@ -152,7 +152,7 @@ install: test ${WSGI.script}
 	${INSTALL} auth/*.* ${DATA.dir}/auth
 	${INSTALL} questions/templatetags/* ${DATA.dir}/questions/templatetags
 	${INSTALL} -D *.py ${DATA.dir}
-	${WRITE_INSTALL} -D *.db ${DATA.dir}
+	${INSTALL} -D *.db ${DATA.dir}
 
 
 # This will make a .wsgi script from a .wsgi.tmpl file.  Adding
