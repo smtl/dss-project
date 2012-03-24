@@ -1,4 +1,4 @@
-## $Id$
+B0;115;0c## $Id$
 ## jhnoll@gmail.com
 #####################################################################
 # Installation environment.  
@@ -26,7 +26,7 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=dss
+PROJECT=testing
 # The upcoming release.
 RELEASE=1.2
 # The tar archive will be identified by version.
@@ -129,7 +129,7 @@ install: test ${WSGI.script}
 	cp graphviz/graph/graphit ${DATA.dir}/graphviz/graph
 	cp graphviz/graph/color-pml.awk ${DATA.dir}/graphviz/graph
 	${INSTALL} graphviz/graph/analysis/*.* ${DATA.dir}/graphviz/graph/analysis
-	${INSTALL} ${WSGI.script} ${WSGI.dir}
+	${INSTALL} ${WSGI.script} ${WSGI.dir}/${PROJECT}.wsgi
 	${INSTALL} .htaccess ${WSGI.dir}/.htaccess
 	${INSTALL} media/static/admin/css/* ${WSGI.dir}/media/static/admin/css
 	${INSTALL} media/static/admin/img/admin/* ${WSGI.dir}/media/static/admin/img/admin
