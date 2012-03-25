@@ -173,15 +173,26 @@ def answer(request, question_id):
                 qa.answer = selected_answer
                 qa.question = q
                 qa.save()
+#important      # If any other answers need to be answered implicitly do it here
+                # Check rule base
+                # Save answer in the same way but with the implicit column set to 1
             else:
                 answered.answer = selected_answer
                 answered.save()
+#important      # Check the rule base and implictly answered questions
+                # Implicit answers may need to be removed
         elif q not in request.session:
+            # Save answer in session dict
  	        request.session[q] = selected_answer
+#important  Check rule base, answers may implicity answer other questions
+            # Maybe store q+'implicit' as the key and 0 or 1 as the value
         else:
             # Delete the old answer before adding the new one
             del request.session[q]
             request.session[q] = selected_answer
+#important  # Check the rule base and implictly answered questions
+            # Implicit answers may need to be removed
+
         
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
