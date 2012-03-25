@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'DSS Maintenance' %}{% endblock %}
+
+{% block extrastyle %}
+<style>
+
+body {
+  background-color: white;
+  font-size: 13px;
+  font-family: Arial, SunSans-Regular, Sans-Serif;
+  color:#564b47;  
+  padding:0;
+  margin:0;
+}
+
+#header {
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
+font-size: 16px;
+text-transform:uppercase;
+color: #564b47;
+background-color: #90897a;
+padding:0px 0px 0px 0px;
+margin:0px;
+}
+
+.module h2, .module caption, .inline-group h2 { background:#ccc url(/admin_media/img/admin/nav-bg.gif) bottom left repeat-x; color: #333940; }
+a.section:link, a.section:visited { color: #666666; }
+
+#content {
+	padding:10px;
+}
+
+#header a{
+color: #564b47;
+}
+
+#header a:hover{
+color: white;
+}
+
+#header li{
+display: inline;
+}
+
+#header li{
+display: inline;
+}
+
+#user-info {
+float:right;
+margin-right:30px;
+}
+
+#dashboard{
+}
+
+#container {
+}
+
+#content{
+}
+
+#content-related { 
+}
+
+#recent-actions-module.module {
+}
+
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" > {% trans 'DSS Maintenance' %}</h1>
+{% endblock %}
+
+{% block nav-global %}
+<li><a href="{% url index %}">Site Home</a></li> |
+<li><a href="{% url admin:index %}">Maintenance Home</a></li> |
+<li><a href="{% url help %}">Help</a> |
+<li>{% load count %} {% get_count %} Registered users: {{count}}</li>
+{% endblock %}
