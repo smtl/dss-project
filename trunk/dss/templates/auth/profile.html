@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block boxname %}Profile{% endblock %}
+
 {% block content %}
 {% if request.user.is_authenticated %}
     <h1>{{ request.user.username }}'s profile</h1>
