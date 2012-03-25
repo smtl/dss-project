@@ -213,7 +213,7 @@ def edit(request, input_id):
         # Find the question
         q = get_or_none(Question, pk=input_id)
 
-        try:
+        try:    
             # Make sure they have selected an answer
             selected_answer = q.answer_set.get(pk=request.POST['answer'])
         except (KeyError, Answer.DoesNotExist):
@@ -226,12 +226,14 @@ def edit(request, input_id):
                     # Edit the old answer
                     qa.answer_id = request.POST['answer']
                     qa.save()
+#important          # Other answers may need be changed depending on the rules
                 return HttpResponseRedirect(reverse("profile"))
             else:   
                 if q in request.session:
                     # Delete the old answer before adding the new one
                     del request.session[q]
                     request.session[q] = selected_answer
+#important          # Other answers may need be changed depending on the rules
     
                 return HttpResponseRedirect(reverse("profile"))
     # Get the question to show
