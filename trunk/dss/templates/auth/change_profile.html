@@ -23,12 +23,15 @@ text-decoration: none;
  
 
 #header {
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
 font-size: 16px;
 text-transform:uppercase;
 color: #564b47;
 background-color: #90897a;
 padding:5px 15px;
-margin:0px
+margin:0px;
 }
 
 #header a{
@@ -79,25 +82,33 @@ padding: 5px 20px;
 	margin-top:0px;
 	padding-bottom:5px;
 	background-color:#454545;
+        -moz-border-radius: 15px;
+        border-radius: 11px 11px 0 0;
 }
 
 #left-box {
-float:left;
-padding: 0px;
-margin-top:0px;
-padding-bottom:40px;
-margin-left: 4px;
-position:relative;
-width:45%;
-border: 2px solid #454545;
-border-top: 0px;
-background-color: #ffffff;    
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -moz-box-shadow: 0px 1px 10px 0px #000000;
+        -webkit-box-shadow: 0px 1px 10px 0px #000000;
+        box-shadow: 0px 1px 10px 0px #000000;
+        float:left;
+        padding: 0px;
+        margin-left:10px;
+        margin-bottom: 10px;
+        margin-top:40px;
+        padding-bottom:40px;
+        position:fixed;
+        width:45%;
+        border: 1px solid #454545;
+        border-top: 0px;
+        background-color: #ffffff;      
 }
 
 #user-info {
 float: right;
 }
---></style>
+</style>
 </head>
 
 <body>
@@ -114,7 +125,7 @@ float: right;
         </div>
     </div>
 <div id="left-box">
-	<div id="title">Questions</div>
+	<div id="title">Change Profile</div>
 	<div id="content">
 
 {% block content %}
@@ -132,3 +143,5 @@ float: right;
 
 {% endblock %}
 	</div>
+</body>
+</html>
