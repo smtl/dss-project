@@ -25,7 +25,7 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=testing
+PROJECT=dss
 # The upcoming release.
 RELEASE=1.2
 # The tar archive will be identified by version.
@@ -169,6 +169,7 @@ install: test ${WSGI.script}
 	${INSTALL} media/static/admin/tinymce/examples/media/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/media
 	${INSTALL} media/static/admin/tinymce/examples/templates/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/templates
 	${INSTALL} media/static/admin/tinymce_setup/*.* ${WSGI.dir}/media/static/admin/tinymce_setup/*.*
+	cp -r media/static/admin/tinymce/jscripts/* ${WSGI.dir}/media/static/admin/tinymce/jscripts
 	${INSTALL} media/*.* ${WSGI.dir}/media
 	${INSTALL} -D templates/*.* ${TEMPLATES.dir}/templates/
 	${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
