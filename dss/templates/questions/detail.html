@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block boxname %}Questions{% endblock %}
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% if answered == None %}
+
+    {{ question }}
+
+    <form action="{% url answer question_id=question.id%}" method="post">
+        {% csrf_token %}
+        {% for answer in question.answer_set.all %}
+            <input type="radio" name="answer" id="answer{{forloop.counter}}" value="{{answer.id}}" />
+            <label for="answer{{forloop.counter}}">{{answer.answer}}</label><br />
+        {% endfor %}
+        <input type="hidden" name="user_id" value="{{ user.id }}" />
+        <input type="submit" value="answer" />
+    </form>
+
+    <br />
+    {% if not request.user.is_authenticated %}
+        <a href="{% url save_progress %}">[save your progress]</a>
+    {% endif %}
+
+{{ answered.answer }}
+{{ answered }}
+
+{% else %}
+
+    {{ answered }}
+
+{% endif %}
+
+{% endblock %}

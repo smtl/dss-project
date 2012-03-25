@@ -1,0 +1,18 @@
+{% extends "admin/change_form.html" %}
+
+{% block form_top %}
+  <p>A profile type specifies the type of questions a user will see. A user will be able to change profile types from their profile page.</p>
+
+  <p>
+  Each profile has a different question path which you can specify here. This is the order of questions that will be presented to the user. You specify a question and then you specify the question you want to follow it.
+ <br />
+ <br />
+  Example:
+ <p> Question 1 followed by Question 2</p>
+ <p> Question 2 followed by Question 7</p>
+ <p> Question 7 followed by Question 3</p>
+ <p> Question 3 followed by Question 4 </p>
+  </p>
+  {% endblock %}
+
+
