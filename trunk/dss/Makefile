@@ -178,7 +178,7 @@ install: test ${WSGI.script}
 	${INSTALL} grappelli/templates/admin/includes_grappelli/*.* ${DATA.dir}/grappelli/templates/admin/includes_grappelli
 	${INSTALL} grappelli/templates/admin_doc/*.* ${DATA.dir}/grappelli/templates/admin_doc
 	${INSTALL} grappelli/templates/registration/*.* ${DATA.dir}/grappelli/templates/registration
-	cp -r grappelli/static/grappelli/* ${WSGI.dir}/media/static/admin
+	rsync -r grappelli/static/grappelli/js/* ${WSGI.dir}/media/static/admin/js
 	${INSTALL} graphviz/*.* ${DATA.dir}/graphviz
 	${INSTALL} graphviz/pml/*.* ${DATA.dir}/graphviz/pml
 	${INSTALL} graphviz/check/*.* ${DATA.dir}/graphviz/check
@@ -209,7 +209,7 @@ install: test ${WSGI.script}
 	${INSTALL} media/static/admin/tinymce/examples/lists/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/lists
 	${INSTALL} media/static/admin/tinymce/examples/media/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/media
 	${INSTALL} media/static/admin/tinymce/examples/templates/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/templates
-	${INSTALL} media/static/admin/tinymce_setup/*.* ${WSGI.dir}/media/static/admin/tinymce_setup/*.*
+	${INSTALL} media/static/admin/tinymce_setup/*.* ${WSGI.dir}/media/static/admin/tinymce_setup/
 	${INSTALL} media/*.* ${WSGI.dir}/media
 	${INSTALL} -D templates/*.* ${TEMPLATES.dir}/templates/
 	#${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
