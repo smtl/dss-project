@@ -27,7 +27,7 @@ else:
 #FORCE_SCRIPT_NAME = '/'+URL_PREFIX
 #if SITE_ROOT not in sys.path:
 #    sys.path.append(SITE_ROOT)
-
+GRAPPELLI_ADMIN_TITLE = "DSS"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
