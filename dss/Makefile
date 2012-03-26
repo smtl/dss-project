@@ -147,8 +147,6 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard/modules
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templatetags
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/utils
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce_setup
 	${INSTALL} -d ${DATA.dir}/grappelli/templates
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/admin_doc
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/registration
@@ -177,7 +175,7 @@ install: test ${WSGI.script}
 	${INSTALL} grappelli/templates/admin/includes_grappelli/*.* ${DATA.dir}/grappelli/templates/admin/includes_grappelli
 	${INSTALL} grappelli/templates/admin_doc/*.* ${DATA.dir}/grappelli/templates/admin_doc
 	${INSTALL} grappelli/templates/registration/*.* ${DATA.dir}/grappelli/templates/registration
-	cp -r grappelli/static ${WSGI.dir}/media/static/admin
+	cp -r grappelli/static/grappelli/* ${WSGI.dir}/media/static/admin
 	${INSTALL} graphviz/*.* ${DATA.dir}/graphviz
 	${INSTALL} graphviz/pml/*.* ${DATA.dir}/graphviz/pml
 	${INSTALL} graphviz/check/*.* ${DATA.dir}/graphviz/check
