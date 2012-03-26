@@ -15,7 +15,8 @@ def fromRelativePath(*relativeComponents):
     return os.path.join(os.path.dirname(__file__), *relativeComponents).replace("\\","/")
 
 urlpatterns = patterns('questions.views',
-    url(r'^$', 'index', name='index'),
+#    url(r'^index.html','index'),
+    url(r'^index/$','index',name='index'),
     url(r'^hello/$', 'hello'),
     url(r'^questions/$', 'questions'),
     url(r'^questions/(?P<question_id>\d+)/$', 'detail', name='detail'),
@@ -24,6 +25,10 @@ urlpatterns = patterns('questions.views',
     url(r'^questions/(?P<input_id>\d+)/edit/$', 'edit', name='edit'),
     url(r'^save/$', 'save_progress', name='save_progress'),
     url(r'^help/$', 'help', name='help'),
+)
+
+urlpatterns += patterns('welcome.views',
+    url(r'^$', 'welcome', name='welcome'),
 )
 
 urlpatterns += patterns('auth.views',

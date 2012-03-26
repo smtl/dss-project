@@ -25,7 +25,7 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=dss
+PROJECT=alpha
 # The upcoming release.
 RELEASE=1.2
 # The tar archive will be identified by version.
@@ -124,6 +124,7 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/recommendations/recommendation
 	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/recommendations/uploadedfile
 	${INSTALL} -d ${TEMPLATES.dir}/templates/questions
+	${INSTALL} -d ${TEMPLATES.dir}/templates/welcome
 	${INSTALL} -d ${TEMPLATES.dir}/templates/auth
 	${INSTALL} -d ${TEMPLATES.dir}/templates/recommendations
 	${INSTALL} -d ${TEMPLATES.dir}/templates/registration
@@ -132,6 +133,7 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${DATA.dir}/auth
 	${INSTALL} -d ${DATA.dir}/recommendations
 	${INSTALL} -d ${DATA.dir}/questions
+	${INSTALL} -d ${DATA.dir}/welcome
 	${INSTALL} -d ${DATA.dir}/questions/templatetags
 	${INSTALL} -d ${DATA.dir}/graphviz
 	${INSTALL} -d ${DATA.dir}/graphviz/graph
@@ -218,10 +220,12 @@ install: test ${WSGI.script}
 	${INSTALL} -D templates/admin/recommendations/recommendation/* ${TEMPLATES.dir}/templates/admin/recommendations/recommendation
 	${INSTALL} -D templates/admin/recommendations/uploadedfile/* ${TEMPLATES.dir}/templates/recommendations/uploadedfile
 	${INSTALL} -D templates/auth/* ${TEMPLATES.dir}/templates/auth
+	${INSTALL} -D templates/welcome/* ${TEMPLATES.dir}/templates/welcome
 	${INSTALL} -D templates/questions/* ${TEMPLATES.dir}/templates/questions
 	${INSTALL} -D templates/registration/* ${TEMPLATES.dir}/templates/registration
 	${INSTALL} -D templates/recommendations/* ${TEMPLATES.dir}/templates/recommendations
 	${INSTALL} questions/*.* ${DATA.dir}/questions
+	${INSTALL} welcome/*.* ${DATA.dir}/welcome
 	${INSTALL} recommendations/*.* ${DATA.dir}/recommendations
 	${INSTALL} auth/*.* ${DATA.dir}/auth
 	${INSTALL} questions/templatetags/* ${DATA.dir}/questions/templatetags
