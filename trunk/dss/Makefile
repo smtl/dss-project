@@ -147,52 +147,8 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard/modules
 	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templatetags
-	${INSTALL} -d ${DATA.dir}/grappelli/dashboard/templatetags
-
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/css
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/css/datepicker
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/img
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/img/admin
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/img/backgrounds
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/img/icons
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/i18n
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/css
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/css/custom-theme
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/css/custom-theme/images
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/css/ui-lightness
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/css/ui-lightness/images
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/js
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/jquery/ui/js/
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/js
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/js/admin
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/js/grappelli
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/examples
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/examples/css
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/examples/lists
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/examples/media
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/examples/templates
-
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/langs
 	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/utils
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/plugins
-	cp -r grappelli/static/grappelli/tinymce/jscripts/tiny_mce/plugins ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/plugins/
-	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/utils
-	cp -r grappelli/static/grappelli/tinymce/jscripts/tiny_mce/themes ${DATA.dir}/grappelli/static/grappelli/tinymce/jscripts/tiny_mce/
 	${INSTALL} -d ${DATA.dir}/grappelli/static/grappelli/tinymce_setup
-
-
 	${INSTALL} -d ${DATA.dir}/grappelli/templates
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/admin_doc
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/registration
@@ -202,17 +158,26 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/admin/includes_grappelli
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/admin/auth/
 	${INSTALL} -d ${DATA.dir}/grappelli/templates/admin/auth/user
-
-
-
-
 	${INSTALL} -d ${DATA.dir}/grappelli/templatetags
 	${INSTALL} -d ${DATA.dir}/grappelli/views
-
-	cp -r grappelli/ ${DATA.dir}/grappelli
-	cp -r grappelli/static/grappelli/* ${WSGI.dir}/media/static/admin/
-
-
+	${INSTALL} grappelli/*.* ${DATA.dir}/grappelli
+	${INSTALL} grappelli/dashboard/*.* ${DATA.dir}/grappelli/dashboard
+	${INSTALL} grappelli/dashboard/management/*.* ${DATA.dir}/grappelli/dashboard/management
+	${INSTALL} grappelli/dashboard/management/commands/*.* ${DATA.dir}/grappelli/dashboard/management/commands
+	${INSTALL} grappelli/dashboard/templates/admin/*.* ${DATA.dir}/grappelli/dashboard/templates/admin
+	${INSTALL} grappelli/dashboard/templates/grappelli/dashboard/*.* ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard
+	${INSTALL} grappelli/dashboard/templates/grappelli/dashboard/modules/*.* ${DATA.dir}/grappelli/dashboard/templates/grappelli/dashboard/modules
+	${INSTALL} grappelli/dashboard/templatetags/*.* ${DATA.dir}/grappelli/dashboard/templatetags
+	${INSTALL} grappelli/templatetags/*.* ${DATA.dir}/grappelli/templatetags
+	${INSTALL} grappelli/views/*.* ${DATA.dir}/grappelli/views
+	${INSTALL} grappelli/templates/admin/*.* ${DATA.dir}/grappelli/templates/admin
+	${INSTALL} grappelli/templates/admin/auth/user/*.* ${DATA.dir}/grappelli/templates/admin/auth/user
+	${INSTALL} grappelli/templates/admin/edit_inline/*.* ${DATA.dir}/grappelli/templates/admin/edit_inline
+	${INSTALL} grappelli/templates/admin/includes/*.* ${DATA.dir}/grappelli/templates/admin/includes
+	${INSTALL} grappelli/templates/admin/includes_grappelli/*.* ${DATA.dir}/grappelli/templates/admin/includes_grappelli
+	${INSTALL} grappelli/templates/admin_doc/*.* ${DATA.dir}/grappelli/templates/admin_doc
+	${INSTALL} grappelli/templates/registration/*.* ${DATA.dir}/grappelli/templates/registration
+	cp -r grappelli/static ${WSGI.dir}/media/static/admin
 	${INSTALL} graphviz/*.* ${DATA.dir}/graphviz
 	${INSTALL} graphviz/pml/*.* ${DATA.dir}/graphviz/pml
 	${INSTALL} graphviz/check/*.* ${DATA.dir}/graphviz/check
@@ -244,10 +209,9 @@ install: test ${WSGI.script}
 	${INSTALL} media/static/admin/tinymce/examples/media/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/media
 	${INSTALL} media/static/admin/tinymce/examples/templates/*.* ${WSGI.dir}/media/static/admin/tinymce/examples/templates
 	${INSTALL} media/static/admin/tinymce_setup/*.* ${WSGI.dir}/media/static/admin/tinymce_setup/*.*
-	cp -r media/static/admin/tinymce/jscripts/* ${WSGI.dir}/media/static/admin/tinymce/jscripts
 	${INSTALL} media/*.* ${WSGI.dir}/media
 	${INSTALL} -D templates/*.* ${TEMPLATES.dir}/templates/
-	${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
+	#${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
 	${INSTALL} -D templates/admin/auth/profile/* ${TEMPLATES.dir}/templates/admin/auth/profile
 	${INSTALL} -D templates/admin/questions/question/* ${TEMPLATES.dir}/templates/admin/questions/question
 	${INSTALL} -D templates/admin/recommendations/recommendation/* ${TEMPLATES.dir}/templates/admin/recommendations/recommendation
