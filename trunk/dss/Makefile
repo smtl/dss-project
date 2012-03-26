@@ -87,6 +87,9 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${WSGI.dir}/media
 	${INSTALL} -d ${WSGI.dir}/media/static
 	${INSTALL} -d ${WSGI.dir}/media/static/admin
+        ${INSTALL} -d ${WSGI.dir}/media/static/admin/js
+        ${INSTALL} -d ${WSGI.dir}/media/static/admin/js/admin
+        ${INSTALL} -d ${WSGI.dir}/media/static/admin/js/grappelli
 	${INSTALL} -d ${WSGI.dir}/media/static/admin/css
 	${INSTALL} -d ${WSGI.dir}/media/static/admin/css/datepicker
 	${INSTALL} -d ${WSGI.dir}/media/static/admin/img
