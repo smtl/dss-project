@@ -114,7 +114,7 @@ float: right;
 <body>
     <div id=header>
         <li><a href="{% url index %}">Home</a></li> |
-        {% if request.user.is_staff %}<li><a href="{% url admin;index %}">Admin</a></li> |{% endif %}
+        {% if request.user.is_staff %}<li><a href="{% url admin:index %}">Admin</a></li> |{% endif %}
         <li><a href="{% url profile %}">Profile</a></li>
     <div id="user-info">
 	{% if user.is_authenticated %}
