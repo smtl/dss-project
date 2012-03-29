@@ -28,7 +28,7 @@ class AnsweredQuestion(models.Model):
     question = models.ForeignKey(Question)
     answer = models.ForeignKey(Answer)
     implicit = models.PositiveSmallIntegerField(default=0)
-
+    redundancy = models.PositiveSmallIntegerField(default=0)
     def __unicode__(self):
         return self.answer.answer
 
