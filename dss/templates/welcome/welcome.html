@@ -113,8 +113,18 @@ float: right;
 
 <body>
     <div id=header>
-        <li>DSS</li>
+        <li><a href="{% url index %}">Home</a></li> |
+        {% if request.user.is_staff %}<li><a href="{% url admin;index %}">Admin</a></li> |{% endif %}
+        <li><a href="{% url profile %}">Profile</a></li>
+    <div id="user-info">
+	{% if user.is_authenticated %}
+        Logged in as {{ user.username }} | <a href="{% url logout %}">Log out</a>
+        {% else %}
+            <a href="{% url login %}">Log in</a> or <a href="{% url save_progress %}">Register</a>
+        {% endif %}
+        </div>
     </div>
+
 <div id="left-box">
         <div id="title">Welcome!</div>
 	<div id="content">
