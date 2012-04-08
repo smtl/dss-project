@@ -134,6 +134,19 @@ class save_progress(TestCase):
         s.save()
 
 #Adrian Kwizera
+#Testing order of recommendations based on answered question
+class TestSort(unittest.TestCase):
+
+    def setUp(self):
+
+       self.alist = [5, 2, 3, 1, 4]
+
+    def test_ascending_sort(self):
+
+       self.alist.sort()
+       self.assertEqual(self.alist, [1, 2, 3, 4, 5])
+
+#Adrian Kwizera
 #Maintainer test
 class MaintainerTestCase(unittest.TestCase):
     def setUp(self):
