@@ -67,6 +67,12 @@ class RecAnswerLink(models.Model):
     def __unicode__(self):
         return "Recommendation <-> Answer Link"
 
+class UserRecommendation(models.Model):
+    user = models.ForeignKey(User)
+    recommendation = models.ForeignKey(Recommendation)
+    def __unicode__(self):
+        return "User recommendation"+recommendation.name
+
 
 class RecommendationProfile(models.Model):
     recommendation = models.ForeignKey(Recommendation)

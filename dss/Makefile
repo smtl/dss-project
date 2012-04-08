@@ -25,9 +25,9 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=alpha
+PROJECT=wallet
 # The upcoming release.
-RELEASE=1.2
+RELEASE=1.3
 # The tar archive will be identified by version.
 RELEASE_CANDIDATE=$(shell [ -f .svn ] && svn version|grep RELEASE|awk '{print $2}')
 RELEASE_NAME=${PROJECT}-${RELEASE}-rc${RELEASE_CANDIDATE}

@@ -85,6 +85,24 @@ box-shadow: 0px 1px 10px 0px #000000;
 	padding-bottom:40px;
 }
 
+#feedback-box {
+overflow:auto;
+-moz-border-radius: 10px;
+border-radius: 10px;
+
+-moz-box-shadow: 0px 1px 10px 0px #000000;
+-webkit-box-shadow: 0px 1px 10px 0px #000000;
+box-shadow: 0px 1px 10px 0px #000000;
+	float:right;
+	margin-top:40px;
+	margin-bottom:10px;
+	margin-right:10px;
+	width:52%;
+	border: 1px solid #454545;
+	background-color: #ffffff;
+	padding-bottom:40px;
+}
+
 #title {
 -moz-border-radius: 15px;
 border-radius: 11px 11px 0 0;
@@ -144,9 +162,16 @@ margin-right:30px;
       {% empty %}
       Start answering questions to get custom recommendations.
       {% endfor %}
-
 	</div>
     </div>
+
+<div id="feedback-box">
+    <div id="title">Feedback</div>
+        <div id="content">
+            Recommendation A was given because you answered Question X with Answer B
+        </div>
+    </div>
+</div>
 
     <div id=header>
         <li><a href="{% url index %}">Home</a></li> |
