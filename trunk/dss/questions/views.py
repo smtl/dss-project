@@ -17,77 +17,106 @@ from django.core.urlresolvers import reverse
 import os
 import re
 
-def parse_rule(rule, current_user):
-    # rule is a string
-    # "if 2 or 3 and 5 then r7"
-    bool_rule = re.compile(":").split(rule)[0]
-    result_part = re.compile(":").split(rule)[1]
-    print "This is the bool_rule: "+bool_rule
-    tokens = bool_rule.split(' ')
-    result_tokens = result_part.split(' ')
-    new_rule = bool_rule
-    # 2 gets replaced with get_or_none(Answer, id=2)
-    for t in tokens:
-        if 'ans' in t:
-            print "found ans"
-            ans_bool_result = get_or_none(AnsweredQuestion, user=current_user, answer=int(float(t[3:])))
-            if ans_bool_result == None:
-                ans_bool = False
-            else:
-                ans_bool = True
-            print t+" = "+str(ans_bool)
-            new_rule = new_rule.replace(t, str(ans_bool))
-        #if 'rec' in t:
-        #    rec_result = get_or_none(Recommendation, id=t[3:])
-        #    new_rule = new_rule.replace(t, "get_or_none(Recommendations,id="+t[3:]+")")
-        #if 'red' in t:
-        #    AnsweredQuestion(user="+str(current_user_id)+", question="+t[3:]+", answer=0, redundancy=1).save()
-        #    new_rule = new_rule.replace(t, "AnsweredQuestion(user="+str(current_user_id)+", question="+t[3:]+", answer=0, redundancy=1).save()")
-
-    #if get_or_none(Answer, id=2) or get_or_none(Answer, id=3) and get_or_none(Answer, id=7): return get_or_none(Recommendation, id=7)
-    print new_rule
-    result_string = "result = "+new_rule
-    exec(result_string)
-    if result == True:
-        print "true lol"
-        for t in result_tokens:
-            if "red" in t:
-                print "outcome results in a question being made redundant"
-                question = get_or_none(Question, id=int(float(t[3:])))
-                # check if question has already been answered, if it has there is no point marking it redundant
-                # actually this is a design decision - it can be changed if neccesary
-                answered = get_or_none(AnsweredQuestion, user=current_user, question=question)
-                if answered == None:
-                    aq = AnsweredQuestion()
-                    aq.user = current_user
-                    aq.question = question
-                    aq.answer_id = 0
-                    aq.redundancy = 1
-                    aq.save()
-            elif "rec" in t:
-                print "outcome results in a recommendation being recommended"
-                rec = get_or_none(Recommendation, id=int(float(t[3:])))
-                # check if recommendation is already recommended for user
-                recommended = get_or_none(UserRecommendation, user=current_user, recommendation=rec)
-                if recommended == None:
-                    ur = UserRecommendation()
-                    ur.user = current_user
-                    ur.recommendation = rec
-                    ur.save()
-            elif "ans" in t:
-                print "outcome results in marking a answer as implicitly answered"
-                # check if question is already answered by user. If it is, there is no need to mark it implicit
-                answer = get_or_none(Answer, id=int(float(t[3:])))
-                answered = get_or_none(AnsweredQuestion, user=current_user, question=answer.question)
-                if answered == None:
-                    aq = AnsweredQuestion()
-                    aq.user = current_user
-                    aq.question = answer.question
-                    aq.answer = answer
-                    aq.implicit = 1
-                    aq.save()
-    else:
-        print "false lol"
+#def parse_rule(rule, request):
+#    # rule is a string
+#    # "if 2 or 3 and 5 then r7"
+#    bool_rule = re.compile(":").split(rule)[0]
+#    result_part = re.compile(":").split(rule)[1]
+#    print "This is the bool_rule: "+bool_rule
+#    tokens = bool_rule.split(' ')
+#    result_tokens = result_part.split(' ')
+#    new_rule = bool_rule
+#    current_user = request.user
+#    # create the logic string
+#    for t in tokens:
+#        if 'ans' in t:
+#            current_answer = get_or_none(Answer, id=int(float(t[3:]))
+#            # Handle users and guests differently
+#            if current_user.is_authenticated():
+#                ans_bool_result = get_or_none(AnsweredQuestion, user=current_user, answer=current_answer)
+#            elif current_answer.question in request.session:
+#                ans_bool_result = "question found"
+#            else:
+#                ans_bool_result = None
+#
+#            if ans_bool_result == None:
+#                ans_bool = False
+#            else:
+#                ans_bool = True
+#            # create the new rule which is to be executed
+#            new_rule = new_rule.replace(t, str(ans_bool))
+#    
+#    # Build and execute the rule putting the result in the "result" variable
+#    result_string = "result = "+new_rule
+#    exec(result_string)
+#    if result == True:
+#        # Actions for the outcomes of a rule
+#        for t in result_tokens:
+#            # red denotes redundancy
+#            if "red" in t:
+#                print "outcome results in a question being made redundant"
+#                question = get_or_none(Question, id=int(float(t[3:])))
+#                # check if question has already been answered, if it has there is no point marking it redundant
+#                # actually this is a design decision - it can be changed if neccesary
+#                if current_user.is_authenticated():
+#                    answered = get_or_none(AnsweredQuestion, user=current_user, question=question)
+#                elif question in request.session:
+#                    answered = "question found"
+#                else:
+#                    answered = None
+#
+#                if answered == None:
+#                    if current_user.is_authenticated():
+#                        aq = AnsweredQuestion()
+#                        aq.user = current_user
+#                        aq.question = question
+#                        aq.answer_id = 0
+#                        aq.redundancy = 1
+#                        aq.save()
+#                    else:
+#                        # redundancy marked by r at the start of the question
+#                        request.session["r"+question] = 0
+#            # rec denotes recommendation
+#            elif "rec" in t:
+#                print "outcome results in a recommendation being recommended"
+#                rec = get_or_none(Recommendation, id=int(float(t[3:])))
+#                # check if recommendation is already recommended for user or guest
+#                if current_user.is_authenticated():
+#                    recommended = get_or_none(UserRecommendation, user=current_user, recommendation=rec)
+#                elif rec in request.session:
+#                    recommended = request.session[rec]
+#                if recommended == None:
+#                    if current_user.is_authenticated():
+#                        ur = UserRecommendation()
+#                        ur.user = current_user
+#                        ur.recommendation = rec
+#                        ur.save()
+#                    else:
+#                        request.session[rec] = rec
+#            # answer denotes to answer a question implictly
+#            elif "ans" in t:
+#                print "outcome results in marking a answer as implicitly answered"
+#                # check if question is already answered by user. If it is, there is no need to mark it implicit
+#                answer = get_or_none(Answer, id=int(float(t[3:])))
+#                if current_user.is_authenticated():
+#                    answered = get_or_none(AnsweredQuestion, user=current_user, question=answer.question)
+#                elif answer.question in request.session:
+#                    answered = "Not None"
+#                else:
+#                    answered = None
+#
+#                if answered == None:
+#                    if current_user.is_authenticated():
+#                        aq = AnsweredQuestion()
+#                        aq.user = current_user
+#                        aq.question = answer.question
+#                        aq.answer = answer
+#                        aq.implicit = 1
+#                        aq.save()
+#                    else:
+#                        request.session["i"+answer.question] = answer
+#    else:
+#        print "false lol"
 
 def get_or_none(model, **kwargs):
     try:
@@ -164,8 +193,7 @@ def hello(request):
 #    os.environ['WSGI_SCRIPT_DIR'] = os.path.dirname(environ['SCRIPT_NAME'])
     response.write("</ul>\n")
     response.write("<p>You can access a <a href='" + os.path.dirname(request.META['SCRIPT_NAME']) + "/static/index.html'>file</a> in my <em>static</em> directory.")
-    # NEEDS A REGISTERED USER
-    print request.user
+    
     parse_rule("ans1 and ans3 : ans22 red9", request.user)
 
     return response
