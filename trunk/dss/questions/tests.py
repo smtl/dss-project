@@ -36,17 +36,17 @@ import tempfile
 
 
 #Adrian Kwizera
-class ViewsTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
+#class ViewsTestCase(TestCase):
+    #def setUp(self):
+        #self.client = Client()
  
-    def test_MyView(self):
-        User.objects.create_user('general', 'general@admin.com', 'general1')
+    #def test_MyView(self):
+        #User.objects.create_user('general', 'general@admin.com', 'general1')
  
         #use test client to perform login
-        user = self.client.login(username='general', password='general1')
+        #user = self.client.login(username='general', password='general1')
  
-        response = self.client.post('http://localhost:8000/admin/')
+        #response = self.client.post('http://localhost:8000/admin/')
 
 # Adrian Kwizera
 class CountTest(TestCase):
@@ -156,14 +156,14 @@ class AdminCustomisationTest(TestCase):
 
 
 # Adrian Kwizera
-class TestAddingViaAdmin(unittest.TestCase):
+#class TestAddingViaAdmin(unittest.TestCase):
 
-        def test_can_create_new_question_via_admin_site(self):
-            self.client = Client()
-            text = 'hello my friend'
+        #def test_can_create_new_question_via_admin_site(self):
+            #self.client = Client()
+            #text = 'hello my friend'
 
             # Magpie opens her web browser, and points to the dss's admin page
-            self.client.get('/admin/')
+            #self.client.get('/admin/')
 
             # She sees the familiar 'Django administration' heading
             #body = self.client.get('body')
