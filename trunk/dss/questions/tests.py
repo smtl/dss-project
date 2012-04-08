@@ -120,6 +120,8 @@ class TestAssertion(TestCase):
         self.assertIn(1, [1, 2, 3]) # assert first value in second  
         self.assertIsInstance(self, TestCase) # first value is instance of second  
 
+#Adrian Kwizera
+#Testing saved progress for questions_answers_recommendation path
 class save_progress(TestCase):
 
     def setUp(self):
