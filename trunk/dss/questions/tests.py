@@ -120,6 +120,16 @@ class TestAssertion(TestCase):
         self.assertIn(1, [1, 2, 3]) # assert first value in second  
         self.assertIsInstance(self, TestCase) # first value is instance of second  
 
+class save_progress(TestCase):
+
+    def setUp(self):
+     
+        self.client.get('/questions/') # after this, self.client.session is a real session
+        self.client.get('/answers/')
+        self.client.get('/recommendation/')
+        s = self.client.session
+        s['key'] = 'value'
+        s.save()
 
 #Adrian Kwizera
 #Maintainer test
