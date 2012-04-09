@@ -14,9 +14,7 @@ from recommendations.models import Recommendation, UserRecommendation
 register = Library()
 
 def parse_rule(rule, context):
-    print "in parse rule"
     if 'request' in context:
-        print "got request"
         request = context['request']
     # rule is a string
     # "if 2 or 3 and 5 then r7"
@@ -75,7 +73,7 @@ def parse_rule(rule, context):
                         aq.save()
                     else:
                         # redundancy marked by r at the start of the question
-                        request.session["r"+question] = 0
+                        request.session["r"+question.question] = 0
             # rec denotes recommendation
             elif "rec" in t:
                 print "outcome results in a recommendation being recommended"
@@ -85,6 +83,9 @@ def parse_rule(rule, context):
                     recommended = get_or_none(UserRecommendation, user=current_user, recommendation=rec)
                 elif rec in request.session:
                     recommended = request.session[rec]
+                else:
+                    recommended = None
+
                 if recommended == None:
                     if current_user.is_authenticated():
                         ur = UserRecommendation()
@@ -114,7 +115,7 @@ def parse_rule(rule, context):
                         aq.implicit = 1
                         aq.save()
                     else:
-                        request.session["i"+answer.question] = answer
+                        request.session["i"+answer.question.question] = answer
     else:
         print "false lol"
 
@@ -137,9 +138,20 @@ class RecObj(Node):
         # Get the page request so we know who the user is
         if 'request' in context:
             request = context['request']
-        print "test" 
-        parse_rule("ans1 and ans3 : rec13", context)
-
+        
+        # test parse stuff
+        parse_rule("ans1 and ans3 : rec13 red13 ans12", context)
+        new_rec_list = []
+        if request.user.is_authenticated():
+            new_recs = UserRecommendation.objects.filter(user=request.user)
+            for r in new_recs:
+                new_rec_list.append(r)
+        else:
+            for r in Recommendation.objects.all():
+                if r in request.session:
+                    new_rec_list.append(r)
+        
+        context['rec'] = new_rec_list
         # If they are signed in we query the database
         if request.user.is_authenticated():
             rec_answers = []
@@ -188,7 +200,7 @@ class RecObj(Node):
                      recos.remove(re.recommendation.recommendation)
                      recos.insert(0,re.recommendation.recommendation)  
 
-            context['rec'] = recos
+            #context['rec'] = recos
         return ""
 
 register.tag("get_rec_list",build_rec_list)
