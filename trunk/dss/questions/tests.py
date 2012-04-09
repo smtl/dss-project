@@ -126,7 +126,7 @@ class save_progress(TestCase):
 
     def setUp(self):
      
-        self.client.get('/questions/') # after this, self.client.session is a real session
+        self.client.get('/questions/')
         self.client.get('/answers/')
         self.client.get('/recommendation/')
         s = self.client.session
@@ -185,21 +185,16 @@ class AdminCustomisationTest(TestCase):
         self.client.logout()
         self.u.delete()
 
+#Adrian Kwizera
+#Testing help link for maintainer
+class HelpTest(TestCase):
 
-# Adrian Kwizera
-#class TestAddingViaAdmin(unittest.TestCase):
+    def setup(self):
+        self.u = User.objects.create(username="admin", password="admin")
+        self.u = User.objects.get('/questions/help_staff.html/')
 
-        #def test_can_create_new_question_via_admin_site(self):
-            #self.client = Client()
-            #text = 'hello my friend'
-
-            # Magpie opens her web browser, and points to the dss's admin page
-            #self.client.get('/admin/')
-
-            # She sees the familiar 'Django administration' heading
-            #body = self.client.get('body')
-            #self.assertIn('Django administration', text)
-
+    def tearDown(self):
+        self.client.logout()
 
 
 #Adrian Kwizera
