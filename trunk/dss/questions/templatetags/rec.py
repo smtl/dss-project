@@ -140,7 +140,7 @@ class RecObj(Node):
             request = context['request']
         
         # test parse stuff
-        parse_rule("ans1 and ans3 : rec13 red13 ans12", context)
+        #parse_rule("ans1 and ans3 : rec13 red13 ans12", context)
         new_rec_list = []
         if request.user.is_authenticated():
             new_recs = UserRecommendation.objects.filter(user=request.user)
@@ -151,7 +151,7 @@ class RecObj(Node):
                 if r in request.session:
                     new_rec_list.append(r)
         
-        context['rec'] = new_rec_list
+        #context['rec'] = new_rec_list
         # If they are signed in we query the database
         if request.user.is_authenticated():
             rec_answers = []
@@ -200,7 +200,7 @@ class RecObj(Node):
                      recos.remove(re.recommendation.recommendation)
                      recos.insert(0,re.recommendation.recommendation)  
 
-            #context['rec'] = recos
+            context['rec'] = recos
         return ""
 
 register.tag("get_rec_list",build_rec_list)
