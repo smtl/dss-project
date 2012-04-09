@@ -146,6 +146,12 @@ class TestSort(unittest.TestCase):
        self.alist.sort()
        self.assertEqual(self.alist, [1, 2, 3, 4, 5])
 
+    def test_sorting_reverse(self):
+
+       self.alist.sort()
+       self.alist.reverse()
+       self.assertEqual(self.alist, [5, 4, 3, 2, 1])
+
 #Adrian Kwizera
 #Maintainer test
 class MaintainerTestCase(unittest.TestCase):
