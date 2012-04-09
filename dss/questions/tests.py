@@ -72,6 +72,9 @@ class record_view(TestCase):
     def setup(self):
         self.u = User.objects.create(username="admin", password="admin")
         self.u = User.objects.get('/questions/record_view.html/')
+        self.assertEqual(u.status_code, 200)
+        self.assertEqual(questions.status_code, 200)
+        self.assertEqual(login.status_code, 200)
 
     def tearDown(self):
         self.client.logout()
