@@ -199,6 +199,11 @@ class AdminCustomisationTest(TestCase):
         self.assertTrue(self.client.login(username=username, password=pwd),
             "Logging in user %s, pwd %s passed." % (username, pwd))
 
+        self.assertEqual(home.status_code, 200)
+        self.assertEqual(profile.status_code, 302)
+        self.assertEqual(changeprofile.status_code, 200)
+        self.assertEqual(login.status_code, 200)
+
         questions.objects.all().add()
 
     def tearDown(self):
@@ -230,6 +235,7 @@ class HelpTest(TestCase):
         self.u = User.objects.get('/questions/help_user.html/')
         self.assertEqual(u.status_code, 200)
         self.assertEqual(profile.status_code, 302) #redirects guest user
+
       
     def tearDown(self):
         self.u.delete()
