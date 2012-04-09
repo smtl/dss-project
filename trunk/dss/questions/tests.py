@@ -213,6 +213,9 @@ class HelpTest(TestCase):
     def setup(self):
         self.u = User.objects.create(username="admin", password="admin")
         self.u = User.objects.get('/questions/help_staff.html/')
+        self.assertEqual(u.status_code, 200)
+        self.assertEqual(changeprofile.status_code, 200)#redirects to different profile
+        self.assertEqual(login.status_code, 200)
 
     def tearDown(self):
         self.client.logout()
@@ -225,7 +228,9 @@ class HelpTest(TestCase):
 
     def setup(self):
         self.u = User.objects.get('/questions/help_user.html/')
-
+        self.assertEqual(u.status_code, 200)
+        self.assertEqual(profile.status_code, 302) #redirects guest user
+      
     def tearDown(self):
         self.u.delete()
 
