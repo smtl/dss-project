@@ -64,6 +64,19 @@ class CountTest(TestCase):
         self.assertEqual(3 - 1, 2)
         self.assertEqual(2 - 1, 1)
         self.assertEqual(1 - 1, 0)
+
+
+#Adrian Kwizera
+#Record view test
+class record_view(TestCase):
+    def setup(self):
+        self.u = User.objects.create(username="admin", password="admin")
+        self.u = User.objects.get('/questions/record_view.html/')
+
+    def tearDown(self):
+        self.client.logout()
+        self.u.delete()    
+
        
 #Adrian Kwizera
 #Testing the user creation
