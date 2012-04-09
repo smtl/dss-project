@@ -185,6 +185,7 @@ class AdminCustomisationTest(TestCase):
         self.client.logout()
         self.u.delete()
 
+
 #Adrian Kwizera
 #Testing help link for maintainer
 class HelpTest(TestCase):
@@ -195,6 +196,18 @@ class HelpTest(TestCase):
 
     def tearDown(self):
         self.client.logout()
+        self.u.delete()
+
+
+#Adrian Kwizera
+#Testing help link for guest
+class HelpTest(TestCase):
+
+    def setup(self):
+        self.u = User.objects.get('/questions/help_user.html/')
+
+    def tearDown(self):
+        self.u.delete()
 
 
 #Adrian Kwizera
