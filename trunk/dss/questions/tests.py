@@ -75,12 +75,13 @@ class record_view(TestCase):
 
     def tearDown(self):
         self.client.logout()
-        self.u.delete()    
-
+        self.u.delete()   
        
+ 
 #Adrian Kwizera
 #Testing the user creation
 class UserCreationTesting(unittest.TestCase):
+
     def setUp(self):
         self.profile1 = User.objects.create(username='Adrian')
         self.profile2 = User.objects.create(username='Poland')
@@ -97,13 +98,13 @@ class UserCreationTesting(unittest.TestCase):
         self.assertEquals(self.profile5.username, 'Stephen')
         self.assertEquals(self.profile6.username, 'Murphy')
 
-        def tearDown(self):
-          self.profile1.delete()
-          self.profile2.delete()
-          self.profile3.delete()
-          self.profile4.delete()
-          self.profile5.delete()
-          self.profile6.delete()
+    def tearDown(self):
+        self.profile1.delete()
+        self.profile2.delete()
+        self.profile3.delete()
+        self.profile4.delete()
+        self.profile5.delete()
+        self.profile6.delete()
 
 
 #Adrian Kwizera
@@ -133,6 +134,7 @@ class TestAssertion(TestCase):
         self.assertIn(1, [1, 2, 3]) # assert first value in second  
         self.assertIsInstance(self, TestCase) # first value is instance of second  
 
+
 #Adrian Kwizera
 #Testing saved progress for questions_answers_recommendation path
 class save_progress(TestCase):
@@ -145,6 +147,7 @@ class save_progress(TestCase):
         s = self.client.session
         s['key'] = 'value'
         s.save()
+
 
 #Adrian Kwizera
 #Testing order of recommendations based on answered question
@@ -164,6 +167,7 @@ class TestSort(unittest.TestCase):
        self.alist.sort()
        self.alist.reverse()
        self.assertEqual(self.alist, [5, 4, 3, 2, 1])
+
 
 #Adrian Kwizera
 #Maintainer test
@@ -190,7 +194,7 @@ class AdminCustomisationTest(TestCase):
         self.u.save()
 
         self.assertTrue(self.client.login(username=username, password=pwd),
-            "Logging in user %s, pwd %s failed." % (username, pwd))
+            "Logging in user %s, pwd %s passed." % (username, pwd))
 
         questions.objects.all().add()
 
