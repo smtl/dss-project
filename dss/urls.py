@@ -1,5 +1,5 @@
 import os
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
 from django.conf import settings
 
@@ -47,6 +47,7 @@ urlpatterns += patterns('recommendations.views',
 urlpatterns += patterns('',
     #url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
     url(r'^grappelli/', include('grappelli.urls')),
+    url('r^admin/$', 'questions.views.index'),
     url(r'^admin/', include(admin.site.urls), name="admin"),
     #url("^admin_media/(?P<path>.*)$", "django.views.static.serve",{ "document_root": fromRelativePath("static", "admin") }),
 )

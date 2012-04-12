@@ -3,6 +3,7 @@ from questions.models import Question, Answer, AnsweredQuestion
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 
@@ -22,3 +23,7 @@ def show(request):
         return render_to_response('recommendations/show.html', {'recs': recs})
     else:
         return render_to_response('questions/index.html', {})
+
+def rules(request):
+    return render_to_response('questions/index.html', {}, RequestContext(request, {}))
+rules = staff_member_required
