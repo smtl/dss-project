@@ -11,9 +11,12 @@ import re
 from questions.models import Question, Answer, AnsweredQuestion
 from recommendations.models import Recommendation, UserRecommendation
 
+globalList = []
+
 register = Library()
 
 def parse_rule(rule, context):
+    global globalList
     if 'request' in context:
         request = context['request']
     # rule is a string
@@ -34,9 +37,12 @@ def parse_rule(rule, context):
             if request.user.is_authenticated():
                 print "answer found in useranswers"
                 ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
+		if ans_bool_result != None:
+			globalList.append("\n"+str(ans_bool_result.question)+" "+str(ans_bool_result))
             else:
                 for q in Question.objects.all():
                     if q in request.session:
+			globalList.append(str(request.session[q]))
                         guest_answers.append(request.session[q])
                 if current_answer in guest_answers:
                     print "answer found in guest answers"
@@ -72,12 +78,14 @@ def build_rec_list(parser,token):
 
 class RecObj(Node):
     def render(self,context):
+	global globalList
         # New way of doing this
         # Go through all the recommendations and get the answer links. If all the answers are in the user's database, present the answer 
         # Get the page request so we know who the user is
         if 'request' in context:
             request = context['request']
         new_rec_list = []
+	context["feedback"] = []
 
         # test parse stuff
         result_tokens = parse_rule("ans1 and ans3 : rec1", context)
@@ -114,8 +122,10 @@ class RecObj(Node):
                     rec = get_or_none(Recommendation, id=int(float(t[3:])))
                     # check if recommendation is already recommended for user or guest
                     if rec != None:
+			context["feedback"] = globalList
+			globalList = []
                         new_rec_list.append(rec.recommendation)
-                
+               		context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
                 elif "ans" in t:
                     print "outcome results in marking a answer as implicitly answered"
                     # check if question is already answered by user. If it is, there is no need to mark it implicit
