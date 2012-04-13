@@ -38,7 +38,10 @@ def parse_rule(rule, context):
                 print "answer found in useranswers"
                 ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
 		if ans_bool_result != None:
-			globalList.append("\n"+str(ans_bool_result.question)+" "+str(ans_bool_result))
+			temp = "\n"+str(ans_bool_result.question)+" "+str(ans_bool_result)
+			if temp not in globalList:
+				globalList.append(temp)
+	        tokens.remove(t)
             else:
                 for q in Question.objects.all():
                     if q in request.session:
@@ -88,8 +91,8 @@ class RecObj(Node):
 	context["feedback"] = []
 
         # test parse stuff
-        result_tokens = parse_rule("ans1 and ans3 : rec1", context)
-        
+        #result_tokens = parse_rule("ans1 and ans3 : rec1", context)
+        result_tokens = parse_rule("ans1 : rec7",context)
         if result_tokens != None:
             for t in result_tokens:
                 # red denotes redundancy
