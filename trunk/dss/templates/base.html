@@ -168,7 +168,9 @@ margin-right:30px;
 <div id="feedback-box">
     <div id="title">Feedback</div>
         <div id="content">
-            Recommendation A was given because you answered Question X with Answer B
+            {% for f in feedback %}
+              {% autoescape on %}{{ f|markdown }}{% endautoescape %}
+            {% endfor %}
         </div>
     </div>
 </div>
