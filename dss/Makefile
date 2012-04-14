@@ -25,7 +25,7 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=wallet2
+PROJECT=wallet3
 # The upcoming release.
 RELEASE=1.3
 # The tar archive will be identified by version.
@@ -123,6 +123,8 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/recommendations
 	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/recommendations/recommendation
 	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/recommendations/uploadedfile
+	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/rules/
+	${INSTALL} -d ${TEMPLATES.dir}/templates/admin/rules/rule
 	${INSTALL} -d ${TEMPLATES.dir}/templates/questions
 	${INSTALL} -d ${TEMPLATES.dir}/templates/welcome
 	${INSTALL} -d ${TEMPLATES.dir}/templates/auth
@@ -130,6 +132,7 @@ install: test ${WSGI.script}
 	${INSTALL} -d ${TEMPLATES.dir}/templates/registration
 	${INSTALL} -d ${DATA.dir}
 	${INSTALL} -d ${DATA.dir}/grappelli
+	${INSTALL} -d ${DATA.dir}/rules
 	${INSTALL} -d ${DATA.dir}/auth
 	${INSTALL} -d ${DATA.dir}/recommendations
 	${INSTALL} -d ${DATA.dir}/questions
@@ -218,13 +221,15 @@ install: test ${WSGI.script}
 	${INSTALL} -D templates/admin/auth/profile/* ${TEMPLATES.dir}/templates/admin/auth/profile
 	${INSTALL} -D templates/admin/questions/question/* ${TEMPLATES.dir}/templates/admin/questions/question
 	${INSTALL} -D templates/admin/recommendations/recommendation/* ${TEMPLATES.dir}/templates/admin/recommendations/recommendation
-	${INSTALL} -D templates/admin/recommendations/uploadedfile/* ${TEMPLATES.dir}/templates/recommendations/uploadedfile
+	${INSTALL} -D templates/admin/recommendations/uploadedfile/* ${TEMPLATES.dir}/templates/admin/recommendations/uploadedfile
+	${INSTALL} -D templates/admin/rules/rule/* ${TEMPLATES.dir}/templates/admin/rules/rule
 	${INSTALL} -D templates/auth/* ${TEMPLATES.dir}/templates/auth
 	${INSTALL} -D templates/welcome/* ${TEMPLATES.dir}/templates/welcome
 	${INSTALL} -D templates/questions/* ${TEMPLATES.dir}/templates/questions
 	${INSTALL} -D templates/registration/* ${TEMPLATES.dir}/templates/registration
 	${INSTALL} -D templates/recommendations/* ${TEMPLATES.dir}/templates/recommendations
 	${INSTALL} questions/*.* ${DATA.dir}/questions
+	${INSTALL} rules/*.* ${DATA.dir}/rules
 	${INSTALL} welcome/*.* ${DATA.dir}/welcome
 	${INSTALL} recommendations/*.* ${DATA.dir}/recommendations
 	${INSTALL} auth/*.* ${DATA.dir}/auth
