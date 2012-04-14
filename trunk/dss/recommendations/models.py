@@ -38,12 +38,6 @@ class Recommendation(models.Model):
     def __unicode__(self):
         return self.name
 
-class Rule(models.Model):
-    rule = models.CharField(max_length="110")
-
-    def __unicode__(self):
-        return self.rule
-
 class UploadedFile(models.Model):
     files = models.FileField(upload_to="./", max_length=500)
     def __unicode__(self):

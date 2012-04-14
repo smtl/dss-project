@@ -1,56 +1,11 @@
 from recommendations.models import Recommendation, RecommendationProfile, UploadedFile, RecAnswerLink
+from rules.models import Rule
 from questions.models import Question, Answer
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
-
-class RecommendationProfileInline(admin.TabularInline):
-    model = RecommendationProfile
-    extra = 0
-    fieldsets = [
-        (RecommendationProfile, {
-            'fields': ('recommendation', 'profile',)
-        })
-    ]
-
-class RecommendationAdmin(admin.ModelAdmin):
-    fieldsets = [
-       ('Recommendation', {'fields': ['name','recommendation']}),
-    ]
-    inlines = [RecommendationProfileInline] 
-    search_fields = ['recommendation']
-
-
-class UploadedFileAdmin(admin.ModelAdmin):
-    fieldsets = [
-       ("UploadedFile", {"fields": ["files"]}),
-    ]
-    search_fields = ["files"]
-
-class RecAnswerLinkAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ('Recommendation Answer Link', {'fields': ['recommendation','answer']}),
-    ]
-    search_fields = ['recommendation', 'answer']
-
-
-class MultipleFactsInline(admin.TabularInline):
-    model = RecommendationProfile
-    extra = 0
-    fieldsets = [
-        (RecommendationProfile, {
-            'fields': ('recommendation', 'profile',)
-        })
-    ]
-
-
-class MultipleFilesAdmin(admin.ModelAdmin):
-    fieldsets = [
-       ("Multiple Fact", {"fields": ["recommendation"]}),
-    ]
-    search_fields = ["recommendation"]
 
 class RuleAdmin(admin.ModelAdmin):
     def rules(self, request):
@@ -71,24 +26,28 @@ def admin_rules(request, model_admin):
     rule_list = []
     for ru in Rule.objects.all():
         rule_list.append(ru)
-
+    rule_list.append("None")
+    
     # To display answers to choose from
     answer_list = []
     for a in Answer.objects.all():
         answer_list.append(a)
+    answer_list.append("None")
     
     # To display recommendations to choose from
     rec_list = []
     for r in Recommendation.objects.all():
         rec_list.append(r)
-
+    rec_list.append("None")
+    
     # To display questions to choose from (to make redundant)
     question_list = []
     for q in Question.objects.all():
         question_list.append(q)
+    question_list.append("None")
 
     # To choose bool operator to choose from
-    bool_list = ["and", "or"]
+    bool_list = ["and", "or", "None"]
     
     context = {'admin_site': admin_site.name,
                 'title': "Create Custom Rules",
@@ -102,10 +61,7 @@ def admin_rules(request, model_admin):
                 'answer_list': answer_list,
                 'bool_list': bool_list
                 }
-    template = 'admin/recommendations/recommendation/rules.html'
+    template = 'admin/rules/rule/rules.html'
     return render_to_response(template, context, context_instance=RequestContext(request))
 
-#admin.site.register(Rule, RuleAdmin)
-admin.site.register(Recommendation, RecommendationAdmin)
-admin.site.register(UploadedFile, UploadedFileAdmin)
-#admin.site.register(RecAnswerLink, RecAnswerLinkAdmin)
+admin.site.register(Rule, RuleAdmin)

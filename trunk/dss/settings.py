@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'recommendations',
     'django.contrib.markup',
     'grappelli',
+    'rules',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.sessions',
