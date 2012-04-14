@@ -1,0 +1,78 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% block breadcrumbs %}
+<div id="breadcrumbs">
+    <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+    <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+    {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo; Create Custom Rules
+</div>
+{% endblock %}
+
+{% block title %}Create Custom Rules{% endblock %}
+
+{% block content %}
+<h4>Rules in System </h4>
+<p> These are the rules in the system that currently have an effect on the recommendations a user gets </p>
+{% for rule in rule_list %}
+<br />
+{{ rule }} - Delete
+<br />
+{% endfor %}
+<br />
+<hr>
+<br />
+<h4>Create a rule</h4>
+<p> To create a rule, select answers from the drop down boxes and then select the outcome. An outcome can either be a recommendation, making a question redundant or implicitly answering a question or a any combination of those three. </p>
+<br />
+<br />
+
+<form action="./" method="post">
+    {% csrf_token %}
+    <select name="part1">
+        {% for a in answer_list %}
+            <option value="{{a.id}}" selected="selected">{{a}}</option>
+        {% endfor %}
+    </select>
+
+    <select name="boolpart">
+        {% for b in bool_list %}
+            <option value="{{b}}" selected="selected">{{b}}</option>
+        {% endfor %}
+    </select>
+
+    <select name="part2">
+        {% for a in answer_list %}
+            <option value="{{a.id}}" selected="selected">{{a}}</option>
+        {% endfor %}
+    </select>
+
+    <br />
+        Produces
+    <br />
+    <br />
+    <select name="result1">
+        {% for r in rec_list %}
+            <option value="{{r.id}}" selected="selected">{{r}}</option>
+        {% endfor %}
+    </select>
+    
+    <select name="result2">
+        {% for a in answer_list %}
+            <option value="{{a.id}}" selected="selected">{{a}}</option>
+        {% endfor %}
+    </select>
+
+    <select name="result3">
+        {% for q in question_list %}
+            <option value="{{q.id}}" selected="selected">{{q}}</option>
+        {% endfor %}
+    </select>
+    <br />
+    <br />
+    
+    <input type="submit" value="answer" />
+
+</form>
+
+
+{% endblock %}
