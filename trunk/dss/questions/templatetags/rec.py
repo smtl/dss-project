@@ -45,10 +45,11 @@ def parse_rule(rule, context):
             else:
                 for q in Question.objects.all():
                     if q in request.session:
-			globalList.append(str(request.session[q]))
                         guest_answers.append(request.session[q])
                 if current_answer in guest_answers:
                     print "answer found in guest answers"
+		    globalList.append(str(current_answer))
+		    #globalList.append(str(request.session[q]))
                     print current_answer
                     ans_bool_result = "question found"
             
