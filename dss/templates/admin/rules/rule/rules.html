@@ -15,7 +15,9 @@
 <p> These are the rules in the system that currently have an effect on the recommendations a user gets </p>
 {% for rule in rule_list %}
 <br />
+{% autoescape off %}
 {{ rule }} - Delete
+{% endautoescape %}
 <br />
 {% endfor %}
 <br />
@@ -70,7 +72,7 @@
     <br />
     <br />
     
-    <input type="submit" value="answer" />
+    <input type="submit" value="Save rule" />
 
 </form>
 
