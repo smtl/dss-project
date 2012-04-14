@@ -6,6 +6,9 @@ from django.conf.urls.defaults import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
 
 class RuleAdmin(admin.ModelAdmin):
     def rules(self, request):
@@ -17,7 +20,36 @@ class RuleAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 @staff_member_required
-def admin_rules(request, model_admin):
+def admin_rules(request, model_admin=None):
+    if request.method == 'POST':
+        # get information that was submitted
+        part1 = request.POST['part1']
+        boolpart = request.POST['boolpart']
+        part2 = request.POST['part2']
+
+        if not part2:
+            boolstring = "ans"+part1
+        if boolpart != "None":
+            if part2:
+                boolstring = "ans"+part1+" "+boolpart+" "+"ans"+part2
+        
+        # results part
+        rec_result = request.POST['result1']
+        ans_result = request.POST['result2']
+        red_result = request.POST['result3']
+        resultstring = ""
+        temp_result_list = [rec_result, ans_result, red_result]
+        for r in temp_result_list:
+            if r != "None":
+                resultstring = resultstring+r+" "
+        
+        if ("None" not in resultstring) and (len(resultstring) > 3):
+            rule = Rule()
+            rule.rule = boolstring+" : "+resultstring
+            rule.save()
+
+        #return render_to_response('admin/rules/rule/rules.html', {}, context_instance=RequestContext(request))
+
     opts = model_admin.model._meta
     admin_site = model_admin.admin_site
     has_perm = request.user.has_perm(opts.app_label+'.'+opts.get_change_permission())
@@ -26,7 +58,6 @@ def admin_rules(request, model_admin):
     rule_list = []
     for ru in Rule.objects.all():
         rule_list.append(ru)
-    rule_list.append("None")
     
     # To display answers to choose from
     answer_list = []
