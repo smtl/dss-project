@@ -39,7 +39,7 @@
 {% for rule in rule_list %}
 <br />
 {% autoescape off %}
-{{ rule }} - Delete
+{{ rule }}
 <form action="{% url deleterule %}" method="post">
 {% csrf_token %}
 <input type="hidden" name="deleterule" value="{{ rule }}" />
