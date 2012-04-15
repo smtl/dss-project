@@ -32,10 +32,8 @@ def parse_rule(rule, context):
         if 'ans' in t:
             ans_bool_result = None
             current_answer = get_or_none(Answer, id=int(float(t[3:])))
-            print "Answer we are looking for: "+str(current_answer)
             # Handle users and guests differently
             if request.user.is_authenticated():
-                print "answer found in useranswers"
                 ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
 		if ans_bool_result != None:
 			temp = "\n"+str(ans_bool_result.question)+" "+str(ans_bool_result)
@@ -47,10 +45,8 @@ def parse_rule(rule, context):
                     if q in request.session:
                         guest_answers.append(request.session[q])
                 if current_answer in guest_answers:
-                    print "answer found in guest answers"
 		    globalList.append(str(current_answer))
 		    #globalList.append(str(request.session[q]))
-                    print current_answer
                     ans_bool_result = "question found"
             
             if ans_bool_result == None:
@@ -98,7 +94,6 @@ class RecObj(Node):
             for t in result_tokens:
                 # red denotes redundancy
                 if "red" in t:
-                    print "outcome results in a question being made redundant"
                     question = get_or_none(Question, id=int(float(t[3:])))
                     # check if question has already been answered, if it has there is no point marking it redundant
                     # actually this is a design decision - it can be changed if neccesary
@@ -122,7 +117,6 @@ class RecObj(Node):
                             request.session["r"+question.question] = 0
                 # rec denotes recommendation
                 elif "rec" in t:
-                    print "outcome results in a recommendation being recommended"
                     rec = get_or_none(Recommendation, id=int(float(t[3:])))
                     # check if recommendation is already recommended for user or guest
                     if rec != None:
@@ -131,7 +125,6 @@ class RecObj(Node):
                         new_rec_list.append(rec.recommendation)
                		context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
                 elif "ans" in t:
-                    print "outcome results in marking a answer as implicitly answered"
                     # check if question is already answered by user. If it is, there is no need to mark it implicit
                     answer = get_or_none(Answer, id=int(float(t[3:])))
                     if request.user.is_authenticated():

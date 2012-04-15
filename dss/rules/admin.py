@@ -27,7 +27,7 @@ class RuleAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 @staff_member_required
-def admin_rules(request, model_admin=None):
+def admin_rules(request, model_admin):
     if request.method == 'POST':
         # get information that was submitted
         part1 = request.POST['part1']
@@ -41,7 +41,6 @@ def admin_rules(request, model_admin=None):
             if boolpart != "None":
                 if part2:
                     boolstring += " "+boolpart+" ans"+part2
-        print boolstring
 
         # results part
         rec_result = request.POST['result1']
@@ -74,11 +73,10 @@ def admin_rules(request, model_admin=None):
     # To show rules already in system
     rule_list = []
     for ru in Rule.objects.all():
-        rule = ""
+        rule = "rule id:"+str(ru.id)+" "
         result_str = ""
         bool_rule = re.compile(":").split(ru.rule)[0]
         result_part = re.compile(":").split(ru.rule)[1]
-        print result_part
         tokens = bool_rule.split(' ')
         result_tokens = result_part.split(" ")
         for t in tokens:
