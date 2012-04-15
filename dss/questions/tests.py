@@ -190,6 +190,27 @@ class AdminCustomisationTest(TestCase):
         self.u.delete()
 
 
+#Adrian
+#test getting next question
+class get_next_question_or_none_guest(unittest.TestCase):
+    xrange = ""
+    i = 0
+   
+    def setUp(self):
+      #q = QuestionPath.objects.filter(profile=p)[i].current_question
+      for i in xrange(Question.objects.count()):
+        self.q = Question.objects.create(question = "Did you eat pad thai for lunch?")
+        self.a = Answer.objects.create(question = self.q, answer= "Yes")
+    
+    def get_next_question_or_none_guest(self):
+        self.assertEqual(self.a.question.question, "Did you eat pad thai for lunch?")
+        self.assertEqual(self.a.answer, "Yes")
+    
+    def tearDown(self):
+        self.q.delete()
+        self.a.delete()
+            
+
 #Adrian Kwizera
 #Testing help link for maintainer
 class HelpTest(TestCase):
