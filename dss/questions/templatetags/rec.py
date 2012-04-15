@@ -10,6 +10,7 @@ import glob
 import re
 from questions.models import Question, Answer, AnsweredQuestion
 from recommendations.models import Recommendation, UserRecommendation
+from rules.models import Rule
 
 globalList = []
 
@@ -89,61 +90,63 @@ class RecObj(Node):
 
         # test parse stuff
         #result_tokens = parse_rule("ans1 and ans3 : rec1", context)
-        result_tokens = parse_rule("ans1 : rec7",context)
-        if result_tokens != None:
-            for t in result_tokens:
-                # red denotes redundancy
-                if "red" in t:
-                    question = get_or_none(Question, id=int(float(t[3:])))
-                    # check if question has already been answered, if it has there is no point marking it redundant
-                    # actually this is a design decision - it can be changed if neccesary
-                    if request.user.is_authenticated():
-                        answered = get_or_none(AnsweredQuestion, user=request.user, question=question)
-                    elif question in request.session:
-                        answered = "question found"
-                    else:
-                        answered = None
-
-                    if answered == None:
+        for ru in Rule.objects.all():
+            result_tokens = parse_rule(ru.rule,context)
+            if result_tokens != None:
+                for t in result_tokens:
+                    # red denotes redundancy
+                    if "red" in t:
+                        question = get_or_none(Question, id=int(float(t[3:])))
+                        # check if question has already been answered, if it has there is no point marking it redundant
+                        # actually this is a design decision - it can be changed if neccesary
                         if request.user.is_authenticated():
-                            aq = AnsweredQuestion()
-                            aq.user = request.user
-                            aq.question = question
-                            aq.answer_id = 0
-                            aq.redundancy = 1
-                            aq.save()
+                            answered = get_or_none(AnsweredQuestion, user=request.user, question=question)
+                        elif question in request.session:
+                            answered = "question found"
                         else:
-                            # redundancy marked by r at the start of the question
-                            request.session["r"+question.question] = 0
-                # rec denotes recommendation
-                elif "rec" in t:
-                    rec = get_or_none(Recommendation, id=int(float(t[3:])))
-                    # check if recommendation is already recommended for user or guest
-                    if rec != None:
-			context["feedback"] = globalList
-			globalList = []
-                        new_rec_list.append(rec.recommendation)
-               		context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
-                elif "ans" in t:
-                    # check if question is already answered by user. If it is, there is no need to mark it implicit
-                    answer = get_or_none(Answer, id=int(float(t[3:])))
-                    if request.user.is_authenticated():
-                        answered = get_or_none(AnsweredQuestion, user=request.user, question=answer.question)
-                    elif answer.question in request.session:
-                        answered = "Not None"
-                    else:
-                        answered = None
+                            answered = None
 
-                    if answered == None:
+                        if answered == None:
+                            if request.user.is_authenticated():
+                                aq = AnsweredQuestion()
+                                aq.user = request.user
+                                aq.question = question
+                                aq.answer_id = 0
+                                aq.redundancy = 1
+                                aq.save()
+                            else:
+                                # redundancy marked by r at the start of the question
+                                request.session["r"+question.question] = 0
+                    # rec denotes recommendation
+                    elif "rec" in t:
+                        rec = get_or_none(Recommendation, id=int(float(t[3:])))
+                        # check if recommendation is already recommended for user or guest
+                        if rec != None:
+                            #context["feedback"] = gloablList
+                            #globalList = []
+                            new_rec_list.append(rec.recommendation)
+
+                        context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
+                    elif "ans" in t:
+                        # check if question is already answered by user. If it is, there is no need to mark it implicit
+                        answer = get_or_none(Answer, id=int(float(t[3:])))
                         if request.user.is_authenticated():
-                            aq = AnsweredQuestion()
-                            aq.user = request.user
-                            aq.question = answer.question
-                            aq.answer = answer
-                            aq.implicit = 1
-                            aq.save()
+                            answered = get_or_none(AnsweredQuestion, user=request.user, question=answer.question)
+                        elif answer.question in request.session:
+                            answered = "Not None"
                         else:
-                            request.session["i"+answer.question.question] = answer
+                            answered = None
+
+                        if answered == None:
+                            if request.user.is_authenticated():
+                                aq = AnsweredQuestion()
+                                aq.user = request.user
+                                aq.question = answer.question
+                                aq.answer = answer
+                                aq.implicit = 1
+                                aq.save()
+                            else:
+                                request.session["i"+answer.question.question] = answer
         # pass the list of recommendations back to be shown to user
         context['rec'] = new_rec_list
         return ""

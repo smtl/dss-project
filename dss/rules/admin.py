@@ -97,7 +97,7 @@ def admin_rules(request, model_admin):
             if "ans" in rt:
                 temp_ans_result = get_or_none(Answer, pk=(int(float(rt[3:]))))
                 if temp_ans_result != None:
-                    result_str += "<li>A question being implicitly answered: "+str(temp_ans)+"</li>"
+                    result_str += "<li>A question being implicitly answered: "+str(temp_ans_result)+"</li>"
             
             if "red" in rt:
                 temp_red = get_or_none(Question, pk=(int(float(rt[3:]))))
