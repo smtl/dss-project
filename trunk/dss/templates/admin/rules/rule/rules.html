@@ -1,5 +1,27 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
+
+{% block extrastyle %}
+<style type="text/css">
+
+#customLinks{
+    position:absolute;
+    margin-left:40%;
+ 	top:10px;
+ 	z-index:1;
+}
+
+#customLinks a:hover{
+    color: white;
+}
+
+#content{
+    color: #000;
+}
+</style>
+{% endblock %}
+
+
 {% block breadcrumbs %}
 <div id="breadcrumbs">
     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
