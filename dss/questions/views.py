@@ -16,6 +16,7 @@ import hashlib
 from django.core.urlresolvers import reverse
 import os
 import re
+from rules.models import Rule
 
 #def parse_rule(rule, request):
 #    # rule is a string
@@ -264,18 +265,11 @@ def parse_rule(rule, request):
             # Handle users and guests differently
             if request.user.is_authenticated():
                 ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
-		if ans_bool_result != None:
-			temp = "\n"+str(ans_bool_result.question)+" "+str(ans_bool_result)
-			if temp not in globalList:
-				globalList.append(temp)
-	        tokens.remove(t)
             else:
                 for q in Question.objects.all():
                     if q in request.session:
                         guest_answers.append(request.session[q])
                 if current_answer in guest_answers:
-		    globalList.append(str(current_answer))
-		    #globalList.append(str(request.session[q]))
                     ans_bool_result = "question found"
             
             if ans_bool_result == None:
@@ -293,17 +287,45 @@ def parse_rule(rule, request):
     else:
         return None
 
-def parse_rule_result():
+def check_rule_results(request):
+    # delete all redudant and implicitly answered questions here!!!!
+    implicit_answers = AnsweredQuestion.objects.filter(implicit=1)
+    implicit_answers.delete()
+    #
+    #
     for ru in Rule.objects.all():
         result_tokens = parse_rule(ru.rule, request)
         if result_tokens != None:
             for t in result_tokens:
-                if "ans" in t:
+                if "red" in t:
+                    question = get_or_none(Question, id=int(float(t[3:])))
+                    # check if question has already been answered, if it has there is no point marking it redundant
+                    # actually this is a design decision - it can be changed if neccesary
+                    if request.user.is_authenticated():
+                        answered = get_or_none(AnsweredQuestion, user=request.user, question=question)
+                    elif question in request.session:
+                        answered = "question found"
+                    else:
+                        answered = None
+
+                    if answered == None:
+                        if request.user.is_authenticated():
+                            aq = AnsweredQuestion()
+                            aq.user = request.user
+                            aq.question = question
+                            aq.answer_id = 0
+                            aq.redundancy = 1
+                            aq.save()
+                        else:
+                            # redundancy marked by r at the start of the question
+                            request.session["r"+question.question] = 0
+                elif "ans" in t:
                     # check if question is already answered by user. If it is, there is no need to mark it implicit
                     answer = get_or_none(Answer, id=int(float(t[3:])))
                     if request.user.is_authenticated():
                         answered = get_or_none(AnsweredQuestion, user=request.user, question=answer.question)
                     elif answer.question in request.session:
+                        print "guest has answered this"
                         answered = "Not None"
                     else:
                         answered = None
@@ -317,6 +339,8 @@ def parse_rule_result():
                             aq.implicit = 1
                             aq.save()
                         else:
+                            print "this happened"
+                            request.session[answer.question] = answer
                             request.session["i"+answer.question.question] = answer
 
 
@@ -369,8 +393,14 @@ def answer(request, question_id):
             # Implicit answers may need to be removed
         
         if qpath != None:
-            nextq = qpath.follow_question
-            #nextq = get_next_question_or_none(request.user)
+            check_rule_results(request)
+            #nextq = qpath.follow_question
+            # for logged in user
+            if request.user.is_authenticated():
+                nextq = get_next_question_or_none(request.user)
+            else:
+                nextq = get_next_question_or_none_guest(request)
+            # need to fix for guest
 
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
@@ -381,7 +411,6 @@ def answer(request, question_id):
 def results(request):
     #q = get_object_or_404(Question, pk=question_id)
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
-
 
 
 # Lets a user change the answer they gave
