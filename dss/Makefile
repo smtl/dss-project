@@ -25,7 +25,7 @@ MY_MODE=ug+rwX,o+rwX
 #
 
 # Set PROJECT to the name of your project.
-PROJECT=wallet4
+PROJECT=decisionsupportsystem
 # The upcoming release.
 RELEASE=1.3
 # The tar archive will be identified by version.
