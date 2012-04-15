@@ -28,7 +28,6 @@ def deleterule(request):
     if request.method == "POST":
         rule_string = request.POST['deleterule']
         id_string = rule_string.split(" ")[1]
-        print id_string
         rule = get_or_none(Rule, pk=int(float(id_string[3:])))
         if rule != None:
             rule.delete()
