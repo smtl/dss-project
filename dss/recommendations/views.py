@@ -1,4 +1,4 @@
-from recommendations.models import Recommendation, RecAnswerLink, UploadedFile
+from recommendations.models import Recommendation, RecAnswerLink, UploadedFile, Slide
 from questions.models import Question, Answer, AnsweredQuestion
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
