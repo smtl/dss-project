@@ -122,11 +122,10 @@ class RecObj(Node):
                         rec = get_or_none(Recommendation, id=int(float(t[3:])))
                         # check if recommendation is already recommended for user or guest
                         if rec != None:
-                            #context["feedback"] = gloablList
-                            #globalList = []
+                            context["feedback"] = globalList
+                            globalList = []
                             new_rec_list.append(rec.recommendation)
-
-                        context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
+                            context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
                     elif "ans" in t:
                         # check if question is already answered by user. If it is, there is no need to mark it implicit
                         answer = get_or_none(Answer, id=int(float(t[3:])))
