@@ -127,9 +127,9 @@ class save_progress(TestCase):
 
     def setUp(self):
      
-        self.client.get('/questions/')
-        self.client.get('/answers/')
-        self.client.get('/recommendation/')
+        self.client.get('/questions/questions.html')
+        self.client.get('/answers/answers.html')
+        self.client.get('/recommendation/recommendation.html')
         s = self.client.session
         s['key'] = 'value'
         s.save()
@@ -283,7 +283,7 @@ class TestLoader(unittest.TestCase):
         suite.addTests(tests)
      return suite
 
-
+#Adrian 
 #test for deleting rules
 class deleterule(unittest.TestCase):
     get = "POST"
