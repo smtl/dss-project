@@ -80,7 +80,7 @@ sudo apt-get install apache2-prefork-dev
 
 Commands to control the apache2 server are:
 
-sudo service apache2 start
+sudo service apache2 restart
 
 sudo service apache2 stop
 
@@ -143,6 +143,22 @@ cd <project_name>
 
 4. Run 'make install'
 
+5. On run, tests are first run and on successive build an installation is made
+
+
+Help files
+===============================
+
+There are two help files (one for the guests and one for the maintainer/admin)
+
+Guests help
+===========
+At the end of .wsgi/ add help to view the guest help file
+
+Maintainer help
+===============
+Once logged into admin, click on the help link to view the guide
+
 
 Frequently Encountered Problems
 ===============================
@@ -164,3 +180,5 @@ Make sure you have permissions set right for the dss folder itself and the conte
 If you encounter other problems it is good practice to try restart your server and try again. This may solve some issues.
 
 Clearing your browsers cache or trying a different browser may also clear up problems.
+
+
