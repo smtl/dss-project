@@ -140,6 +140,7 @@ def get_next_question_or_none(current_user):
 
             q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question 
             a = get_or_none(AnsweredQuestion, user=current_user,question=q)
+
             if a == None:
                 return q
     except IndexError:
@@ -149,6 +150,14 @@ def get_next_question_or_none(current_user):
             q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].follow_question
         else:
             q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[0].follow_question
+        a = get_or_none(AnsweredQuestion, user=current_user, question=q)
+        if a == None:
+            return q
+        #checking if not answered
+        if i < 1:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].current_question
+        else:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[0].current_question
         a = get_or_none(AnsweredQuestion, user=current_user, question=q)
         if a == None:
             return q
@@ -173,6 +182,14 @@ def get_next_question_or_none_guest(request):
 
     if i == Question.objects.count() or i > Question.objects.count():
         return None
+
+        if i < 1:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i-1].current_question
+        else:
+            q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[0].current_question
+        a = get_or_none(AnsweredQuestion, user=current_user, question=q)
+        if a == None:
+            return q
 
 def get_script_name(request):
     return request.META['SCRIPT_NAME']
@@ -311,7 +328,6 @@ def results(request):
     return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
 
 
-
 # Lets a user change the answer they gave
 def edit(request, input_id):
     # If a new answer is submitted
@@ -380,32 +396,30 @@ def record_view(request):
     return render_to_response('questions/record_view.html', {'count': count}, context_instance=RequestContext(request))
 
 
-
-# adrian, what does this do?
-#viewing user info by admin and maintainer for specification purposes
-def get_user_info(username):
-    c = cache.get_cache('default')
-    username = unicode(username).encode('ascii', 'ignore')
-    key = 'trac_user_info:%s' % hashlib.md5(username).hexdigest()
-    info = c.get(key)
-    if info is None:
-        try:
-            u = User.objects.get(username=username)
-        except User.DoesNotExist:
-            info = {"core": False, "cla": False}
-        else:
-            info = {
-                "core": u.has_perm('auth.commit'),
-                "cla": bool(find_agreements(u))
-            }
-        c.set(key, info, 60*60)
-    return info
-
-
-
 # links to help templates
 def help(request):
     if request.user.is_staff:
         return render_to_response('questions/help_staff.html', {}, context_instance=RequestContext(request))
     else:
         return render_to_response('questions/help_user.html', {}, context_instance=RequestContext(request))
+
+
+# added search functionality on site
+def search(request):
+   query_string = ''
+   found_entries = None
+   search_fields=('text','title',)
+
+   if ('q' in request.GET) and request.GET['q'].strip():
+      query_string = request.GET['q']
+      entry_query = get_query(query_string, search_fields)
+      found_entries = AnsweredQuestion.objects.filter(entry_query).order_by('-id')
+ 
+      return render_to_response('questions/search.html',
+                      { 'query_string': query_string, 'found_entries': found_entries },
+                      context_instance=RequestContext(request))
+
+    
+
+
+
