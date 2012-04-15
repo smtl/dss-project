@@ -1,10 +1,11 @@
-from recommendations.models import Recommendation, RecommendationProfile, UploadedFile, RecAnswerLink
+from recommendations.models import Recommendation, RecommendationProfile, UploadedFile, RecAnswerLink, Slide
 from questions.models import Question, Answer
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
+
 
 class RecommendationProfileInline(admin.TabularInline):
     model = RecommendationProfile
@@ -105,7 +106,11 @@ def admin_rules(request, model_admin):
     template = 'admin/recommendations/recommendation/rules.html'
     return render_to_response(template, context, context_instance=RequestContext(request))
 
+class SlideAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'slide_thumbnail',)
+
 #admin.site.register(Rule, RuleAdmin)
+admin.site.register(Slide, SlideAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(UploadedFile, UploadedFileAdmin)
 #admin.site.register(RecAnswerLink, RecAnswerLinkAdmin)
