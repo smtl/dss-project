@@ -9,8 +9,25 @@
 {% endblock %}
 
 {% block extrahead %}
-<li><a href="{% url index %}">Site Home</a></li> |
-<li><a href="{% url admin:index %}">Maintenance Home</a></li> |
-<li><a href="{% url help %}">Help</a> |
-<li>{% load count %} {% get_count %} Registered users: {{count}}</li>
+<style type="text/css">
+#customLinks{
+	position:absolute;
+	margin-left:40%;
+	top:10px;
+	z-index:1;
+}
+
+#customLinks a:hover{
+	color:white;
+}
+
+</style>
+
+
+<div id="customLinks">
+
+<a href="{% url index %}"> Site Home </a>|
+<a href="{% url admin:index %}"> Maintenance Home </a>|
+<a href="{% url help %}"> Help </a>|
+{% load count %} {% get_count %} <font color="white">Registered users: {{count}}</text></div>
 {% endblock %}
