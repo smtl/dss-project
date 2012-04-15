@@ -32,14 +32,15 @@ def profile(request):
     if request.user.is_authenticated():
         user_profile = request.user.get_profile()
         profile = user_profile.profile
-        answered = AnsweredQuestion.objects.filter(user=request.user)
+        answered = AnsweredQuestion.objects.filter(user=request.user, redundancy=0)
         return render_to_response('auth/profile.html', {'answered_questions': answered, 'profile': profile}, context_instance=RequestContext(request))
     else:
         profile = Profile.objects.get(name="Default")
         answered = []
         for q in Question.objects.all():
             if q in request.session:
-                answered.append(request.session[q])
+                if "r"+q.question not in request.session:
+                    answered.append(request.session[q])
         return render_to_response('auth/profile.html', {'answered_questions': answered, 'profile': profile}, context_instance=RequestContext(request))
 
 

@@ -195,8 +195,6 @@ def hello(request):
 #    os.environ['WSGI_SCRIPT_DIR'] = os.path.dirname(environ['SCRIPT_NAME'])
     response.write("</ul>\n")
     response.write("<p>You can access a <a href='" + os.path.dirname(request.META['SCRIPT_NAME']) + "/static/index.html'>file</a> in my <em>static</em> directory.")
-    
-    parse_rule("ans1 and ans3 : ans22 red9", request.user)
 
     return response
 
@@ -318,6 +316,7 @@ def check_rule_results(request):
                             aq.save()
                         else:
                             # redundancy marked by r at the start of the question
+                            request.session[question] = 0
                             request.session["r"+question.question] = 0
                 elif "ans" in t:
                     # check if question is already answered by user. If it is, there is no need to mark it implicit
