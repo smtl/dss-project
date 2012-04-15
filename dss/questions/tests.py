@@ -1,8 +1,7 @@
 """
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
+DSS (Decision support system) testing suite.
+run make install in terminal to run tests
+tests that fail will have their errors outputted in the terminal
 """
 from __future__ import with_statement
 from django.contrib.auth import login, logout
@@ -270,7 +269,7 @@ class Rules(unittest.TestCase):
         self.a.delete()
         self.r.delete()
  
-          
+
 #Adrian Kwizera
 #Testing loading
 class TestLoader(unittest.TestCase):
