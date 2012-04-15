@@ -139,6 +139,7 @@ def get_next_question_or_none(current_user):
                 p = UserProfile.objects.get(user=current_user)
 
             q = QuestionPath.objects.filter(profile=current_user.get_profile().profile)[i].current_question 
+            # if the question isn't found then it hasn't been answered so it can be returned
             a = get_or_none(AnsweredQuestion, user=current_user,question=q)
             if a == None:
                 return q
@@ -248,8 +249,6 @@ def detail(request, question_id):
     else:
         return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
 
-
-
 # Handles the answer selected by the user/guest
 def answer(request, question_id):
     q = get_or_none(Question, pk=question_id)
@@ -259,8 +258,7 @@ def answer(request, question_id):
         qpath = get_or_none(QuestionPath, current_question=q, profile=request.user.get_profile().profile)
     else:      
         qpath = get_or_none(QuestionPath, current_question=q, profile=1)
-    if qpath != None:
-        nextq = qpath.follow_question
+    
     try:
         # Make sure they have selected an answer
         selected_answer = q.answer_set.get(pk=request.POST['answer'])
@@ -298,8 +296,11 @@ def answer(request, question_id):
             request.session[q] = selected_answer
 #important  # Check the rule base and implictly answered questions
             # Implicit answers may need to be removed
-
         
+        if qpath != None:
+            #nextq = qpath.follow_question
+            nextq = get_next_question_or_none(request.user)
+
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
