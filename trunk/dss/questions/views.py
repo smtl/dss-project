@@ -249,6 +249,77 @@ def detail(request, question_id):
     else:
         return render_to_response('questions/detail.html', {'question': q, 'answered': request.session[q]}, context_instance=RequestContext(request))
 
+def parse_rule(rule, request):
+    bool_rule = re.compile(":").split(rule)[0]
+    result_part = re.compile(":").split(rule)[1]
+    tokens = bool_rule.split(' ')
+    result_tokens = result_part.split(' ')
+    new_rule = bool_rule
+    guest_answers = [] 
+    # create the logic string
+    for t in tokens:
+        if 'ans' in t:
+            ans_bool_result = None
+            current_answer = get_or_none(Answer, id=int(float(t[3:])))
+            # Handle users and guests differently
+            if request.user.is_authenticated():
+                ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
+		if ans_bool_result != None:
+			temp = "\n"+str(ans_bool_result.question)+" "+str(ans_bool_result)
+			if temp not in globalList:
+				globalList.append(temp)
+	        tokens.remove(t)
+            else:
+                for q in Question.objects.all():
+                    if q in request.session:
+                        guest_answers.append(request.session[q])
+                if current_answer in guest_answers:
+		    globalList.append(str(current_answer))
+		    #globalList.append(str(request.session[q]))
+                    ans_bool_result = "question found"
+            
+            if ans_bool_result == None:
+                ans_bool = False
+            else:
+                ans_bool = True
+            # create the new rule which is to be executed
+            new_rule = new_rule.replace(t, str(ans_bool))
+    
+    # Build and execute the rule putting the result in the "result" variable
+    result_string = "result = "+new_rule
+    exec(result_string)
+    if result == True:
+        return result_tokens
+    else:
+        return None
+
+def parse_rule_result():
+    for ru in Rule.objects.all():
+        result_tokens = parse_rule(ru.rule, request)
+        if result_tokens != None:
+            for t in result_tokens:
+                if "ans" in t:
+                    # check if question is already answered by user. If it is, there is no need to mark it implicit
+                    answer = get_or_none(Answer, id=int(float(t[3:])))
+                    if request.user.is_authenticated():
+                        answered = get_or_none(AnsweredQuestion, user=request.user, question=answer.question)
+                    elif answer.question in request.session:
+                        answered = "Not None"
+                    else:
+                        answered = None
+
+                    if answered == None:
+                        if request.user.is_authenticated():
+                            aq = AnsweredQuestion()
+                            aq.user = request.user
+                            aq.question = answer.question
+                            aq.answer = answer
+                            aq.implicit = 1
+                            aq.save()
+                        else:
+                            request.session["i"+answer.question.question] = answer
+
+
 # Handles the answer selected by the user/guest
 def answer(request, question_id):
     q = get_or_none(Question, pk=question_id)
@@ -298,8 +369,8 @@ def answer(request, question_id):
             # Implicit answers may need to be removed
         
         if qpath != None:
-            #nextq = qpath.follow_question
-            nextq = get_next_question_or_none(request.user)
+            nextq = qpath.follow_question
+            #nextq = get_next_question_or_none(request.user)
 
         if qpath == None:
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
