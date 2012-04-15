@@ -29,24 +29,7 @@ from recommendations.models import Recommendation, RecAnswerLink
 from questions.models import Question, Answer, QuestionPath
 from questions.models import AnsweredQuestion
 import tempfile
-#import shutils
 
-
-
-
-
-#Adrian Kwizera
-#class ViewsTestCase(TestCase):
-    #def setUp(self):
-        #self.client = Client()
- 
-    #def test_MyView(self):
-        #User.objects.create_user('general', 'general@admin.com', 'general1')
- 
-        #use test client to perform login
-        #user = self.client.login(username='general', password='general1')
- 
-        #response = self.client.post('http://localhost:8000/admin/')
 
 # Adrian Kwizera
 class CountTest(TestCase):
@@ -157,16 +140,13 @@ class save_progress(TestCase):
 class TestSort(unittest.TestCase):
 
     def setUp(self):
-
        self.alist = [5, 2, 3, 1, 4]
 
     def test_ascending_sort(self):
-
        self.alist.sort()
        self.assertEqual(self.alist, [1, 2, 3, 4, 5])
 
     def test_sorting_reverse(self):
-
        self.alist.sort()
        self.alist.reverse()
        self.assertEqual(self.alist, [5, 4, 3, 2, 1])
@@ -271,6 +251,10 @@ class Test(unittest.TestCase):
     def tearDownClass(cls):
         cls._connection.destroy()
 
+
+#test for deleting rules
+#class deleterule((unittest.TestCase):
+     
 
 #Adrian Kwizera
 #Testing loading
