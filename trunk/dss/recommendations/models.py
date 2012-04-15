@@ -40,6 +40,7 @@ class Recommendation(models.Model):
 
 class UploadedFile(models.Model):
     files = models.FileField(upload_to="./", max_length=500)
+   
     def __unicode__(self):
         return str(self.files)
 
@@ -84,3 +85,27 @@ class RecommendationProfile(models.Model):
     class Meta:
         #order_with_respect_to = 'user'
         unique_together = ('profile', 'recommendation',)
+
+class Slide(models.Model):
+    
+    #Image Fields
+    image = models.ImageField(
+        upload_to="static_pages/slide/image/%Y/%m/%d",
+        height_field="image_height",
+        width_field="image_width"
+    )
+    image_height = models.PositiveIntegerField(null=True, blank=True, editable=False)
+    image_width = models.PositiveIntegerField(null=True, blank=True, editable=False)
+    
+    title = models.CharField(max_length=128)
+    order = models.PositiveIntegerField(default=0)
+    
+    def slide_thumbnail(self, width=300, height=200):
+    #    if self.image:
+    #        thumb = DjangoThumbnail(self.image, (width, height))
+    #        return '{img src="%s" /}' % thumb.absolute_url
+    #    return '{img src="/media/img/admin/icon-no.gif" alt="False"}'
+     slide_thumbnail.allow_tags = True
+    
+    def __unicode__(self):
+        return u'Slide: %s - %sx%s' % (self.title, self.image_height, self.image_width)
