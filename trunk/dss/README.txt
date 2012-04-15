@@ -145,6 +145,11 @@ cd <project_name>
 
 5. On run, tests are first run and on successive build an installation is made
 
+6. Any new project directories must be added first to the makefile before doing step 4.
+Install any new directories as outlined below:
+
+${INSTALL} -d ${DATA.dir}/grappelli/templates/registration
+
 
 Help files
 ===============================
