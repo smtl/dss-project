@@ -16,7 +16,7 @@ def fromRelativePath(*relativeComponents):
 
 urlpatterns = patterns('questions.views',
 #    url(r'^index.html','index'),
-    url(r'^index/$','index',name='index'),
+    url(r'^index/$','index', name='index'),
     url(r'^hello/$', 'hello'),
     url(r'^questions/$', 'questions'),
     url(r'^questions/(?P<question_id>\d+)/$', 'detail', name='detail'),
@@ -48,7 +48,8 @@ urlpatterns += patterns('',
     #url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
     url(r'^grappelli/', include('grappelli.urls')),
     #url('r^admin/$', 'questions.views.index'),
-    url('r^admin/rules/rule/rules$', 'rule', name="rule"),
+    url(r'^admin/rules/rule/rules/deleterule/$', 'rules.views.deleterule', name="deleterule"),
+    #url(r'^admin/rules/rule/rules/$', 'rules.admin.admin_rules', name="rule"),
     url(r'^admin/', include(admin.site.urls), name="admin"),
     #url("^admin_media/(?P<path>.*)$", "django.views.static.serve",{ "document_root": fromRelativePath("static", "admin") }),
 )

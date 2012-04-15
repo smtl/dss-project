@@ -12,11 +12,17 @@
 
 {% block content %}
 <h4>Rules in System </h4>
-<p> These are the rules in the system that currently have an effect on the recommendations a user gets </p>
+<p> These are the rules in the system. Rules can result in recommendations being provided to the user, questions being marked as redundant and questions being answered imlicitly.</p>
+
 {% for rule in rule_list %}
 <br />
 {% autoescape off %}
 {{ rule }} - Delete
+<form action="{% url deleterule %}" method="post">
+{% csrf_token %}
+<input type="hidden" name="deleterule" value="{{ rule }}" />
+<input type="submit" value="Delete rule" />
+</form>
 {% endautoescape %}
 <br />
 {% endfor %}
@@ -30,40 +36,52 @@
 
 <form action="./" method="post">
     {% csrf_token %}
+    Choose an answer:
+    <br />
     <select name="part1">
         {% for a in answer_list %}
             <option value="{{a.id}}" selected="selected">{{a}}</option>
         {% endfor %}
     </select>
-
+    <br />
+    Choose the boolean operator:
+    <br />
     <select name="boolpart">
         {% for b in bool_list %}
             <option value="{{b}}" selected="selected">{{b}}</option>
         {% endfor %}
     </select>
-
+    <br />
+    Choose an answer:
+    <br />
     <select name="part2">
         {% for a in answer_list %}
             <option value="{{a.id}}" selected="selected">{{a}}</option>
         {% endfor %}
     </select>
-
     <br />
-        Produces
     <br />
+        Triggers:
+    <br />
+    <br />
+    Choose a recommendation:
     <br />
     <select name="result1">
         {% for r in rec_list %}
             <option value="{{r.id}}" selected="selected">{{r}}</option>
         {% endfor %}
     </select>
-    
+    <br />
+    Choose an question to be answered implicitly:
+    <br />
     <select name="result2">
         {% for a in answer_list %}
             <option value="{{a.id}}" selected="selected">{{a}}</option>
         {% endfor %}
     </select>
-
+    <br />
+    Choose a question to be made redundant:
+    <br />
     <select name="result3">
         {% for q in question_list %}
             <option value="{{q.id}}" selected="selected">{{q}}</option>
