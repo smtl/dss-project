@@ -251,11 +251,26 @@ class Test(unittest.TestCase):
     def tearDownClass(cls):
         cls._connection.destroy()
 
+#Adrian 
+#test for rules
+class Rules(unittest.TestCase):
+    
+    def setUp(self):
+        self.r = Recommendation.objects.create(recommendation="We recommend this")
+        self.ru = Question.objects.create(question = "do you eat pork?")
+        self.a = Answer.objects.create(question = self.ru, answer= "Yes")
+    def testAnswers(self):
+        self.assertEqual(self.a.question.question, "do you eat pork?")
+        self.assertEqual(self.a.answer, "Yes")
+   # def testRecommendation(self):
+   #     self.assertEqual(self.ru.recommendation, "we recommend this")
 
-#test for deleting rules
-#class deleterule((unittest.TestCase):
-     
-
+    def tearDown(self):
+        self.ru.delete()
+        self.a.delete()
+        self.r.delete()
+ 
+          
 #Adrian Kwizera
 #Testing loading
 class TestLoader(unittest.TestCase):
