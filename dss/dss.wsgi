@@ -5,7 +5,7 @@ DSS_PUBLIC = os.path.dirname(os.path.realpath(__file__))
 
 # DATA_DIR is where the Django code exists
 # DATA_DIR is set in the Makefile
-DATA_DIR='/home/slowry/data/wallet3'
+DATA_DIR='/home/slowry/data/wallet4'
 sys.path.append(DATA_DIR)
 
 # This is the settings file for the project
