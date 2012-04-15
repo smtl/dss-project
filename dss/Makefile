@@ -217,7 +217,7 @@ install: test ${WSGI.script}
 	${INSTALL} media/static/admin/tinymce_setup/*.* ${WSGI.dir}/media/static/admin/tinymce_setup/
 	${INSTALL} media/*.* ${WSGI.dir}/media
 	${INSTALL} -D templates/*.* ${TEMPLATES.dir}/templates/
-	#${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
+	${INSTALL} -D templates/admin/*.* ${TEMPLATES.dir}/templates/admin
 	${INSTALL} -D templates/admin/auth/profile/* ${TEMPLATES.dir}/templates/admin/auth/profile
 	${INSTALL} -D templates/admin/questions/question/* ${TEMPLATES.dir}/templates/admin/questions/question
 	${INSTALL} -D templates/admin/recommendations/recommendation/* ${TEMPLATES.dir}/templates/admin/recommendations/recommendation

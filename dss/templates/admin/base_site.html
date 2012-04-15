@@ -1,17 +1,16 @@
 {% extends "admin/base.html" %}
-{% load i18n grp_tags %}
+{% load i18n %}
 
-{% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
+{% block title %}{{ title }} | {% trans 'DSS Maintenance' %}{% endblock %}
+
 
 {% block branding %}
-    <h1 id="site-name">{% trans 'Django administration' %}</h1>
+<h1 id="site-name" > {% trans 'DSS Maintenance' %}</h1>
 {% endblock %}
 
-{% block nav-global %}a
-test
+{% block extrahead %}
 <li><a href="{% url index %}">Site Home</a></li> |
 <li><a href="{% url admin:index %}">Maintenance Home</a></li> |
 <li><a href="{% url help %}">Help</a> |
 <li>{% load count %} {% get_count %} Registered users: {{count}}</li>
-
 {% endblock %}
