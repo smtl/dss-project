@@ -122,7 +122,7 @@ class RecObj(Node):
                         rec = get_or_none(Recommendation, id=int(float(t[3:])))
                         # check if recommendation is already recommended for user or guest
                         if rec != None:
-                            context["feedback"] = globalList
+                            context["feedback"].extend(globalList)
                             globalList = []
                             new_rec_list.append(rec.recommendation)
                             context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
