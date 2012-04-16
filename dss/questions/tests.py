@@ -1,344 +1,149 @@
 """
-DSS (Decision support system) testing suite.
-run make install in terminal to run tests
-tests that fail will have their errors outputted in the terminal
+This file demonstrates writing tests using the unittest module. These will pass
+when you run "manage.py test".
+
+Replace this with more appropriate tests for your application.
 """
-from __future__ import with_statement
+
 from django.contrib.auth import login, logout
 import templatetags as rec
 from django.utils import unittest
 from django.test import TestCase
 from django.test.client import Client
 from django.http import HttpRequest, HttpResponse
-from django.utils.functional import curry
-from django.core.exceptions import SuspiciousOperation
-from Cookie import SimpleCookie, Morsel
 from django.conf import settings
 from django.core.context_processors import csrf
 from django.middleware.csrf import CsrfViewMiddleware
 from django.template import RequestContext, Template
 from django.contrib.auth.models import User
 from auth.models import Profile
-from django.core import mail
-import copy
-
-
 from auth.models import Profile, UserProfile
 from recommendations.models import Recommendation, RecAnswerLink
 from questions.models import Question, Answer, QuestionPath
 from questions.models import AnsweredQuestion
 import tempfile
 
-
-# Adrian Kwizera
-class CountTest(TestCase):
-    def test_user_count(self):
-
-        """
-        Tests that the user count for registered users is working
-        """
-        #for users registering on the site
-        self.assertEqual(0 + 1, 1)
-        self.assertEqual(1 + 1, 2)
-        self.assertEqual(2 + 1, 3)
-
-        #for users that unregister from the site 
-        self.assertEqual(3 - 1, 2)
-        self.assertEqual(2 - 1, 1)
-        self.assertEqual(1 - 1, 0)
-
-
-#Adrian Kwizera
-#Record view test
-class record_view(TestCase):
-    def setup(self):
-        self.u = User.objects.create(username="admin", password="admin")
-        self.u = User.objects.get('/questions/record_view.html/')
-        self.assertEqual(u.status_code, 200)
-        self.assertEqual(questions.status_code, 200)
-        self.assertEqual(login.status_code, 200)
-
-    def tearDown(self):
-        self.client.logout()
-        self.u.delete()   
-       
- 
-#Adrian Kwizera
-#Testing the user creation
-class UserCreationTesting(unittest.TestCase):
-
+# Stephen Lowry
+class QuestionTest(TestCase):
     def setUp(self):
-        self.profile1 = User.objects.create(username='Adrian')
-        self.profile2 = User.objects.create(username='Poland')
-        self.profile3 = User.objects.create(username='James')
-        self.profile4 = User.objects.create(username='Cathy')
-        self.profile5 = User.objects.create(username='Stephen')
-        self.profile6 = User.objects.create(username='Murphy')
-
-    def testA(self):
-        self.assertEquals(self.profile1.username, 'Adrian')
-        self.assertEquals(self.profile2.username, 'Poland')
-        self.assertEquals(self.profile3.username, 'James')
-        self.assertEquals(self.profile4.username, 'Cathy')
-        self.assertEquals(self.profile5.username, 'Stephen')
-        self.assertEquals(self.profile6.username, 'Murphy')
-
-    def tearDown(self):
-        self.profile1.delete()
-        self.profile2.delete()
-        self.profile3.delete()
-        self.profile4.delete()
-        self.profile5.delete()
-        self.profile6.delete()
-
-
-#Adrian Kwizera
-#Testing saved and resumed sessions
-class TestSessionState(TestCase):
-
-    def setUp(self):
-     
-        self.client.get('/questions/') # after this, self.client.session is a real session
-        s = self.client.session
-        s['key'] = 'value'
-        s.save()
-
-
-#Adrian Kwizera
-#Testing assertions for recommendations assigned to user profiles
-class TestAssertion(TestCase):  
-  
-    def test_assertion_of_recommendations(self):   
-        self.assertTrue(1) # evaluates truth value  
-        self.assertFalse(0) # evaluates false value  
-        self.assertEquals(1, 1) # evaluates second (dynamic) value equals the first (known) value;  
-        self.assertNotEquals(1, 2)  
-          
-        o = 1  
-        self.assertIs(o, o) # assert evaluate to the same object  
-        self.assertIn(1, [1, 2, 3]) # assert first value in second  
-        self.assertIsInstance(self, TestCase) # first value is instance of second  
-
-
-#Adrian Kwizera
-#Testing saved progress for questions_answers_recommendation path
-class save_progress(TestCase):
-
-    def setUp(self):
-     
-        self.client.get('/questions/questions.html')
-        self.client.get('/answers/answers.html')
-        self.client.get('/recommendation/recommendation.html')
-        s = self.client.session
-        s['key'] = 'value'
-        s.save()
-
-
-#Adrian Kwizera
-#Testing order of recommendations based on answered question
-class TestSort(unittest.TestCase):
-
-    def setUp(self):
-       self.alist = [5, 2, 3, 1, 4]
-
-    def test_ascending_sort(self):
-       self.alist.sort()
-       self.assertEqual(self.alist, [1, 2, 3, 4, 5])
-
-    def test_sorting_reverse(self):
-       self.alist.sort()
-       self.alist.reverse()
-       self.assertEqual(self.alist, [5, 4, 3, 2, 1])
-
-
-#Adrian Kwizera
-#Maintainer test
-class MaintainerTestCase(unittest.TestCase):
-    def setUp(self):
-        self.cr = Question.objects.create(question="Do you love fish")
-        self.an = Answer.objects.create(question=self.cr, answer="perhaps")
+        #self.u = User.objects.create(username='testfile', email='testfile@testfile.com', password='testfile')
+        self.u = User.objects.create_user('testfile', 'testfile@gmail.com', 'testfile')
+        self.q = Question.objects.create(question = "Why?")
+        self.q2 = Question.objects.create(question = "How?")
+        self.q.answer_set.create(answer="because")
+        self.q.answer_set.create(answer="i don't know")
+        self.q.answer_set.create(answer="another answer")
+        self.a = Answer.objects.get(pk=1)
+        self.a2 = Answer.objects.get(pk=2)
+        self.p = Profile.objects.create(name="Default")
+        self.up = UserProfile.objects.create(user=self.u, profile=self.p)
+        self.qp = QuestionPath.objects.create(profile=self.p, current_question=self.q, follow_question=self.q2)
     
+    def test_models(self):
+        self.assertEqual(self.q.question, "Why?")
+        self.assertEqual(self.q.answer_set.all().count(), 3)
+        self.assertEqual(self.a.answer, "because") 
+
+    def test_answer(self):
+        c = Client()
+        response = c.post('/questions/'+str(self.q.id)+'/answer/', {'answer':str(self.a.id), 'user_id':str(self.u.id)})
+        self.assertEqual(response.status_code, 200)
+
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+        response = c.post('/questions/'+str(self.q.id)+'/answer/', {'answer':str(self.a.id), 'user_id':str(self.u.id)})
+        self.assertEqual(response.status_code, 200)
+        
+        aq = AnsweredQuestion.objects.get(user=self.u, answer=self.a)
+        self.assertEqual(aq.answer.answer, 'because')
+
+    def test_details(self):
+        c = Client()
+        response = c.post('/questions/'+str(self.q.id)+'/')
+        self.assertEqual(response.status_code, 200)
+
+        user = c.login(username='testfile', password='testfile')
+        response = c.post('/questions/'+str(self.q.id)+'/')
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_index(self):
+        c = Client()
+        response = c.get('/index/')
+        self.assertEqual(response.status_code, 200)
+
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+
+        response = c.get('/index/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_results(self):
+        c = Client()
+        response = c.get('/questions/results/')
+        self.assertEqual(response.status_code, 200)
+
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+
+        response = c.get('/questions/results/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit(self):
+        c = Client()
+        response = c.post('/questions/'+str(self.q.id)+'/edit/')
+        self.assertEqual(response.status_code, 200) 
+        
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+
+        response = c.post('/questions/'+str(self.q.id)+'/answer/', {'answer':str(self.a.id), 'user_id':str(self.u.id)})
+        self.assertEqual(response.status_code, 200)
+        
+        aq = AnsweredQuestion.objects.get(user=self.u, answer=self.a)
+        self.assertEqual(aq.answer.answer, 'because')
+
+        response = c.post('/questions/'+str(self.q.id)+'/edit/', {'answer':str(self.a2.id)})
+        self.assertEqual(response.status_code, 302) 
+
+        aq = AnsweredQuestion.objects.get(user=self.u, answer=self.a2)
+        self.assertNotEqual(aq.answer.answer, "because")
+        self.assertEqual(aq.answer.answer, "i don't know")
+
+    def test_save_progress(self):
+        c = Client()
+        
+        response = c.get('/save/')
+        self.assertEqual(response.status_code, 200) 
+
+        response = c.post('/save/', {'username':'bob', 'password1':'bob', 'password2':'bob'})
+        user = c.login(username='bob', password='bob')
+        self.assertEqual(user, True)
+        response = c.get('/save/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_help(self):
+        c = Client()
+
+        response = c.get('/help/')
+        self.assertEqual(response.status_code, 200) 
+        
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+        
+        response = c.get('/help/')
+        self.assertEqual(response.status_code, 200) 
+
+
     def tearDown(self):
-        self.cr.delete()
-        self.an.delete()
-
-
-# Adrian Kwizera
-class AdminCustomisationTest(TestCase):
-    
-    def setUp(self):
-        username = 'test_user'
-        pwd = 'secret'
-
-        self.u = User.objects.create_user(username, '', pwd)
-        self.u.is_staff = True
-        self.u.is_superuser = True
-        self.u.save()
-
-        self.assertTrue(self.client.login(username=username, password=pwd),
-            "Logging in user %s, pwd %s passed." % (username, pwd))
-
-        self.assertEqual(home.status_code, 200)
-        self.assertEqual(profile.status_code, 302)
-        self.assertEqual(changeprofile.status_code, 200)
-        self.assertEqual(login.status_code, 200)
-
-        questions.objects.all().add()
-
-    def tearDown(self):
-        self.client.logout()
         self.u.delete()
-
-
-#Adrian
-#test getting next question
-class get_next_question_or_none_guest(unittest.TestCase):
-    xrange = ""
-    i = 0
-   
-    def setUp(self):
-      #q = QuestionPath.objects.filter(profile=p)[i].current_question
-      for i in xrange(Question.objects.count()):
-        self.q = Question.objects.create(question = "Did you eat pad thai for lunch?")
-        self.a = Answer.objects.create(question = self.q, answer= "Yes")
-    
-    def get_next_question_or_none_guest(self):
-        self.assertEqual(self.a.question.question, "Did you eat pad thai for lunch?")
-        self.assertEqual(self.a.answer, "Yes")
-    
-    def tearDown(self):
         self.q.delete()
+        self.q2.delete()
         self.a.delete()
-            
-
-#Adrian Kwizera
-#Testing help link for maintainer
-class HelpTest(TestCase):
-
-    def setup(self):
-        self.u = User.objects.create(username="admin", password="admin")
-        self.u = User.objects.get('/questions/help_staff.html/')
-        self.assertEqual(u.status_code, 200)
-        self.assertEqual(changeprofile.status_code, 200)#redirects to different profile
-        self.assertEqual(login.status_code, 200)
-
-    def tearDown(self):
-        self.client.logout()
-        self.u.delete()
-
-
-#Adrian Kwizera
-#Testing help link for guest
-class HelpTest(TestCase):
-
-    def setup(self):
-        self.u = User.objects.get('/questions/help_user.html/')
-        self.assertEqual(u.status_code, 200)
-        self.assertEqual(profile.status_code, 302) #redirects guest user
-
-      
-    def tearDown(self):
-        self.u.delete()
-
-
-#Adrian Kwizera
-#Testing string assertions by the makefile
-class TestMakeFile(unittest.TestCase):
-    def assertMultiLineEqual(self, first, second, msg=None):
-        """Assert that two strings are equal, when traversing the makefile
-        """
-        self.assertTrue(isinstance(first, str),
-                'First argument is not a string')
-        self.assertTrue(isinstance(second, str),
-                'Second argument is not a string')
-
-        if first != second:
-            message = ''.join(difflib.ndiff(first.splitlines(True),
-                                                second.splitlines(True)))
-            if msg:
-                message += " : " + msg
-            self.fail("strings are unequal:\n" + message)
-
-
-#Adrian Kwizera
-#creating connections test
-class Test(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls._connection = createExecutableObject()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls._connection.destroy()
-
-#Adrian 
-#test for rules
-class Rules(unittest.TestCase):
-    
-    def setUp(self):
-        self.r = Recommendation.objects.create(recommendation="We recommend this")
-        self.ru = Question.objects.create(question = "do you eat pork?")
-        self.a = Answer.objects.create(question = self.ru, answer= "Yes")
-    def testAnswers(self):
-        self.assertEqual(self.a.question.question, "do you eat pork?")
-        self.assertEqual(self.a.answer, "Yes")
-   # def testRecommendation(self):
-   #     self.assertEqual(self.ru.recommendation, "we recommend this")
-
-    def tearDown(self):
-        self.ru.delete()
-        self.a.delete()
-        self.r.delete()
- 
-
-#Adrian Kwizera
-#Testing loading
-class TestLoader(unittest.TestCase):
-
-    #test_cases = (TestCase1, TestCase2, TestCase3)
-    def load_tests(loader, tests, pattern):
-     suite = TestSuite()
-     for test_class in test_cases:
-        tests = loader.loadTestsFromTestCase(test_class)
-        suite.addTests(tests)
-     return suite
-
-#Adrian 
-#test for deleting rules
-class deleterule(unittest.TestCase):
-    get = "POST"
-    def deleterule():
-     
-     for rule_string in get:
-        rule_string = request.POST['deleterule']
-        id_string = rule_string.split(" ")[1]
-        print id_string
-        rule = get_or_none(Rule, pk=int(float(id_string[3:])))
-        if rule != None:
-            rule.delete()
-        return HttpResponseRedirect(reverse("admin:rules_rule_changelist"))
-
-
-#Adrian Kwizera
-#Testing file make and deletion
-class MyTestCase(unittest.TestCase):
-    def setUp(self):
-        # create fixtures
-        self.tempdir = tempfile.mkdtemp()
-
-    def tearDown(self):
-       
-
-     def test_fixture_1(self):
-    # self.tempdir was just created
-    # Create a file
-      open(os.path.join(self.tempdir, 'test'), 'w')
-    # self.tempdir will be deleted after the function call
-
-     def test_fixture_2(self):
-    # Check that the file 'test' doesn't exist
-        self.assertRaise(IOError, open, os.path.join(self.tempdir, 'test'))
-
+        self.a2.delete()
+        self.p.delete()
+        self.up.delete()
+        self.qp.delete()
 
 '''
 # Stephen Lowry
@@ -373,15 +178,15 @@ class UserPagesTest(unittest.TestCase):
         self.up = UserProfile.objects.create(user=self.u, profile=self.p)
         client.login(username='test', password='test')
         self.q = Question.objects.create(question = "Huh?")
-        home = client.get('/hello')
-        questions = client.get('/questions/')
+        #home = client.get('/hello')
+        #questions = client.get('/questions/')
         profile = client.get('/profile/')
         changeprofile = client.get('/changeprofile/')
         question = client.get('/questions/1/')
         answer = client.get('/questions/1/answer/')
         logout = client.post('/accounts/logout/')
         self.assertEqual(home.status_code, 200)
-        self.assertEqual(questions.status_code, 200)
+        #self.assertEqual(questions.status_code, 200)
         self.assertEqual(profile.status_code, 200)
         self.assertEqual(changeprofile.status_code, 200)
         self.assertEqual(question.status_code, 200)
