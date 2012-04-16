@@ -22,10 +22,17 @@
     {% if answered_questions %}
         {% for q in answered_questions %}
             {{ q.answer }} <a href="{% url edit input_id=q.question.id %}">(Change Answer)</a>
-
+        
         <br />
         <br />
         
+        {% endfor %}
+        <u>Answers that were implicitly answered (Trigger by other answers)</u>
+        <br />
+        <br />
+        {% for im in implicit_answers %}
+            {{ im.answer }}
+            <br />
         {% endfor %}
     {% else %}
         <p>No questions have been answered.</p>
@@ -37,6 +44,13 @@
         <br />
         <br />    
     {% endfor %}
+        <u>Answers that were implicitly answered (Trigger by other answers)</u>
+        <br />
+        <br />
+        {% for im in implicit_answers %}
+            {{ im }}
+            <br />
+        {% endfor %}
     {% else %}
     <p>No questions have been answered.</p>
     {% endif %}

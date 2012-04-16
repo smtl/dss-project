@@ -193,14 +193,14 @@ def check_rule_results(request):
     redundant_questions = AnsweredQuestion.objects.filter(redundancy=1)
     redundant_questions.delete()
     for a in Answer.objects.all():
-        if 'i'+a.answer in request.session:
+        if ("i"+a.question.question) in request.session:
             print "removed implicit q for guest"
-            del request.session['i'+q.question]
-            del request.session[q]
+            del request.session["i"+a.question.question]
+            del request.session[a.question]
     for q in Question.objects.all():
-        if 'r'+q.question in request.session:
+        if ("r"+q.question) in request.session:
             print "removed redundant q for guest"
-            del request.session['r'+q.question]
+            del request.session["r"+q.question]
             del request.session[q]
 
     for ru in Rule.objects.all():
