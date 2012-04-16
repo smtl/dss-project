@@ -6,14 +6,14 @@ from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
-
+'''
 def get_or_none(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
     except model.DoesNotExist:
         return None
-
-
+'''
+'''
 def show(request):
     # user is logged in user
     if request.user.is_authenticated():
@@ -27,3 +27,4 @@ def show(request):
 def rules(request):
     return render_to_response('questions/index.html', {}, RequestContext(request, {}))
 rules = staff_member_required
+'''

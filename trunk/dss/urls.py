@@ -40,9 +40,9 @@ urlpatterns += patterns('auth.views',
     url(r'changeprofile/$', 'change_profile', name='changeprofile'),
 )
 
-urlpatterns += patterns('recommendations.views',
-    url(r'^recommendations/$', 'show'),
-)
+#urlpatterns += patterns('recommendations.views',
+    #url(r'^recommendations/$', 'show'),
+#)
 
 urlpatterns += patterns('',
     #url(r"^admin/recommendations/uploadedfile/$","handle_uploaded_file"),
