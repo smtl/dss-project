@@ -218,10 +218,10 @@ Default admin is username:admin, password:admin
  - You can upload images (need to use the full url when linking on the site)
 
 (Release 2 feature 6) Ability to add and delete rules
- - Rules can be a single fact or two facts combined with a boolean operator
+ - Rules can be a single fact or two facts combined with a boolean operator (release2 feature 5)
  - Outcomes of rules are:
   - recommendations
-  - questions being implicitly answered (release2 feature 8)
+  - questions being implicitly answered (release2 feature 7 and 8)
   - questions being marked as redundant (release2 feature 8)
 
 9) 10) Ability to create and delete profiles
