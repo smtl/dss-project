@@ -160,7 +160,7 @@ margin-right:30px;
               {% autoescape on %}{{ i|markdown }}{% endautoescape %}
           {% endif %}
       {% empty %}
-      Start answering questions to get custom recommendations.
+      Start answering <a href="{% url index %}">questions</a> to get custom recommendations.
       {% endfor %}
 	</div>
     </div>

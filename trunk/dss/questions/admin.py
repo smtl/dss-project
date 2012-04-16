@@ -23,7 +23,7 @@ class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
        ('Question', {'fields': ['question']}),
     ]
-    inlines = [AnswerInline, RecAnswerLinkInline]
+    inlines = [AnswerInline]
     search_fields = ['question']
 
 
