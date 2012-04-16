@@ -27,13 +27,15 @@
         <br />
         
         {% endfor %}
-        <u>Answers that were implicitly answered (Trigger by other answers)</u>
+        {% if implicit_answers %}
+        <u>Answers that were implicitly answered (Trigger by other answers):</u>
         <br />
         <br />
         {% for im in implicit_answers %}
             {{ im.answer }}
             <br />
         {% endfor %}
+        {% endif %}
     {% else %}
         <p>No questions have been answered.</p>
     {% endif %}

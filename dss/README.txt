@@ -145,10 +145,7 @@ cd <project_name>
 
 5. On run, tests are first run and on successive build an installation is made
 
-6. Any new project directories must be added first to the makefile before doing step 4.
-Install any new directories as outlined below:
-
-${INSTALL} -d ${DATA.dir}/grappelli/templates/registration
+6. Any new project directories must be added first to the makefile before doing step 4
 
 
 Help files
@@ -163,55 +160,6 @@ At the end of .wsgi/ add help to view the guest help file
 Maintainer help
 ===============
 Once logged into admin, click on the help link to view the guide
-
-
-sites-enabled website configuration
-===========================================
-path: etc/apache2/sites-enabled/000-default
-
-<VirtualHost *:80>
-        ServerAdmin webmaster@localhost
-
-        DocumentRoot /home/adrian/ 
-        <Directory />
-                Options FollowSymLinks
-                AllowOverride None
-        </Directory>
-
-        <Directory /home/adrian>
-                Options Indexes FollowSymLinks MultiViews
-                AllowOverride all
-                Order allow,deny
-                allow from all
-        </Directory>
-
-        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-        <Directory "/usr/lib/cgi-bin">
-                AllowOverride None
-                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                Order allow,deny
-                Allow from all
-        </Directory>
-
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-
-        # Possible values include: debug, info, notice, warn, error, crit,
-        # alert, emerg.
-        LogLevel warn
-
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    Alias /doc/ "/usr/share/doc/"
-    <Directory "/usr/share/doc/">
-        Options Indexes MultiViews FollowSymLinks
-        AllowOverride None
-        Order deny,allow
-        Deny from all
-        Allow from 127.0.0.0/255.0.0.0 ::1/128
-    </Directory>
-
-</VirtualHost>
-
 
 
 Frequently Encountered Problems
@@ -235,4 +183,21 @@ If you encounter other problems it is good practice to try restart your server a
 
 Clearing your browsers cache or trying a different browser may also clear up problems.
 
+Feature Description
+===================
 
+Admin Functions
+==============
+Default admin is username:admin, password:admin
+
+1) Ability to create users and change their staff status
+
+2) Ability to create questions with answers
+ - Click questions
+ - Click add Question
+ - Type question
+ - Click "Add another question"
+  - Click blue Answer bar and observe text box dropping down
+  - Type in Answer
+  - Repeat for as many answers as you like
+  - Click save
