@@ -23,6 +23,7 @@ from questions.models import Question, Answer, QuestionPath
 from questions.models import AnsweredQuestion
 import tempfile
 from questions.views import get_or_none, get_next_question_or_none, parse_rule
+from questions.templatetags.rec import parse_rule
 
 # Stephen Lowry
 class QuestionTest(unittest.TestCase):
@@ -362,3 +363,11 @@ class recParsing(unittest.TestCase):
     def youTube(self):
         self.assertEqual(rec.media(self.yout.you,0),"<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/SBh01XZHfL0\" frameborder=\"0\" allowfullscreen></iframe>")
 
+#Stephen Murphy
+#Testing the parsing for rules
+class ruleParsing(unittest.TestCase):
+    def setUp(self):
+	self.rule = "ans1 and ans2 : rec1"
+    def parse(self):
+	self.assertEqual(parse_rule(self.rule,context),"rec1")
+	
