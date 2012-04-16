@@ -106,7 +106,7 @@ class RecObj(Node):
         #        if q in request.session:
         #            del request.session[q]
             if ("i"+q.question) in request.session:
-                print "i"+q.question
+                #print "i"+q.question
                 del request.session["i"+q.question]
                 if q in request.session:
                     del request.session[q]
