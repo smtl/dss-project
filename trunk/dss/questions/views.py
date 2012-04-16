@@ -18,107 +18,6 @@ import os
 import re
 from rules.models import Rule
 
-#def parse_rule(rule, request):
-#    # rule is a string
-#    # "if 2 or 3 and 5 then r7"
-#    bool_rule = re.compile(":").split(rule)[0]
-#    result_part = re.compile(":").split(rule)[1]
-#    print "This is the bool_rule: "+bool_rule
-#    tokens = bool_rule.split(' ')
-#    result_tokens = result_part.split(' ')
-#    new_rule = bool_rule
-#    current_user = request.user
-#    # create the logic string
-#    for t in tokens:
-#        if 'ans' in t:
-#            current_answer = get_or_none(Answer, id=int(float(t[3:]))
-#            # Handle users and guests differently
-#            if current_user.is_authenticated():
-#                ans_bool_result = get_or_none(AnsweredQuestion, user=current_user, answer=current_answer)
-#            elif current_answer.question in request.session:
-#                ans_bool_result = "question found"
-#            else:
-#                ans_bool_result = None
-#
-#            if ans_bool_result == None:
-#                ans_bool = False
-#            else:
-#                ans_bool = True
-#            # create the new rule which is to be executed
-#            new_rule = new_rule.replace(t, str(ans_bool))
-#    
-#    # Build and execute the rule putting the result in the "result" variable
-#    result_string = "result = "+new_rule
-#    exec(result_string)
-#    if result == True:
-#        # Actions for the outcomes of a rule
-#        for t in result_tokens:
-#            # red denotes redundancy
-#            if "red" in t:
-#                print "outcome results in a question being made redundant"
-#                question = get_or_none(Question, id=int(float(t[3:])))
-#                # check if question has already been answered, if it has there is no point marking it redundant
-#                # actually this is a design decision - it can be changed if neccesary
-#                if current_user.is_authenticated():
-#                    answered = get_or_none(AnsweredQuestion, user=current_user, question=question)
-#                elif question in request.session:
-#                    answered = "question found"
-#                else:
-#                    answered = None
-#
-#                if answered == None:
-#                    if current_user.is_authenticated():
-#                        aq = AnsweredQuestion()
-#                        aq.user = current_user
-#                        aq.question = question
-#                        aq.answer_id = 0
-#                        aq.redundancy = 1
-#                        aq.save()
-#                    else:
-#                        # redundancy marked by r at the start of the question
-#                        request.session["r"+question] = 0
-#            # rec denotes recommendation
-#            elif "rec" in t:
-#                print "outcome results in a recommendation being recommended"
-#                rec = get_or_none(Recommendation, id=int(float(t[3:])))
-#                # check if recommendation is already recommended for user or guest
-#                if current_user.is_authenticated():
-#                    recommended = get_or_none(UserRecommendation, user=current_user, recommendation=rec)
-#                elif rec in request.session:
-#                    recommended = request.session[rec]
-#                if recommended == None:
-#                    if current_user.is_authenticated():
-#                        ur = UserRecommendation()
-#                        ur.user = current_user
-#                        ur.recommendation = rec
-#                        ur.save()
-#                    else:
-#                        request.session[rec] = rec
-#            # answer denotes to answer a question implictly
-#            elif "ans" in t:
-#                print "outcome results in marking a answer as implicitly answered"
-#                # check if question is already answered by user. If it is, there is no need to mark it implicit
-#                answer = get_or_none(Answer, id=int(float(t[3:])))
-#                if current_user.is_authenticated():
-#                    answered = get_or_none(AnsweredQuestion, user=current_user, question=answer.question)
-#                elif answer.question in request.session:
-#                    answered = "Not None"
-#                else:
-#                    answered = None
-#
-#                if answered == None:
-#                    if current_user.is_authenticated():
-#                        aq = AnsweredQuestion()
-#                        aq.user = current_user
-#                        aq.question = answer.question
-#                        aq.answer = answer
-#                        aq.implicit = 1
-#                        aq.save()
-#                    else:
-#                        request.session["i"+answer.question] = answer
-#    else:
-#        print "false lol"
-
 def get_or_none(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
@@ -179,6 +78,7 @@ def get_next_question_or_none_guest(request):
 def get_script_name(request):
     return request.META['SCRIPT_NAME']
 
+'''
 # hello request
 def hello(request):
     response = HttpResponse()
@@ -197,7 +97,7 @@ def hello(request):
     response.write("<p>You can access a <a href='" + os.path.dirname(request.META['SCRIPT_NAME']) + "/static/index.html'>file</a> in my <em>static</em> directory.")
 
     return response
-
+'''
 
 # Show a list of questions
 def index(request):
@@ -217,7 +117,7 @@ def index(request):
         else:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
 
-
+'''
 # definition for a set of questions
 def questions(request):
     if request.user.is_authenticated():
@@ -229,6 +129,7 @@ def questions(request):
             if q in request.session:
                 answered.append(request.session[q])
         return render_to_response('questions/answered_questions.html', {'answered_questions': answered}, context_instance=RequestContext(request))
+'''
 
 # Present the question to the user
 def detail(request, question_id):
@@ -289,8 +190,19 @@ def check_rule_results(request):
     # delete all redudant and implicitly answered questions here!!!!
     implicit_answers = AnsweredQuestion.objects.filter(implicit=1)
     implicit_answers.delete()
-    #
-    #
+    redundant_questions = AnsweredQuestion.objects.filter(redundancy=1)
+    redundant_questions.delete()
+    for a in Answer.objects.all():
+        if 'i'+a.answer in request.session:
+            print "removed implicit q for guest"
+            del request.session['i'+q.question]
+            del request.session[q]
+    for q in Question.objects.all():
+        if 'r'+q.question in request.session:
+            print "removed redundant q for guest"
+            del request.session['r'+q.question]
+            del request.session[q]
+
     for ru in Rule.objects.all():
         result_tokens = parse_rule(ru.rule, request)
         if result_tokens != None:
@@ -324,7 +236,6 @@ def check_rule_results(request):
                     if request.user.is_authenticated():
                         answered = get_or_none(AnsweredQuestion, user=request.user, question=answer.question)
                     elif answer.question in request.session:
-                        print "guest has answered this"
                         answered = "Not None"
                     else:
                         answered = None
@@ -338,7 +249,6 @@ def check_rule_results(request):
                             aq.implicit = 1
                             aq.save()
                         else:
-                            print "this happened"
                             request.session[answer.question] = answer
                             request.session["i"+answer.question.question] = answer
 
@@ -455,7 +365,12 @@ def edit(request, input_id):
 
 # Save current user state. Render same state on login
 def save_progress(request):
+        
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse("profile"))
+
     if request.method == 'POST':
+        
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()   
@@ -473,35 +388,12 @@ def save_progress(request):
         form = UserCreationForm()
     return render_to_response("registration/register.html", {'form': form}, context_instance=RequestContext(request))
 
-
+'''
 # View registered user count
 def record_view(request):
     count = User.objects.count()
     return render_to_response('questions/record_view.html', {'count': count}, context_instance=RequestContext(request))
-
-
-
-# adrian, what does this do?
-#viewing user info by admin and maintainer for specification purposes
-def get_user_info(username):
-    c = cache.get_cache('default')
-    username = unicode(username).encode('ascii', 'ignore')
-    key = 'trac_user_info:%s' % hashlib.md5(username).hexdigest()
-    info = c.get(key)
-    if info is None:
-        try:
-            u = User.objects.get(username=username)
-        except User.DoesNotExist:
-            info = {"core": False, "cla": False}
-        else:
-            info = {
-                "core": u.has_perm('auth.commit'),
-                "cla": bool(find_agreements(u))
-            }
-        c.set(key, info, 60*60)
-    return info
-
-
+'''
 
 # links to help templates
 def help(request):

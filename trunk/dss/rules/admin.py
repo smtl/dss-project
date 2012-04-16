@@ -57,9 +57,10 @@ def admin_rules(request, model_admin):
 
         temp_result_list = [rec_result, ans_result, red_result]
         for r in temp_result_list:
-                resultstring = resultstring+r+" "
+                if len(r) > 2:
+                    resultstring = resultstring+r+" "
         
-        if len(boolstring) > 1 and (len(resultstring) > 1):
+        if (len(boolstring) > 1) and (len(resultstring) > 2):
             rule = Rule()
             rule.rule = boolstring+" : "+resultstring
             rule.save()

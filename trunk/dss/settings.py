@@ -123,7 +123,7 @@ SECRET_KEY = '+)*ae)+l$=19)3(ot&4!n+mij2j^is*g*sv!4&!!brcs!(jd&d'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -138,10 +138,11 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
+    os.path.realpath(os.path.join(SITE_ROOT, 'templates')),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_SITE, 'templates')#'/var/www/dss/templates'
+    os.path.join(BASE_SITE, 'templates'),#'/var/www/dss/templates'
 )
 
 INSTALLED_APPS = (
