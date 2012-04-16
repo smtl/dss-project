@@ -211,6 +211,7 @@ Default admin is username:admin, password:admin
  - can be formatted with markdown
  - 16) 17) can embed videos
  - 16) 17) can have links to videos, pdfs and more
+ - recommendation titles should not have any code, mathematical symbols or logical words in them
 
 * Ability to upload files
  - 6) If you upload a .pml you can replace the file-ending with .png and get and image of it
