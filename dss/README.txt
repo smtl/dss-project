@@ -190,9 +190,14 @@ Admin Functions
 ==============
 Default admin is username:admin, password:admin
 
-1) Ability to create users and change their staff status
+1) Knowledge representation
+ - questions, answers, recommendations, uploadedfiles, users, rules, profiles, profilepaths can be added
 
-2) Ability to create questions with answers
+* Ability to create users and change their staff status
+
+* Ability to change a users permissions
+
+* Ability to create, edit, delete questions with answers
  - Click questions
  - Click add Question
  - Type question
@@ -201,3 +206,34 @@ Default admin is username:admin, password:admin
   - Type in Answer
   - Repeat for as many answers as you like
   - Click save
+
+* Ability to add, edit and delete recommendations
+ - can be formatted with markdown
+ - 16) 17) can embed videos
+ - 16) 17) can have links to videos, pdfs and more
+
+* Ability to upload files
+ - 6) If you upload a .pml you can replace the file-ending with .png and get and image of it
+ - 15) PML images can be linked or displayed in recommendations
+ - You can upload images (need to use the full url when linking on the site)
+
+(Release 2 feature 6) Ability to add and delete rules
+ - Rules can be a single fact or two facts combined with a boolean operator
+ - Outcomes of rules are:
+  - recommendations
+  - questions being implicitly answered (release2 feature 8)
+  - questions being marked as redundant (release2 feature 8)
+
+9) 10) Ability to create and delete profiles
+ - A user can choose different profiles and be presented with different question paths
+ - A user has a profile page where they can change their profile type and see their answered questions along with questions that have been answered implicitly (release2 feature 10)
+
+* Ability to determine question paths
+ - This is the order of questions that will be presented to the user
+ - They are to be added in pairs (question and it's follow question) and the pairs have to be linked up
+
+18) Eye candy
+
+(release2 feature 10) Feedback regarding recommendations is shown to the user
+
+19) Ability to see how many registered users there are on the site (on the navigation bar)
