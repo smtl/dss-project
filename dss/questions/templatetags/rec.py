@@ -29,6 +29,7 @@ def parse_rule(rule, context):
     new_rule = bool_rule
     guest_answers = [] 
     # create the logic string
+    i=0
     for t in tokens:
         if 'ans' in t:
             ans_bool_result = None
@@ -38,16 +39,12 @@ def parse_rule(rule, context):
                 ans_bool_result = get_or_none(AnsweredQuestion, user=request.user, answer=current_answer)
 		if ans_bool_result != None:
 			temp = "\n"+str(ans_bool_result.question)+" "+str(ans_bool_result)
-			if temp not in globalList:
-				globalList.append(temp)
 	        tokens.remove(t)
             else:
                 for q in Question.objects.all():
                     if q in request.session:
                         guest_answers.append(request.session[q])
                 if current_answer in guest_answers:
-		    globalList.append(str(current_answer))
-		    #globalList.append(str(request.session[q]))
                     ans_bool_result = "question found"
             
             if ans_bool_result == None:
@@ -56,7 +53,7 @@ def parse_rule(rule, context):
                 ans_bool = True
             # create the new rule which is to be executed
             new_rule = new_rule.replace(t, str(ans_bool))
-    
+ 
     # Build and execute the rule putting the result in the "result" variable
     result_string = "result = "+new_rule
     exec(result_string)
@@ -143,13 +140,92 @@ class RecObj(Node):
                                 request.session["r"+question.question] = 0
                     # rec denotes recommendation
                     elif "rec" in t:
-                        rec = get_or_none(Recommendation, id=int(float(t[3:])))
-                        # check if recommendation is already recommended for user or guest
-                        if rec != None:
-                            context["feedback"].extend(globalList)
-                            globalList = []
-                            new_rec_list.append(rec.recommendation)
-                            context["feedback"].append(" **this produces: **"+rec.name+"</b>") 
+			#AUTHENTICATED USER
+		        if request.user.is_authenticated():
+                            rec = get_or_none(Recommendation, id=int(float(t[3:])))
+                            # check if recommendation is already recommended for user or guest
+                            if rec != None:
+			        rul = (ru.rule).split(" : ")[0]
+			        rul = rul.split(" ")
+			        if len(rul) > 2:
+			            if rul[1] == "or":
+				        a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				        b = get_or_none(Answer, id=int(float(rul[2][3:])))
+				        aa = get_or_none(AnsweredQuestion, user=request.user, answer=a)
+				        bb = get_or_none(AnsweredQuestion, user=request.user, answer=b)
+				        if aa is None:
+				            globalList.append(str(bb.question.question)+" "+str(bb))
+				        elif bb is None:
+					    globalList.append(str(aa.question.question)+" "+str(aa))
+				        elif aa is not None and bb is not None:
+					    globalList.append(str(aa.question.question)+" "+str(aa))
+					    globalList.append("or")
+					    globalList.append(str(bb.question.question)+" "+str(bb))
+				    elif rul[1] == "and":
+				        a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				        b = get_or_none(Answer, id=int(float(rul[2][3:])))
+				        aa = get_or_none(AnsweredQuestion, user=request.user, answer=a)
+				        bb = get_or_none(AnsweredQuestion, user=request.user, answer=b)
+				        globalList.append(str(aa.question.question)+" "+str(aa))
+				        globalList.append("and")
+				        globalList.append(str(bb.question.question)+" "+str(bb))
+			        else:
+				    a = get_or_none(Answer, id=int(float(rul[0][3:])))
+			            aa = get_or_none(AnsweredQuestion, user=request.user, answer=a)
+				    globalList.append(str(aa.question.question)+" "+str(aa))
+			       # context["feedback"].extend(globalList)
+			       # globalList = []
+			   		 
+			        recommend = "**this produces: **"+rec.name+"</b>"
+                                context["feedback"].extend(globalList)
+                                globalList = []
+                                new_rec_list.append(rec.recommendation)
+                                context["feedback"].append(recommend)
+			#GUEST USER
+                        else:
+			    rec = get_or_none(Recommendation, id=int(float(t[3:])))
+			    if rec not in request.session:
+			        rul = (ru.rule).split(" : ")[0]
+			        rul = rul.split(" ")
+			        if len(rul) > 2:
+				    a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				    b = get_or_none(Answer, id=int(float(rul[2][3:])))
+				    if a.question in request.session and b.question in request.session:
+			                if rul[1] == "or":
+				            if (a != None) and (b != None):
+				                a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				                b = get_or_none(Answer, id=int(float(rul[2][3:])))
+					        globalList.append(str(request.session[a.question]))
+					        globalList.append("or")
+					        globalList.append(str(request.session[b.question]))
+				            if (a == None) and (b != None):
+				                a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				                b = get_or_none(Answer, id=int(float(rul[2][3:])))
+				                globalList.append(str(request.session[b.question]))
+				            elif (b == None) and (a != None):
+				                a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				                b = get_or_none(Answer, id=int(float(rul[2][3:])))
+					        globalList.append(str(request.session[a.question]))
+				        elif rul[1] == "and":
+				            a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				            b = get_or_none(Answer, id=int(float(rul[2][3:])))
+					    if (a != None) and (b != None):
+				                globalList.append(str(request.session[a.question]))
+				                globalList.append("and")
+				                globalList.append(str(request.session[b.question]))
+			        else:
+				    a = get_or_none(Answer, id=int(float(rul[0][3:])))
+				    globalList.append(str(request.session[a.question]))
+			       # context["feedback"].extend(globalList)
+			       # globalList = []
+			   		 
+			        recommend = "**this produces: **"+rec.name+"</b>"
+                                context["feedback"].extend(globalList)
+                                globalList = []
+                                new_rec_list.append(rec.recommendation)
+                                context["feedback"].append(recommend)
+
+				
                     elif "ans" in t:
                         # check if question is already answered by user. If it is, there is no need to mark it implicit
                         answer = get_or_none(Answer, id=int(float(t[3:])))
