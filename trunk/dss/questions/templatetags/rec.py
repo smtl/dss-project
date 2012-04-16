@@ -88,6 +88,30 @@ class RecObj(Node):
         new_rec_list = []
 	context["feedback"] = []
 
+        # delete all redudant and implicitly answered questions here!!!!
+        implicit_answers = AnsweredQuestion.objects.filter(implicit=1)
+        implicit_answers.delete()
+        redundant_questions = AnsweredQuestion.objects.filter(redundancy=1)
+        redundant_questions.delete()
+        #for a in Answer.objects.all():
+        #    if ("i"+q.question) in request.session:
+        #        print "removed implicit q for guest"
+        #        del request.session["i"+a.question.question]
+        #        if a.question in request.session:
+        #            del request.session[a.question]
+        for q in Question.objects.all():
+        #    if ("r"+q.question) in request.session:
+        #        print "removed redundant q for guest"
+        #        del request.session["r"+q.question]
+        #        if q in request.session:
+        #            del request.session[q]
+            if ("i"+q.question) in request.session:
+                print "i"+q.question
+                del request.session["i"+q.question]
+                if q in request.session:
+                    del request.session[q]
+
+
         # test parse stuff
         #result_tokens = parse_rule("ans1 and ans3 : rec1", context)
         for ru in Rule.objects.all():
@@ -146,12 +170,14 @@ class RecObj(Node):
                                 aq.save()
                             else:
                                 request.session["i"+answer.question.question] = answer
+                                request.session[answer.question] = answer
         # pass the list of recommendations back to be shown to user
         context['rec'] = new_rec_list
         return ""
 
 register.tag("get_rec_list",build_rec_list)
 
+'''
 @register.filter
 @stringfilter
 def media(value,arg):
@@ -166,8 +192,9 @@ def media(value,arg):
     else:
         return value
 register.filter("media",media)
+'''
 
-
+'''
 def initial_letter_filter(text, autoescape=True):
     first, other = text[0], text[1:]
     if autoescape:
@@ -176,6 +203,4 @@ def initial_letter_filter(text, autoescape=True):
         esc = lambda x: x
     result = '<strong>%s</strong>%s' % (esc(first), esc(other))
     return mark_safe(result)
-
-
-
+'''
