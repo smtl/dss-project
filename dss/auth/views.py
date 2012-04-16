@@ -10,7 +10,7 @@ from django.template import RequestContext
 from questions.models import AnsweredQuestion, Question
 from django.core.urlresolvers import reverse
 
-
+'''
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -26,7 +26,7 @@ def register(request):
     return render_to_response("registration/register.html", {
         'form': form,
     })
-
+'''
 
 def profile(request):
     if request.user.is_authenticated():

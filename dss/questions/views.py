@@ -74,10 +74,10 @@ def get_next_question_or_none_guest(request):
 
     if i == Question.objects.count() or i > Question.objects.count():
         return None
-
+'''
 def get_script_name(request):
     return request.META['SCRIPT_NAME']
-
+'''
 '''
 # hello request
 def hello(request):
@@ -116,6 +116,9 @@ def index(request):
             return render_to_response('questions/results.html', {}, context_instance=RequestContext(request))
         else:
             return render_to_response('questions/detail.html', {'question': q}, context_instance=RequestContext(request))
+
+def questions(request):
+    pass
 
 '''
 # definition for a set of questions
@@ -192,16 +195,16 @@ def check_rule_results(request):
     implicit_answers.delete()
     redundant_questions = AnsweredQuestion.objects.filter(redundancy=1)
     redundant_questions.delete()
-    for a in Answer.objects.all():
-        if ("i"+a.question.question) in request.session:
-            print "removed implicit q for guest"
-            del request.session["i"+a.question.question]
-            del request.session[a.question]
-    for q in Question.objects.all():
-        if ("r"+q.question) in request.session:
-            print "removed redundant q for guest"
-            del request.session["r"+q.question]
-            del request.session[q]
+    #for a in Answer.objects.all():
+    #    if ("i"+a.question.question) in request.session:
+    #        print "removed implicit q for guest"
+    #        del request.session["i"+a.question.question]
+    #        del request.session[a.question]
+    #for q in Question.objects.all():
+    #    if ("r"+q.question) in request.session:
+    #        print "removed redundant q for guest"
+    #        del request.session["r"+q.question]
+    #        del request.session[q]
 
     for ru in Rule.objects.all():
         result_tokens = parse_rule(ru.rule, request)

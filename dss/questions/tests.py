@@ -22,9 +22,10 @@ from recommendations.models import Recommendation, RecAnswerLink
 from questions.models import Question, Answer, QuestionPath
 from questions.models import AnsweredQuestion
 import tempfile
+from questions.views import get_or_none, get_next_question_or_none
 
 # Stephen Lowry
-class QuestionTest(TestCase):
+class QuestionTest(unittest.TestCase):
     def setUp(self):
         #self.u = User.objects.create(username='testfile', email='testfile@testfile.com', password='testfile')
         self.u = User.objects.create_user('testfile', 'testfile@gmail.com', 'testfile')
@@ -134,6 +135,19 @@ class QuestionTest(TestCase):
         response = c.get('/help/')
         self.assertEqual(response.status_code, 200) 
 
+    def test_get_or_none(self):
+        self.qr = get_or_none(Question, question="Why?")
+        self.assertEqual(self.qr.question, "Why?")
+        self.qr2 = get_or_none(Question, question="Random")
+        self.assertEqual(self.qr2, None)    
+   
+    def test_get_next_question_or_none(self):
+        c = Client()
+        user = c.login(username='testfile', password='testfile')
+        self.assertEqual(user, True)
+        
+        self.result = get_next_question_or_none(self.u)
+        self.assertNotEqual(self.result, None)
 
     def tearDown(self):
         self.u.delete()
