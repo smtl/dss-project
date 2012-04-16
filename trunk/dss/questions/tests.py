@@ -22,7 +22,7 @@ from recommendations.models import Recommendation, RecAnswerLink
 from questions.models import Question, Answer, QuestionPath
 from questions.models import AnsweredQuestion
 import tempfile
-from questions.views import get_or_none, get_next_question_or_none
+from questions.views import get_or_none, get_next_question_or_none, parse_rule
 
 # Stephen Lowry
 class QuestionTest(unittest.TestCase):
@@ -148,6 +148,9 @@ class QuestionTest(unittest.TestCase):
         
         self.result = get_next_question_or_none(self.u)
         self.assertNotEqual(self.result, None)
+
+    #def test_parse_rule(self):
+    #   parse_rule("ans1 : rec1", request)
 
     def tearDown(self):
         self.u.delete()
