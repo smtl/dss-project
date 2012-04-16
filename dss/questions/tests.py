@@ -344,22 +344,6 @@ class RecommendationTest(unittest.TestCase):
     def tearDown(self):
         self.r.delete()
 
-# Stephen Lowry
-class RecAnswerLinkTest(unittest.TestCase):
-    def setUp(self):
-        self.r = Recommendation.objects.create(recommendation="This is a recommendation")
-        self.q = Question.objects.create(question="What?")
-        self.a = Answer.objects.create(question=self.q, answer="Yes")
-        self.ralink = RecAnswerLink.objects.create(question=self.q, answer=self.a, recommendation=self.r)
-    def testRecAnswerLink(self):
-        self.assertEqual(self.ralink.question.question, "What?")
-        self.assertEqual(self.ralink.recommendation.recommendation, "This is a recommendation")
-        self.assertEqual(self.ralink.answer.answer, "Yes")
-    def tearDown(self):
-        self.q.delete()
-        self.a.delete()
-        self.r.delete()
-
 
 #Stephen Murphy
 #Testing the recommendation parsing
