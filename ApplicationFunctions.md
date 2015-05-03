@@ -1,0 +1,34 @@
+# Functions #
+
+Guests can answer questions
+
+Guests answers are logged
+
+User registration
+
+User log in
+
+User can change profiles
+
+User can answer questions
+
+User answers are stored
+
+User can see a list of questions
+
+Questions are presented to users based on their profile
+
+Admin/Maintenance can add, edit, delete questions
+
+Admin/Maintenance can add, edit, delete answers
+
+Admin/Maintenance can add, edit, delete profiles
+
+Admin/Maintenance can add, edit, delete question paths (which are assigned to
+profiles)
+
+Admin/Maintenance can add, edit, delete recommendations
+
+Admin/Maintenance can add, edit, delete links from answers to recommendations
+
+Registered User count can be displayed

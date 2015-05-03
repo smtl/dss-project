@@ -1,0 +1,75 @@
+# Introduction #
+
+The website uses the Python (2.7), Django Framework 1.3, Apache2 server with mod\_wsgi extension, sqlite3 all running on top of the Ubuntu operating system.
+
+This page lets you know the configurations and necessary programs to run this website.
+
+
+# Details #
+
+## Where to install ##
+
+svn checkout into /var/www/ so that the files you download will have the correct locations in them.
+
+## Python ##
+
+Ubuntu comes with python but you still might need to install the developer packages:
+
+`sudo apt-get install python-dev`
+
+## Django ##
+
+We are using Django 1.3.1. The download and instructions to install can be found here:
+
+https://www.djangoproject.com/download/
+
+## Apache2 ##
+
+`sudo apt-get install apache2`
+
+`sudo apt-get install apache2-prefork-dev`
+
+(If you want a graphical interface to control the server, you can use https://launchpad.net/localhost-indicator)
+
+Commands to control the apache2 server are:
+
+`sudo service apache2 start`
+`sudo service apache2 stop`
+
+## mod\_wsgi ##
+
+Download mod\_wsgi from:
+
+http://code.google.com/p/modwsgi/downloads/detail?name=mod_wsgi-3.3.tar.gz&can=2&q=
+
+`tar xvfz mod_wsgi-3.3.tar.gz`
+
+`cd` into the new mod\_wsgi folder
+
+`./configure`
+
+`make`
+
+Edit /etc/apache2/httpd.conf to include this line:
+
+`LoadModule wsgi_module modules/mod_wsgi.so`
+
+`sudo make install`
+
+
+(Note: After doing this you must stop the server and then start it again)
+
+For a more detailed guide to using mod\_wsgi of for troubleshooting help, see:
+http://code.google.com/p/modwsgi/wiki/QuickInstallationGuide
+
+## SVN ##
+
+We are using subversion as a version control system.
+
+sudo apt-get install subversion
+
+A guide to using subversion can be found at http://svnbook.red-bean.com/
+
+## Finally ##
+
+Go to localhost to view the website
